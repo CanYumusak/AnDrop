@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">AnDrop</string>
+    <string name="welcome_to_androp">Welcome to AnDrop</string>
+    <string name="discovery_fragment_title">Share file to</string>
+    <string name="welcome_to_androp_description">This is a lightweight tool to transfer files between your Android phone and your macOS devices.</string>
+    <string name="welcome_to_androp_tutorial">1. Install and launch AnDrop for mac on your macOS device from the App Store.\n\n
+        2. Share any file on your Android device with AnDrop.\n\n
+        3. Select your target macOS device.\n\n
+        5. Profit! Your file is now in the Download folder of your macOS device.
+    </string>
+    <string name="searching_clients">Searching for clients…</string>
+    <string name="storage_access_permission">To share this file you need to grant AnDrop storage access permission</string>
+    <string name="grant_storage_permission_button_title">Grant storage permission</string>
+    <string name="tipping_jar_title">Tip Jar</string>
+    <string name="tipping_jar_description">Androp relies on your support to fund its development. If you find it useful, please consider supporting the app by leaving a tip in our Tip Jar.</string>
+    <string name="tipping_jar_connection_error">Failed to connect to billing services</string>
+
+    <string name="tipping_jar_button_small_tip">Generous Tip of 0,99€</string>
+    <string name="tipping_jar_button_medium_tip">Massive Tip of 1,99€</string>
+    <string name="tipping_jar_button_big_tip">Amazing Tip of 4,99€ </string>
+
+    <string name="tipping_jar_dialog_sucess_title">Thanks a bunch!</string>
+    <string name="tipping_jar_dialog_sucess_message">Big thanks for supporting the development of AnDrop. You are great and the developer will never forget you!</string>
+    <string name="tipping_jar_dialog_sucess_button_title">You are welcome</string>
+
+    <string name="tipping_jar_dialog_error_title">Failed to tip</string>
+    <string name="tipping_jar_dialog_error_message">Unfortunately something bad happened while performing the tipping transaction. Do not be sad, just try again another time and enjoy AnDrop</string>
+    <string name="tipping_jar_dialog_error_button_title">Aw, shoot</string>
+
+    <string name="tipping_jar_tips_message">You tipped a total of %s. You are awesome!</string>
+</resources>
