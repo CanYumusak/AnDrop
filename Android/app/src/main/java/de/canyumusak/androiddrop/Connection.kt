@@ -3,15 +3,14 @@ package de.canyumusak.androiddrop
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import de.canyumusak.androiddrop.sendables.SendableFile
 import org.json.JSONObject
 import java.io.*
 import java.net.Socket
 import java.net.UnknownHostException
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
-import android.provider.OpenableColumns
 import kotlinx.coroutines.*
-
 
 typealias DisconnectedDelegate = () -> Unit
 typealias ConnectedDelegate = () -> Unit
@@ -180,62 +179,6 @@ sealed class FilePropositionResponse : Event() {
 
         }
     }
-}
-
-interface SendableFile : Serializable {
-    val size: Long
-    val fileName: String
-    val inputStream: InputStream
-
-    companion object {
-        fun fromUri(uri: Uri, context: Context): SendableFile {
-            return when {
-                uri.toString().startsWith("content") -> ContentProviderFile(context, uri)
-                else -> ClassicFile(context, uri)
-            }
-        }
-    }
-}
-
-class ClassicFile(val context: Context, uri: Uri) : SendableFile {
-    val file = File(uri.path)
-
-    override val size: Long
-        get() = file.length()
-    override val fileName: String
-        get() = file.name
-    override val inputStream: InputStream
-        get() = file.inputStream()
-
-}
-
-class ContentProviderFile(val context: Context, val uri: Uri) : SendableFile {
-    override val inputStream: InputStream
-        get() = context.contentResolver.openInputStream(uri)
-
-    override val size: Long
-        get() {
-            val cursor = context.contentResolver.query(uri, null, null, null, null)
-            return cursor.use {
-                if (cursor != null && cursor.moveToFirst()) {
-                    cursor.getLong(cursor.getColumnIndex(OpenableColumns.SIZE))
-                } else {
-                    0
-                }
-            }
-        }
-
-    override val fileName: String
-        get() {
-            val cursor = context.contentResolver.query(uri, null, null, null, null)
-            return cursor.use {
-                if (cursor?.moveToFirst() == true) {
-                    cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                } else {
-                    "invalid"
-                }
-            }
-        }
 }
 
 interface SentRequest {

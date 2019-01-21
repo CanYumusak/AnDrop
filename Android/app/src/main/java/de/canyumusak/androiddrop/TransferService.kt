@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import de.canyumusak.androiddrop.sendables.SendableFile
 
 class TransferService : Service() {
 

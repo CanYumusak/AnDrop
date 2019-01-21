@@ -64,23 +64,25 @@ class MainActivity : AppCompatActivity() {
         })
 
         billingViewModel.purchaseResult.observe(this, Observer<PurchaseEvent> { event ->
-            val alertDialog = AlertDialog.Builder(this).create()
 
             if (event.result is PurchaseResult.Success) {
+                val alertDialog = AlertDialog.Builder(this).create()
                 alertDialog.setTitle(R.string.tipping_jar_dialog_sucess_title)
                 alertDialog.setMessage(getString(R.string.tipping_jar_dialog_sucess_message))
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.tipping_jar_dialog_sucess_button_title)) { dialog: DialogInterface, _ ->
                     dialog.dismiss()
                 }
-            } else {
+                alertDialog.show()
+            } else if (event.result is PurchaseResult.Fail) {
+                val alertDialog = AlertDialog.Builder(this).create()
                 alertDialog.setTitle(R.string.tipping_jar_dialog_error_title)
                 alertDialog.setMessage(getString(R.string.tipping_jar_dialog_error_message))
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.tipping_jar_dialog_error_button_title)) { dialog: DialogInterface, _ ->
                     dialog.dismiss()
                 }
+                alertDialog.show()
             }
 
-            alertDialog.show()
         })
 
         val tippingSumView = findViewById<TextView>(R.id.textView5)

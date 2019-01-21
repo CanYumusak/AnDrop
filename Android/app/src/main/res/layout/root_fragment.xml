@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="de.canyumusak.androiddrop.ui.root.DiscoveryViewModel" />
+            type="de.canyumusak.androiddrop.DiscoveryViewModel" />
 
         <import type="android.view.View" />
     </data>
