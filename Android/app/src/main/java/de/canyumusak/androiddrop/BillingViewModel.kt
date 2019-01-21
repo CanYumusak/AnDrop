@@ -174,9 +174,11 @@ class BillingViewModel(application: Application)
 
                 updatePurchaseHistory()
             }
+            BillingClient.BillingResponse.USER_CANCELED -> {
+                purchaseResult.value = PurchaseEvent(PurchaseResult.Cancelled, tip)
+            }
             BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
             BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-            BillingClient.BillingResponse.USER_CANCELED,
             BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
             BillingClient.BillingResponse.BILLING_UNAVAILABLE,
             BillingClient.BillingResponse.ITEM_UNAVAILABLE,
@@ -225,6 +227,7 @@ class PurchaseEvent(val result: PurchaseResult, val tip: Tip?)
 sealed class PurchaseResult {
     object Success : PurchaseResult()
     object Fail : PurchaseResult()
+    object Cancelled : PurchaseResult()
 }
 
 sealed class TippingSum {
