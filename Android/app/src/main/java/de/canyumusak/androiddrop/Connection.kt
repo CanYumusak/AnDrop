@@ -229,7 +229,7 @@ class ContentProviderFile(val context: Context, val uri: Uri) : SendableFile {
         get() {
             val cursor = context.contentResolver.query(uri, null, null, null, null)
             return cursor.use {
-                if (cursor.moveToFirst()) {
+                if (cursor?.moveToFirst() == true) {
                     cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                 } else {
                     "invalid"

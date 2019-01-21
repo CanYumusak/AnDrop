@@ -11,7 +11,7 @@ android {
         applicationId "de.canyumusak.androiddrop"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 5
+        versionCode 6
         versionName "0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,6 +47,7 @@ dependencies {
     implementation "de.mannodermaus.rxjava2:rxbonjour:2.0.0-RC1"
     implementation "de.mannodermaus.rxjava2:rxbonjour-platform-android:2.0.0-RC1"
     implementation "de.mannodermaus.rxjava2:rxbonjour-driver-jmdns:2.0.0-RC1"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha09"
     implementation "androidx.transition:transition:1.0.1"
