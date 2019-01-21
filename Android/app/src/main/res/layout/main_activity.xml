@@ -137,13 +137,14 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/tipping_jar_connection_error"
                 android:visibility="gone"
+                android:fontFamily="@font/open_sans"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
-                android:textColorLink="#000000"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/main_activity_tutorial2" />
+                app:layout_constraintTop_toBottomOf="@+id/main_activity_tutorial2"
+                tools:visibility="visible"/>
 
             <TextView
                 android:id="@+id/textView5"
