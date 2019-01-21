@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import de.canyumusak.androiddrop.databinding.ListItemClientBinding
 import de.canyumusak.androiddrop.databinding.RootFragmentBinding
-import de.canyumusak.androiddrop.ui.root.DiscoveryViewModel
 import de.mannodermaus.rxbonjour.BonjourService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

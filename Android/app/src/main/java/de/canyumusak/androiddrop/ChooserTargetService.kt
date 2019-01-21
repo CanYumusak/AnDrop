@@ -6,7 +6,6 @@ import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
-import de.canyumusak.androiddrop.ui.root.DiscoveryViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 

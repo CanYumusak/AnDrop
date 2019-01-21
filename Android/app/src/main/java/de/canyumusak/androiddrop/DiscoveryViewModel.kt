@@ -1,17 +1,16 @@
-package de.canyumusak.androiddrop.ui.root
+package de.canyumusak.androiddrop
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import de.canyumusak.androiddrop.ClassicFile
-import de.canyumusak.androiddrop.SendableFile
+import de.canyumusak.androiddrop.sendables.ClassicFile
+import de.canyumusak.androiddrop.sendables.SendableFile
 import de.mannodermaus.rxbonjour.BonjourEvent
 import de.mannodermaus.rxbonjour.BonjourService
 import de.mannodermaus.rxbonjour.RxBonjour
