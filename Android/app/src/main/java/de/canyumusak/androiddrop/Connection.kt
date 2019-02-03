@@ -162,44 +162,6 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
 
 }
 
-sealed class Event
-class Unknown : Event()
-class HandshakeEvent : Event()
-sealed class FilePropositionResponse : Event() {
-    class Accepted : FilePropositionResponse()
-    class Denied : FilePropositionResponse()
-
-    companion object {
-        fun fromJsonObject(jsonObject: JSONObject): Event {
-            return when (jsonObject.get("response")) {
-                "accepted" -> Accepted()
-                "denied" -> Denied()
-                else -> Unknown()
-            }
-
-        }
-    }
-}
-
-interface SentRequest {
-    fun serialize(): String
-}
-
-class FileProposition(val deviceName: String, val fileName: String, val fileLength: Long) : SentRequest {
-    override fun serialize(): String {
-        val jsonObject = JSONObject()
-        jsonObject.put("type", "send_file")
-        jsonObject.put("devicename", deviceName)
-        jsonObject.put("filename", fileName)
-        jsonObject.put("fileLength", fileLength)
-        return jsonObject.toString(4)
-    }
-
-    override fun toString(): String {
-        return "FileProposition ($deviceName, $fileName, $fileLength)"
-    }
-}
-
 internal class Dispatcher : CoroutineDispatcher() {
     val singleThreadExecutor = Executors.newSingleThreadExecutor()!!
 
