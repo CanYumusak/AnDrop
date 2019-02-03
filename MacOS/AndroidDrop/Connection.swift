@@ -3,7 +3,7 @@ import Cocoa
 
 
 enum ReceivedEvent {
-    case fileSendRequest(hostName: String, name: String, fileLength: Int64)
+    case fileSendRequest(hostName: String, files: [File])
     case invalid
 }
 
@@ -26,8 +26,7 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
     private var outputStream : OutputStream? = nil
     private var waitingForFile = false
     private var currentlyTransferringFile = false
-    private var filename : String? = nil
-    private var fileLength : Int64? = nil
+    private var files : [File]? = nil
     
     var downloadFolder: URL? {
         get {
@@ -108,9 +107,9 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
             switch (event) {
             case .invalid:
                 print ("received invalid event")
-            case .fileSendRequest(let hostName, let filename, let fileLength):
+            case .fileSendRequest(let hostName, let files):
                 if let outputStream = self.outputStream {
-                    self.respondToFileRequest(hostName: hostName, filename: filename, fileLength: fileLength, stream: outputStream)
+                    self.respondToFileRequest(hostName: hostName, files: files, stream: outputStream)
                 }
             }
         }
@@ -157,12 +156,10 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
         filePropositionDelegate.showFileTransferFinishedNotification(state: transferState)
     }
     
-    func respondToFileRequest(hostName: String, filename: String, fileLength: Int64, stream: OutputStream) {
-        print("Got file request from \(hostName) for file \(filename) - accepting")
-        self.filename = filename
-        self.fileLength = fileLength
+    func respondToFileRequest(hostName: String, files: [File], stream: OutputStream) {
+        self.files = files
     
-        let fileProposition = FileProposition(hostName: hostName, filename: filename, fileLength: fileLength)
+        let fileProposition = FileProposition(hostName: hostName, files: files)
         if (autoAcceptFiles) {
             self.waitingForFile = true
             self.send(event: AcceptEvent(), stream: stream)
@@ -270,6 +267,10 @@ fileprivate class DenyEvent: SentEvent {
 
 struct FileProposition {
     let hostName: String
+    let files: [File]
+}
+
+struct File {
     let filename: String
     let fileLength: Int64
 }
