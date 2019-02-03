@@ -31,8 +31,6 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
     val error = MutableLiveData<String>()
     var discovery: Disposable? = null
 
-    var dataUri: Uri? = null
-
     @SuppressLint("CheckResult")
     fun discoverClients() {
         Log.d("Bonjour", "starting discovery")
@@ -70,20 +68,23 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
         discovery?.dispose()
     }
 
-    fun needsStoragePermission(dataUri: Uri?): Boolean {
-        return dataUri?.let {
+    fun needsStoragePermission(dataUris: Array<Uri>?): Boolean {
+        return dataUris?.any { dataUri ->
             val sendableFile = SendableFile.fromUri(dataUri, getApplication())
             val needsStorage = sendableFile is ClassicFile
-            return if (needsStorage) {
-                val hasStoragePermission = ContextCompat.checkSelfPermission(
-                        getApplication(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
-                !hasStoragePermission
+            if (needsStorage) {
+                !hasStoragePermssion()
             } else {
                 false
             }
         } ?: false
+    }
+
+    private fun hasStoragePermssion(): Boolean {
+        return ContextCompat.checkSelfPermission(
+                getApplication(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
 }

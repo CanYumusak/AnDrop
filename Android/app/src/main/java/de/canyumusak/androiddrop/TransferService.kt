@@ -140,7 +140,7 @@ class TransferService : Service() {
         fun createErrorNotification(context: Context, fileTransferCommand: FileTransferCommand): Notification {
             createHighPriorityChannel(context)
 
-            val sendableFile = SendableFile.fromUri(fileTransferCommand.dataUri, context)
+            val sendableFiles = SendableFile.fromUris(fileTransferCommand.dataUris, context)
             return NotificationCompat.Builder(context, HIGH_PRIO_CHANNEL_ID)
                     .setShowWhen(true)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -148,7 +148,7 @@ class TransferService : Service() {
                     .setSmallIcon(R.drawable.ic_stat_share)
                     .setColor(context.getColor(R.color.colorPrimaryDark))
                     .setContentTitle("Failed")
-                    .setContentText("Could not send ${sendableFile.fileName}")
+                    .setContentText("Could not send ${sendableFiles.joinToString { it.fileName }}")
                     .setContentIntent(null)
                     .build()
 
@@ -157,7 +157,7 @@ class TransferService : Service() {
         fun createSuccessNotification(context: Context, fileTransferCommand: FileTransferCommand): Notification {
             createHighPriorityChannel(context)
 
-            val sendableFile = SendableFile.fromUri(fileTransferCommand.dataUri, context)
+            val sendableFiles = SendableFile.fromUris(fileTransferCommand.dataUris, context)
             return NotificationCompat.Builder(context, HIGH_PRIO_CHANNEL_ID)
                     .setShowWhen(true)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -165,7 +165,7 @@ class TransferService : Service() {
                     .setSmallIcon(R.drawable.ic_stat_share)
                     .setColor(context.getColor(R.color.colorPrimaryDark))
                     .setContentTitle("Succeeded")
-                    .setContentText("Successfully sent ${sendableFile.fileName}")
+                    .setContentText("Successfully sent ${sendableFiles.joinToString { it.fileName }}")
                     .setContentIntent(null)
                     .build()
 
@@ -182,13 +182,13 @@ class TransferServiceBroadcastReceiver(val service: TransferService) : Broadcast
 
 }
 
-data class FileTransferCommand(val clientName: String, val ipAddress: String, val port: Int, val dataUri: Uri) {
+data class FileTransferCommand(val clientName: String, val ipAddress: String, val port: Int, val dataUris: List<Uri>) {
 
     constructor(intent: Intent) : this(
             intent.getStringExtra(TransferService.CLIENT_NAME),
             intent.getStringExtra(TransferService.IP_ADDRESS),
             intent.getIntExtra(TransferService.PORT, 8080),
-            intent.extras[TransferService.DATA] as Uri
+            (intent.extras[TransferService.DATA] as Array<Uri>).toList()
     )
 }
 

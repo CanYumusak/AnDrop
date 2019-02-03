@@ -30,11 +30,23 @@ class TransferActivity : AppCompatActivity() {
 
     private lateinit var viewModel: DiscoveryViewModel
 
-    private val dataUri: Uri?
-        get() = intent.extras?.get(TransferService.DATA) as Uri?
+    private val dataUris: Array<Uri>?
+        get() {
+            return if (intent.action == Intent.ACTION_SEND) {
+                (intent.extras?.get(TransferService.DATA) as Uri?)?.let {
+                    arrayOf(it)
+                }
+            } else if (intent.action == Intent.ACTION_SEND_MULTIPLE) {
+                (intent.extras?.get(TransferService.DATA) as List<Uri?>?)?.let {
+                    it.filterNotNull().toTypedArray()
+                }
+            } else {
+                null
+            }
+        }
 
     private val needsStoragePermission: Boolean
-        get() = viewModel.needsStoragePermission(dataUri)
+        get() = viewModel.needsStoragePermission(dataUris)
 
     var binding: RootFragmentBinding? = null
 
@@ -126,8 +138,10 @@ class TransferActivity : AppCompatActivity() {
                         intent.putExtra(TransferService.CLIENT_NAME, client.name)
                         intent.putExtra(TransferService.IP_ADDRESS, ipaddress)
                         intent.putExtra(TransferService.PORT, client.port)
-                        intent.putExtra(TransferService.DATA, dataUri)
-                        grantUriPermission(packageName, dataUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        intent.putExtra(TransferService.DATA, dataUris)
+                        dataUris?.forEach {
+                            grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             startForegroundService(intent)

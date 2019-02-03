@@ -19,6 +19,9 @@ typealias MessageDelegate = (Event) -> Unit
 typealias ProgressChangedDelegate = (Int) -> Unit
 
 class Connection(val ipaddress: String?, val port: Int, val name: String?) {
+
+    val ioScope = CoroutineScope(Job() + Dispatchers.IO)
+
     var disconnectedDelegate: DisconnectedDelegate? = null
     var connectedDelegate: ConnectedDelegate? = null
     var finishedDelegate: FinishedDelegate? = null
@@ -30,7 +33,7 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
     var socket: Socket? = null
     internal val dispatcher = Dispatcher()
 
-    fun openConnection() = GlobalScope.launch(dispatcher) {
+    fun openConnection() = ioScope.launch(dispatcher) {
         withCurrentConnection {
             socket = Socket(ipaddress, port)
             connectedDelegate?.invoke()
@@ -39,21 +42,21 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
         }
     }
 
-    fun closeConnection() = GlobalScope.launch(dispatcher) {
+    fun closeConnection() = ioScope.launch(dispatcher) {
         socket?.close()
     }
 
-    fun proposeFileSendRequest(context: Context, uri: Uri) {
-        val file = SendableFile.fromUri(uri, context)
+    fun proposeFileSendRequest(context: Context, uris: List<Uri>) {
+        val files = SendableFile.fromUris(uris, context).map { File(it.fileName, it.size) }
         try {
-            sendEvent(FileProposition(deviceName, file.fileName, file.size))
+            sendEvent(FileProposition(deviceName, files))
         } catch (exception: Exception) {
             Log.w("Socket", "Socket closed with exception", exception)
             disconnectedDelegate?.invoke()
         }
     }
 
-    fun sendEvent(event: SentRequest) = GlobalScope.launch(dispatcher) {
+    fun sendEvent(event: SentRequest) = ioScope.launch(dispatcher) {
         Log.i("Socket", "Sending event ($event)")
         withCurrentConnection {
             if (socket == null) {
@@ -73,7 +76,7 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
         val reader = BufferedReader(InputStreamReader(input))
         Log.d("Socket", "Listening for messages with stream $input")
 
-        GlobalScope.launch {
+        ioScope.launch {
             try {
 
                 Log.d("Socket", "isConnected? ${socket?.isConnected}")
@@ -103,7 +106,7 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
     }
 
     private inline fun withCurrentConnection(crossinline block: () -> Unit) {
-        GlobalScope.launch(dispatcher) {
+        ioScope.launch(dispatcher) {
             try {
                 block()
             } catch (ex: UnknownHostException) {
@@ -136,20 +139,22 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
     val DEFAULT_BUFFER_SIZE: Int = 8 * 1024
 
 
-    fun sendFile(context: Context, fileUri: Uri) {
+    fun sendFiles(context: Context, fileUris: List<Uri>) {
         Log.i("Socket", "Sending file now")
-        val file = SendableFile.fromUri(fileUri, context)
-
-        file.inputStream.buffered().use { stream ->
-            socket?.getOutputStream()?.let {
-                var bytesCopied: Long = 0
-                val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-                var bytes = stream.read(buffer)
-                while (bytes >= 0) {
-                    it.write(buffer, 0, bytes)
-                    bytesCopied += bytes
-                    bytes = stream.read(buffer)
-                    progressChangedDelegate?.invoke(((bytesCopied.toDouble() / file.size.toDouble()) * 100).toInt())
+        val files = SendableFile.fromUris(fileUris, context)
+        val totalFileSize = files.sumByLong { it.size }
+        socket?.getOutputStream()?.let {
+            var bytesCopied: Long = 0
+            files.forEach { file ->
+                file.inputStream.buffered().use { stream ->
+                    val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+                    var bytes = stream.read(buffer)
+                    while (bytes >= 0) {
+                        it.write(buffer, 0, bytes)
+                        bytesCopied += bytes
+                        bytes = stream.read(buffer)
+                        progressChangedDelegate?.invoke(((bytesCopied.toDouble() / totalFileSize.toDouble()) * 100).toInt())
+                    }
                 }
             }
         }
@@ -163,9 +168,17 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
 }
 
 internal class Dispatcher : CoroutineDispatcher() {
-    val singleThreadExecutor = Executors.newSingleThreadExecutor()!!
+    private val singleThreadExecutor = Executors.newSingleThreadExecutor()
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        singleThreadExecutor.submit(block)
+        this.singleThreadExecutor.submit(block)
     }
+}
+
+private inline fun <T> Iterable<T>.sumByLong(selector: (T) -> Long): Long {
+    var sum = 0L
+    for (element in this) {
+        sum += selector(element)
+    }
+    return sum
 }

@@ -19,7 +19,7 @@ class FileConnection(val context: Context, fileTransferCommand: FileTransferComm
         when (it) {
             is FilePropositionResponse.Accepted -> {
                 Log.i("ConnectionVM", "Accepted file proposition. Sending now")
-                connection.value?.sendFile(context, fileUri)
+                connection.value?.sendFiles(context, fileUris)
             }
 
             is FilePropositionResponse.Denied -> {
@@ -29,19 +29,19 @@ class FileConnection(val context: Context, fileTransferCommand: FileTransferComm
 
             is HandshakeEvent -> {
                 Log.i("ConnectionVM", "Received Handshake event. Proposing file")
-                connection.value?.proposeFileSendRequest(context, fileUri)
+                connection.value?.proposeFileSendRequest(context, fileUris)
             }
             is Unknown -> Log.w("ConnectionVM", "Received unknown event")
         }
     }
 
-    val fileUri: Uri
+    val fileUris: List<Uri>
 
     init {
         val ipaddress = fileTransferCommand.ipAddress
         val port = fileTransferCommand.port
         val name = fileTransferCommand.clientName
-        fileUri = fileTransferCommand.dataUri
+        fileUris = fileTransferCommand.dataUris
 
         val connection = Connection(ipaddress, port, name)
         this.connection.value = connection
@@ -62,7 +62,7 @@ class FileConnection(val context: Context, fileTransferCommand: FileTransferComm
     }
 }
 
-val bluetoothName = BluetoothAdapter.getDefaultAdapter().getName()
+val bluetoothName = BluetoothAdapter.getDefaultAdapter().name
 val deviceName = bluetoothName ?: Build.MODEL
 
 sealed class State {

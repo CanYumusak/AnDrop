@@ -28,8 +28,15 @@ sealed class FilePropositionResponse : Event() {
 }
 
 @Serializable
-data class FileProposition(val deviceName: String, val fileName: String, val fileLength: Long) : SentRequest {
+data class FileProposition(val deviceName: String, val files: List<File>) : SentRequest {
     override fun serialize(): String {
         return Json.stringify(FileProposition.serializer(), this)
+    }
+}
+
+@Serializable
+data class File(val fileName: String, val fileLength: Long) : SentRequest {
+    override fun serialize(): String {
+        return Json.stringify(File.serializer(), this)
     }
 }
