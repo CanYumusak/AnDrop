@@ -21,10 +21,19 @@ class FilePropositionViewController: NSViewController {
         super.viewDidLoad()
 
         hostNameLabel.stringValue = fileProposition?.hostName ?? "Unknown"
-        fileNameLabel.stringValue = fileProposition?.filename ?? "Unknown"
         
-        if let fileLength = fileProposition?.fileLength {
-            let readableFileSize = ByteCountFormatter.string(fromByteCount: fileLength, countStyle: .file)
+        let fileName: String
+        if (fileProposition?.files.count == 1) {
+            fileName = fileProposition?.files[0].filename ?? "Unknown"
+        } else {
+            fileName = "\(fileProposition?.files.count ?? 0) files"
+        }
+        
+        fileNameLabel.stringValue = fileName
+        
+        if let files = fileProposition?.files {
+            let totalSize = files.map { $0.fileLength }.reduce(0, +)
+            let readableFileSize = ByteCountFormatter.string(fromByteCount: totalSize, countStyle: .file)
             fileSizeLabel.stringValue = readableFileSize
         } else {
             fileSizeLabel.stringValue = "Unknown"
