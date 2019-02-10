@@ -15,6 +15,8 @@ class TransferServiceWrapperActivity : Activity() {
         serviceIntent.putExtra(TransferService.IP_ADDRESS, intent.extras[TransferService.IP_ADDRESS] as String)
         serviceIntent.putExtra(TransferService.PORT, intent.extras[TransferService.PORT] as Int )
 
+        TODO()
+
         val dataUri = intent?.extras?.get(TransferService.DATA) as Uri
         serviceIntent.putExtra(TransferService.DATA, dataUri)
         grantUriPermission(packageName, dataUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
