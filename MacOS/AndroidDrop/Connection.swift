@@ -116,44 +116,50 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
     }
     
     func readFile(stream: InputStream) {
-        guard let filename = self.filename, let fileLength = self.fileLength else {
-            print("started file transfer without filename")
+        guard let files = self.files else {
+            print("started file transfer without file array")
             return
         }
         currentlyTransferringFile = true
         
-        var data = Data()
-        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: self.maxLength)
-        while data.count < fileLength && stream.streamStatus == .open {
-            let length = stream.read(buffer, maxLength: self.maxLength)
-            data.append(buffer, count: length)
-            print("appended \(length), total length is \(data.count) out of \(fileLength)")
-        }
-        
-        let transferState: FileTransferState
-        if (data.count >= fileLength) {
-            print("file transfer finished")
-            if let dir = downloadFolder {
-                do {
-                    let fileURL = dir.appendingPathComponent(filename)
-                    try data.write(to: fileURL)
-                    transferState = .success(url: fileURL)
-                } catch {
-                    print("error while writing file \(error)")
-                    transferState = .failed(filename: filename)
-                }
-            } else {
-                transferState = .failed(filename: filename)
+        let fileTransferResults : [FileTransferState] = files.map { file in
+            
+            let fileLength = file.fileLength
+            let filename = file.filename
+            
+            var data = Data()
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: self.maxLength)
+            while data.count < fileLength && stream.streamStatus == .open {
+                let length = stream.read(buffer, maxLength: self.maxLength)
+                data.append(buffer, count: length)
+                print("appended \(length), total length is \(data.count) out of \(fileLength)")
             }
             
-        } else {
-            print("file transfer cancelled")
-            transferState = .failed(filename: filename)
+            let transferState: FileTransferState
+            if (data.count >= fileLength) {
+                print("file transfer finished")
+                if let dir = downloadFolder {
+                    do {
+                        let fileURL = dir.appendingPathComponent(filename)
+                        try data.write(to: fileURL)
+                        return .success(url: fileURL)
+                    } catch {
+                        print("error while writing file \(error)")
+                        return .failed(filename: filename)
+                    }
+                } else {
+                    return .failed(filename: filename)
+                }
+                
+            } else {
+                print("file transfer cancelled")
+                return .failed(filename: filename)
+            }
         }
         
         waitingForFile = false
         currentlyTransferringFile = false
-        filePropositionDelegate.showFileTransferFinishedNotification(state: transferState)
+        filePropositionDelegate.showFileTransferFinishedNotification(states: fileTransferResults)
     }
     
     func respondToFileRequest(hostName: String, files: [File], stream: OutputStream) {
@@ -230,10 +236,14 @@ extension ReceivedEvent: RawRepresentable {
         
         switch type {
         case .send_file:
+            let rawFiles = rawValue["files"] as! [[String: Any]]
+            let files = rawFiles.map { rawFile in
+                File(filename: rawFile["fileName"] as! String, fileLength: rawFile["fileLength"]  as! Int64)
+            }
+            
             self = .fileSendRequest(
                 hostName: rawValue["devicename"]! as! String,
-                name: rawValue["filename"]! as! String,
-                fileLength: rawValue["fileLength"]! as! Int64
+                files: files
             )
         }
     }

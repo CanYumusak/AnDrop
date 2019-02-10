@@ -188,7 +188,7 @@ data class FileTransferCommand(val clientName: String, val ipAddress: String, va
             intent.getStringExtra(TransferService.CLIENT_NAME),
             intent.getStringExtra(TransferService.IP_ADDRESS),
             intent.getIntExtra(TransferService.PORT, 8080),
-            (intent.extras[TransferService.DATA] as Array<Uri>).toList()
+            intent.getParcelableArrayExtra(TransferService.DATA).map { it as Uri }
     )
 }
 
