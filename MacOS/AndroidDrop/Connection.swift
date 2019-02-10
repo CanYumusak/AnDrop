@@ -135,7 +135,6 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
                 print("appended \(length), total length is \(data.count) out of \(fileLength)")
             }
             
-            let transferState: FileTransferState
             if (data.count >= fileLength) {
                 print("file transfer finished")
                 if let dir = downloadFolder {
@@ -242,7 +241,7 @@ extension ReceivedEvent: RawRepresentable {
             }
             
             self = .fileSendRequest(
-                hostName: rawValue["devicename"]! as! String,
+                hostName: rawValue["deviceName"]! as! String,
                 files: files
             )
         }
