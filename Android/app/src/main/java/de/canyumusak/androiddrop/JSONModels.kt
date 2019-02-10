@@ -35,9 +35,4 @@ data class FileProposition(val deviceName: String, val files: List<File>, val ty
 }
 
 @Serializable
-data class File(val fileName: String, val fileLength: Long) {
-
-    override fun serialize(): String {
-        return Json.stringify(File.serializer(), this)
-    }
-}
+data class File(val fileName: String, val fileLength: Long)
