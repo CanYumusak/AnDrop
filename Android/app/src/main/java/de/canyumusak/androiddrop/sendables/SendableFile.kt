@@ -18,5 +18,9 @@ interface SendableFile : Serializable {
                 else -> ClassicFile(context, uri)
             }
         }
+
+        fun fromUris(uris: List<Uri>, context: Context): List<SendableFile> {
+            return uris.map { fromUri(it, context) }
+        }
     }
 }

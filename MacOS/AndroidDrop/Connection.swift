@@ -3,7 +3,7 @@ import Cocoa
 
 
 enum ReceivedEvent {
-    case fileSendRequest(hostName: String, name: String, fileLength: Int64)
+    case fileSendRequest(hostName: String, files: [File])
     case invalid
 }
 
@@ -26,8 +26,7 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
     private var outputStream : OutputStream? = nil
     private var waitingForFile = false
     private var currentlyTransferringFile = false
-    private var filename : String? = nil
-    private var fileLength : Int64? = nil
+    private var files : [File]? = nil
     
     var downloadFolder: URL? {
         get {
@@ -108,61 +107,65 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
             switch (event) {
             case .invalid:
                 print ("received invalid event")
-            case .fileSendRequest(let hostName, let filename, let fileLength):
+            case .fileSendRequest(let hostName, let files):
                 if let outputStream = self.outputStream {
-                    self.respondToFileRequest(hostName: hostName, filename: filename, fileLength: fileLength, stream: outputStream)
+                    self.respondToFileRequest(hostName: hostName, files: files, stream: outputStream)
                 }
             }
         }
     }
     
     func readFile(stream: InputStream) {
-        guard let filename = self.filename, let fileLength = self.fileLength else {
-            print("started file transfer without filename")
+        guard let files = self.files else {
+            print("started file transfer without file array")
             return
         }
         currentlyTransferringFile = true
         
-        var data = Data()
-        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: self.maxLength)
-        while data.count < fileLength && stream.streamStatus == .open {
-            let length = stream.read(buffer, maxLength: self.maxLength)
-            data.append(buffer, count: length)
-            print("appended \(length), total length is \(data.count) out of \(fileLength)")
-        }
-        
-        let transferState: FileTransferState
-        if (data.count >= fileLength) {
-            print("file transfer finished")
-            if let dir = downloadFolder {
-                do {
-                    let fileURL = dir.appendingPathComponent(filename)
-                    try data.write(to: fileURL)
-                    transferState = .success(url: fileURL)
-                } catch {
-                    print("error while writing file \(error)")
-                    transferState = .failed(filename: filename)
-                }
-            } else {
-                transferState = .failed(filename: filename)
+        let fileTransferResults : [FileTransferState] = files.map { file in
+            
+            let fileLength = file.fileLength
+            let filename = file.filename
+            
+            var data = Data()
+            let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: self.maxLength)
+            while data.count < fileLength && stream.streamStatus == .open {
+                let maxLength = min(self.maxLength, Int64(data.count).distance(to: fileLength))
+                let length = stream.read(buffer, maxLength: maxLength)
+                data.append(buffer, count: length)
+                print("appended \(length), total length is \(data.count) out of \(fileLength)")
             }
             
-        } else {
-            print("file transfer cancelled")
-            transferState = .failed(filename: filename)
+            if (data.count >= fileLength) {
+                print("file transfer finished")
+                if let dir = downloadFolder {
+                    do {
+                        let fileURL = dir.appendingPathComponent(filename)
+                        try data.write(to: fileURL)
+                        return .success(url: fileURL)
+                    } catch {
+                        print("error while writing file \(error)")
+                        return .failed(filename: filename)
+                    }
+                } else {
+                    return .failed(filename: filename)
+                }
+                
+            } else {
+                print("file transfer cancelled")
+                return .failed(filename: filename)
+            }
         }
         
         waitingForFile = false
         currentlyTransferringFile = false
-        filePropositionDelegate.showFileTransferFinishedNotification(state: transferState)
+        filePropositionDelegate.showFileTransferFinishedNotification(states: fileTransferResults)
     }
     
-    func respondToFileRequest(hostName: String, filename: String, fileLength: Int64, stream: OutputStream) {
-        print("Got file request from \(hostName) for file \(filename) - accepting")
-        self.filename = filename
-        self.fileLength = fileLength
+    func respondToFileRequest(hostName: String, files: [File], stream: OutputStream) {
+        self.files = files
     
-        let fileProposition = FileProposition(hostName: hostName, filename: filename, fileLength: fileLength)
+        let fileProposition = FileProposition(hostName: hostName, files: files)
         if (autoAcceptFiles) {
             self.waitingForFile = true
             self.send(event: AcceptEvent(), stream: stream)
@@ -233,10 +236,14 @@ extension ReceivedEvent: RawRepresentable {
         
         switch type {
         case .send_file:
+            let rawFiles = rawValue["files"] as! [[String: Any]]
+            let files = rawFiles.map { rawFile in
+                File(filename: rawFile["fileName"] as! String, fileLength: rawFile["fileLength"]  as! Int64)
+            }
+            
             self = .fileSendRequest(
-                hostName: rawValue["devicename"]! as! String,
-                name: rawValue["filename"]! as! String,
-                fileLength: rawValue["fileLength"]! as! Int64
+                hostName: rawValue["deviceName"]! as! String,
+                files: files
             )
         }
     }
@@ -270,6 +277,10 @@ fileprivate class DenyEvent: SentEvent {
 
 struct FileProposition {
     let hostName: String
+    let files: [File]
+}
+
+struct File {
     let filename: String
     let fileLength: Int64
 }

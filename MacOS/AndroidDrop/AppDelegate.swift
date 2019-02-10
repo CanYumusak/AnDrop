@@ -120,26 +120,31 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
         }
     }
     
-    func showFileTransferFinishedNotification(state: FileTransferState) {
+    func showFileTransferFinishedNotification(states: [FileTransferState]) {
         
         let notification = NSUserNotification()
+        let failedState = states.first { state in
+            switch state {
+            case .success(_):
+               return false
+                
+            case .failed(_):
+                return true
+            }
+        }
         
-        switch state {
-        case .success(_):
+        if (failedState == nil) {
             notification.informativeText = "Success"
-            
-        case .failed(_):
-            notification.informativeText = "Failed)"
+            notification.informativeText = "Successfully received files."
+            notificationDelegate = NotificationDelegate(isFailed: false, downloadFolder: downloadFolder)
+
+        } else {
+            notification.informativeText = "Failed"
+            notification.informativeText = "Failed to receive files.)"
+            notificationDelegate = NotificationDelegate(isFailed: true, downloadFolder: downloadFolder)
+
         }
-        
-        switch state {
-        case .success(let url):
-            notification.informativeText = "Successfully received file \(url.lastPathComponent).)"
-            
-        case .failed(let filename):
-            notification.informativeText = "Failed to receive \(filename).)"
-        }
-        notificationDelegate = NotificationDelegate(state: state)
+   
         NSUserNotificationCenter.default.delegate = notificationDelegate
         NSUserNotificationCenter.default.deliver(notification)
     }
@@ -147,10 +152,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
 
 class NotificationDelegate: NSObject, NSUserNotificationCenterDelegate {
     
-    let state: FileTransferState
+    let isFailed: Bool
+    let downloadFolder: URL?
     
-    init(state: FileTransferState) {
-        self.state = state
+    init(isFailed: Bool, downloadFolder: URL?) {
+        self.isFailed = isFailed
+        self.downloadFolder = downloadFolder
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
@@ -160,10 +167,11 @@ class NotificationDelegate: NSObject, NSUserNotificationCenterDelegate {
         case .actionButtonClicked:
             print("Action Button clicked")
         case .contentsClicked:
-            switch state {
-            case .success(let url):
-                NSWorkspace.shared.openFile(url.absoluteString)
-            case .failed(_):
+            if (!isFailed) {
+                if let downloadFolder = self.downloadFolder {
+                    NSWorkspace.shared.openFile(downloadFolder.absoluteString)
+                }
+            } else {
                 print("Clicked on failed notification")
             }
             
@@ -178,5 +186,5 @@ class NotificationDelegate: NSObject, NSUserNotificationCenterDelegate {
 
 protocol FilePropositionPromptDelegate {
     func promptUserFileProposition(fileProposition: FileProposition, callback: @escaping (UserAnswer) -> Void)
-    func showFileTransferFinishedNotification(state: FileTransferState)
+    func showFileTransferFinishedNotification(states: [FileTransferState])
 }
