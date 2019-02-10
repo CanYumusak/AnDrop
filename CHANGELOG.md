@@ -1,3 +1,7 @@
+## [Beta-2]
+### Added 
+- Added support for multiple file send
+
 ## [Beta-1]
 ### Added 
 - Added Tipping Jar to Androp explanation
