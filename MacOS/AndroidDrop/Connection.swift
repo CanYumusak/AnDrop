@@ -130,7 +130,8 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
             var data = Data()
             let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: self.maxLength)
             while data.count < fileLength && stream.streamStatus == .open {
-                let length = stream.read(buffer, maxLength: self.maxLength)
+                let maxLength = min(self.maxLength, Int64(data.count).distance(to: fileLength))
+                let length = stream.read(buffer, maxLength: maxLength)
                 data.append(buffer, count: length)
                 print("appended \(length), total length is \(data.count) out of \(fileLength)")
             }
