@@ -1,11 +1,3 @@
-//
-//  FilePropositionViewController.swift
-//  AndroidDrop
-//
-//  Created by Can Yumusak on 17.10.18.
-//  Copyright © 2018 Can Yumusak. All rights reserved.
-//
-
 import Cocoa
 
 class FilePropositionViewController: NSViewController {

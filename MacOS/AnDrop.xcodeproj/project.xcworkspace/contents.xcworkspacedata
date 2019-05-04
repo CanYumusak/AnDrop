@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:AndroidDrop.xcodeproj">
+      location = "self:/Users/canyumusak/git/coy/AnDrop/MacOS/AnDrop.xcodeproj">
    </FileRef>
 </Workspace>
