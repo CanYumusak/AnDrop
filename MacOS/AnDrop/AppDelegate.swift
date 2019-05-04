@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  AndroidDrop
-//
-//  Created by Can Yumusak on 07.06.18.
-//  Copyright © 2018 Can Yumusak. All rights reserved.
-//
-
 import Cocoa
 
 @NSApplicationMain
@@ -53,9 +45,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
         statusItem.menu = statusMenu
 
         let menu = NSMenu()
-        let changeFolderMenuItem = NSMenuItem(title: "Change Download Folder", action: #selector(self.openDownloadFolderChooser), keyEquivalent: "f")
-        changeFolderMenuItem.target = self
-        menu.addItem(changeFolderMenuItem)
+//        let changeFolderMenuItem = NSMenuItem(title: "Change Download Folder", action: #selector(self.openDownloadFolderChooser), keyEquivalent: "f")
+//        changeFolderMenuItem.target = self
+//        menu.addItem(changeFolderMenuItem)
         
         let changeAutoAcceptMenuItem = NSMenuItem(title: "Auto Accept Files", action: #selector(self.toggleAutoAccept), keyEquivalent: "a")
         changeAutoAcceptMenuItem.target = self
@@ -140,7 +132,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
 
         } else {
             notification.informativeText = "Failed"
-            notification.informativeText = "Failed to receive files.)"
+            notification.informativeText = "Failed to receive files."
             notificationDelegate = NotificationDelegate(isFailed: true, downloadFolder: downloadFolder)
 
         }

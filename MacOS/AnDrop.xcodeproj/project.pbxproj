@@ -18,13 +18,13 @@
 /* Begin PBXFileReference section */
 		B72CF99520CCA68600D4A024 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
 		B7356C812177C2F000F87F54 /* FilePropositionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePropositionViewController.swift; sourceTree = "<group>"; };
-		B79B174620C9D402007C7121 /* AndroidDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AndroidDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B79B174620C9D402007C7121 /* AnDrop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AnDrop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B79B174920C9D402007C7121 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B79B174B20C9D402007C7121 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B79B174D20C9D407007C7121 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B79B175020C9D407007C7121 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B79B175220C9D407007C7121 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B79B175320C9D407007C7121 /* AndroidDrop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AndroidDrop.entitlements; sourceTree = "<group>"; };
+		B7E0A9E8227DEA2900B08279 /* AnDrop.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = AnDrop.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +41,7 @@
 		B79B173D20C9D401007C7121 = {
 			isa = PBXGroup;
 			children = (
-				B79B174820C9D402007C7121 /* AndroidDrop */,
+				B79B174820C9D402007C7121 /* AnDrop */,
 				B79B174720C9D402007C7121 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,32 +49,32 @@
 		B79B174720C9D402007C7121 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B79B174620C9D402007C7121 /* AndroidDrop.app */,
+				B79B174620C9D402007C7121 /* AnDrop.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B79B174820C9D402007C7121 /* AndroidDrop */ = {
+		B79B174820C9D402007C7121 /* AnDrop */ = {
 			isa = PBXGroup;
 			children = (
 				B79B174920C9D402007C7121 /* AppDelegate.swift */,
 				B79B174B20C9D402007C7121 /* ViewController.swift */,
 				B79B174D20C9D407007C7121 /* Assets.xcassets */,
 				B79B174F20C9D407007C7121 /* Main.storyboard */,
+				B7E0A9E8227DEA2900B08279 /* AnDrop.entitlements */,
 				B79B175220C9D407007C7121 /* Info.plist */,
-				B79B175320C9D407007C7121 /* AndroidDrop.entitlements */,
 				B72CF99520CCA68600D4A024 /* Connection.swift */,
 				B7356C812177C2F000F87F54 /* FilePropositionViewController.swift */,
 			);
-			path = AndroidDrop;
+			path = AnDrop;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B79B174520C9D402007C7121 /* AndroidDrop */ = {
+		B79B174520C9D402007C7121 /* AnDrop */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B79B175620C9D407007C7121 /* Build configuration list for PBXNativeTarget "AndroidDrop" */;
+			buildConfigurationList = B79B175620C9D407007C7121 /* Build configuration list for PBXNativeTarget "AnDrop" */;
 			buildPhases = (
 				B79B174220C9D402007C7121 /* Sources */,
 				B79B174320C9D402007C7121 /* Frameworks */,
@@ -84,9 +84,9 @@
 			);
 			dependencies = (
 			);
-			name = AndroidDrop;
+			name = AnDrop;
 			productName = AndroidDrop;
-			productReference = B79B174620C9D402007C7121 /* AndroidDrop.app */;
+			productReference = B79B174620C9D402007C7121 /* AnDrop.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -109,7 +109,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B79B174120C9D402007C7121 /* Build configuration list for PBXProject "AndroidDrop" */;
+			buildConfigurationList = B79B174120C9D402007C7121 /* Build configuration list for PBXProject "AnDrop" */;
 			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -122,7 +122,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B79B174520C9D402007C7121 /* AndroidDrop */,
+				B79B174520C9D402007C7121 /* AnDrop */,
 			);
 		};
 /* End PBXProject section */
@@ -282,19 +282,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = AndroidDrop/AndroidDrop.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AnDrop/AnDrop.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z4C28J97JX;
-				INFOPLIST_FILE = AndroidDrop/Info.plist;
+				INFOPLIST_FILE = AnDrop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.canyumusak.androiddrop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Androp Dev Profile";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -303,19 +303,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = AndroidDrop/AndroidDrop.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = AnDrop/AnDrop.entitlements;
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z4C28J97JX;
-				INFOPLIST_FILE = AndroidDrop/Info.plist;
+				INFOPLIST_FILE = AnDrop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = de.canyumusak.androiddrop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Androp Profile";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -323,7 +323,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B79B174120C9D402007C7121 /* Build configuration list for PBXProject "AndroidDrop" */ = {
+		B79B174120C9D402007C7121 /* Build configuration list for PBXProject "AnDrop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B79B175420C9D407007C7121 /* Debug */,
@@ -332,7 +332,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B79B175620C9D407007C7121 /* Build configuration list for PBXNativeTarget "AndroidDrop" */ = {
+		B79B175620C9D407007C7121 /* Build configuration list for PBXNativeTarget "AnDrop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B79B175720C9D407007C7121 /* Debug */,

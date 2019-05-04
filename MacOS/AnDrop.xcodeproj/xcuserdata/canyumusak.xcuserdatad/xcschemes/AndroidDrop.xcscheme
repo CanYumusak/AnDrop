@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B79B174520C9D402007C7121"
-               BuildableName = "AndroidDrop.app"
-               BlueprintName = "AndroidDrop"
-               ReferencedContainer = "container:AndroidDrop.xcodeproj">
+               BuildableName = "AnDrop.app"
+               BlueprintName = "AnDrop"
+               ReferencedContainer = "container:AnDrop.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B79B174520C9D402007C7121"
-            BuildableName = "AndroidDrop.app"
-            BlueprintName = "AndroidDrop"
-            ReferencedContainer = "container:AndroidDrop.xcodeproj">
+            BuildableName = "AnDrop.app"
+            BlueprintName = "AnDrop"
+            ReferencedContainer = "container:AnDrop.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B79B174520C9D402007C7121"
-            BuildableName = "AndroidDrop.app"
-            BlueprintName = "AndroidDrop"
-            ReferencedContainer = "container:AndroidDrop.xcodeproj">
+            BuildableName = "AnDrop.app"
+            BlueprintName = "AnDrop"
+            ReferencedContainer = "container:AnDrop.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B79B174520C9D402007C7121"
-            BuildableName = "AndroidDrop.app"
-            BlueprintName = "AndroidDrop"
-            ReferencedContainer = "container:AndroidDrop.xcodeproj">
+            BuildableName = "AnDrop.app"
+            BlueprintName = "AnDrop"
+            ReferencedContainer = "container:AnDrop.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
