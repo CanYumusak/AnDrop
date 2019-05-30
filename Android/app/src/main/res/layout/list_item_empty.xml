@@ -23,6 +23,26 @@
             bind:layout_constraintStart_toStartOf="parent"
             bind:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/no_wifi_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/icon_no_wifi"
+            android:tint="@color/mediumGray"
+            android:visibility="gone"
+            bind:layout_constraintBottom_toBottomOf="parent"
+            bind:layout_constraintStart_toStartOf="parent"
+            bind:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier_empty_layout"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            bind:barrierDirection="end"
+            bind:constraint_referenced_ids="progressBar,no_wifi_icon" />
+
         <TextView
             android:id="@+id/textView"
             style="@style/Text.Normal"
@@ -38,7 +58,7 @@
             android:text="@string/searching_clients"
             bind:layout_constraintBottom_toBottomOf="parent"
             bind:layout_constraintEnd_toEndOf="parent"
-            bind:layout_constraintStart_toEndOf="@+id/progressBar"
+            bind:layout_constraintStart_toEndOf="@+id/barrier_empty_layout"
             bind:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

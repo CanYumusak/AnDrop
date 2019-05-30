@@ -55,7 +55,6 @@ class TransferActivity : AppCompatActivity() {
         val inflate = DataBindingUtil.inflate<RootFragmentBinding>(layoutInflater, R.layout.root_fragment, null, false)
 
         viewModel = ViewModelProviders.of(this).get(DiscoveryViewModel::class.java)
-        viewModel.discoverClients()
 
         inflate.viewModel = viewModel
 
@@ -65,14 +64,12 @@ class TransferActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context)
 
             viewModel.clients.observe(this@TransferActivity, Observer {
-
-                if (it.isNotEmpty()) {
-                    inflate.emptyLayout.emptyLayoutRoot.visibility = View.INVISIBLE
-                } else {
-                    inflate.emptyLayout.emptyLayoutRoot.visibility = View.VISIBLE
-                }
-
+                updateEmptyLayout(inflate)
                 clientListAdapter.submitList(it)
+            })
+
+            viewModel.wifiState.observe(this@TransferActivity, Observer {
+                updateEmptyLayout(inflate)
             })
 
             clientListAdapter.submitList(viewModel.clients.value)
@@ -87,6 +84,39 @@ class TransferActivity : AppCompatActivity() {
         binding = inflate
 
         setContentView(inflate.root)
+    }
+
+    private fun updateEmptyLayout(inflate: RootFragmentBinding) {
+        val emptyLayout = inflate.emptyLayout
+
+        when (viewModel.wifiState.value) {
+            WifiState.Disabled -> {
+                emptyLayout.textView.text = getString(R.string.not_connected_to_wifi)
+                emptyLayout.emptyLayoutRoot.visibility = View.VISIBLE
+                emptyLayout.progressBar.visibility = View.GONE
+                emptyLayout.noWifiIcon.visibility = View.VISIBLE
+            }
+            is WifiState.Enabled -> {
+                if (viewModel.clients.value?.isNotEmpty() == true) {
+                    emptyLayout.emptyLayoutRoot.visibility = View.INVISIBLE
+                } else {
+                    emptyLayout.emptyLayoutRoot.visibility = View.VISIBLE
+                    emptyLayout.textView.text = getString(R.string.searching_clients)
+                    emptyLayout.progressBar.visibility = View.VISIBLE
+                    emptyLayout.noWifiIcon.visibility = View.GONE
+                }
+            }
+            null -> {
+                if (viewModel.clients.value?.isNotEmpty() == true) {
+                    emptyLayout.emptyLayoutRoot.visibility = View.INVISIBLE
+                } else {
+                    emptyLayout.emptyLayoutRoot.visibility = View.VISIBLE
+                    emptyLayout.textView.text = getString(R.string.searching_clients)
+                    emptyLayout.progressBar.visibility = View.VISIBLE
+                    emptyLayout.noWifiIcon.visibility = View.GONE
+                }
+            }
+        }
     }
 
     fun updatePermissionRequired(binding: RootFragmentBinding) {
