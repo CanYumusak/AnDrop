@@ -3,7 +3,14 @@ package de.canyumusak.androiddrop
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.ConnectivityManager.CONNECTIVITY_ACTION
+import android.net.NetworkInfo
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.ContextCompat
@@ -19,6 +26,8 @@ import de.mannodermaus.rxbonjour.platforms.android.AndroidPlatform
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import android.net.wifi.WifiManager
+
 
 class DiscoveryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -30,25 +39,63 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
     val clients = MutableLiveData<List<BonjourService>>().also { it.value = listOf() }
     val error = MutableLiveData<String>()
     var discovery: Disposable? = null
+    val wifiState = MutableLiveData<WifiState>()
+
+    val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            updateWifiState()
+        }
+    }
+
+    private fun updateWifiState() {
+        val wifiState = currentWifiState()
+        this@DiscoveryViewModel.wifiState.value = wifiState
+
+        when (wifiState) {
+            WifiState.Disabled -> endDiscovery()
+            is WifiState.Enabled -> {
+                if (discovery?.isDisposed != false) {
+                    discoverClients()
+                }
+            }
+        }
+    }
+
+    val connectivityManager: ConnectivityManager
+        get() = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    init {
+        application.registerReceiver(broadcastReceiver, IntentFilter(CONNECTIVITY_ACTION))
+        updateWifiState()
+    }
+
+    override fun onCleared() {
+        getApplication<Application>().unregisterReceiver(broadcastReceiver)
+        super.onCleared()
+    }
 
     @SuppressLint("CheckResult")
     fun discoverClients() {
         Log.d("Bonjour", "starting discovery")
 
-        discovery = bonjour.newDiscovery("_androp._tcp")
+        val discovery = bonjour.newDiscovery("_androp._tcp")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { event ->
                             when (event) {
                                 is BonjourEvent.Added -> {
-                                    Log.d("Bonjour", "added ${event.service.name}")
-                                    val oldClients = clients.value?.toMutableList()
+                                    if (discovery?.isDisposed == false) {
+                                        Log.d("Bonjour", "added ${event.service.name} with host ${event.service.host}")
+                                        val oldClients = clients.value?.toMutableList()
 
-                                    oldClients?.removeIf { it.host == event.service.host }
+                                        oldClients?.removeIf { it.host == event.service.host }
 
-                                    oldClients?.add(event.service)
-                                    clients.value = oldClients
+                                        oldClients?.add(event.service)
+                                        clients.value = oldClients
+                                    } else {
+                                        Log.d("Bonjour", "ignoring ${event.service.name} since discovery was disposed")
+                                    }
                                 }
 
                                 is BonjourEvent.Removed -> {
@@ -62,9 +109,12 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
                         },
                         { error.value = it.message }
                 )
+
+        this.discovery = discovery
     }
 
     fun endDiscovery() {
+        clients.value = listOf()
         discovery?.dispose()
     }
 
@@ -87,4 +137,20 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    private fun currentWifiState(): WifiState {
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        val isConnected: Boolean = activeNetwork?.isConnected == true
+        val isWiFi: Boolean = activeNetwork?.type == ConnectivityManager.TYPE_WIFI
+
+        return if (isWiFi && isConnected) {
+            WifiState.Enabled
+        } else {
+            WifiState.Disabled
+        }
+    }
+}
+
+sealed class WifiState {
+    object Disabled : WifiState()
+    object Enabled : WifiState()
 }

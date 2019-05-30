@@ -1,3 +1,7 @@
+## [1.1-Beta-1]
+### Added
+- Added hint when wifi is disconnected
+
 ## [Beta-2]
 ### Added 
 - Added support for multiple file send
