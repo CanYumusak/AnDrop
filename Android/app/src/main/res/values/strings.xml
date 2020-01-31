@@ -3,17 +3,20 @@
     <string name="welcome_to_androp">Welcome to AnDrop</string>
     <string name="discovery_fragment_title">Share file to</string>
     <string name="welcome_to_androp_description">This is a lightweight tool to transfer files between your Android phone and your macOS devices.</string>
-    <string name="welcome_to_androp_tutorial">1. Install and launch AnDrop for mac on your macOS device from the App Store.\n\n
-        2. Share any file on your Android device with AnDrop.\n\n
-        3. Select your target macOS device.\n\n
-        5. Profit! Your file is now in the Download folder of your macOS device.
-    </string>
+    <string-array name="welcome_to_androp_tutorial">
+        <item>Install and launch AnDrop for mac on your macOS device from the App Store.</item>
+        <item>Make sure your Android device is in the same Wifi as your mac.</item>
+        <item>Press on the Android share button of a photo, pdf or any other file you\'d like to share.</item>
+        <item>Click on the AnDrop app in the Android sharing sheet.</item>
+        <item>Select your target macOS device.</item>
+        <item>Congratulations! Your file is now in the Download folder of your macOS device.</item>
+    </string-array>
     <string name="searching_clients">Searching for clients…</string>
     <string name="not_connected_to_wifi">Not connected to Wi-Fi</string>
     <string name="storage_access_permission">To share this file you need to grant AnDrop storage access permission</string>
     <string name="grant_storage_permission_button_title">Grant storage permission</string>
     <string name="tipping_jar_title">Tip Jar</string>
-    <string name="tipping_jar_description">Androp relies on your support to fund its development. If you find it useful, please consider supporting the app by leaving a tip in our Tip Jar.</string>
+    <string name="tipping_jar_description">AnDrop is absolutely free but relies on your support to fund its development. If you find it useful, please consider supporting the app by leaving a tip in our Tip Jar.</string>
     <string name="tipping_jar_connection_error">Failed to connect to billing services</string>
 
     <string name="tipping_jar_button_small_tip">Generous Tip of 0,99€</string>

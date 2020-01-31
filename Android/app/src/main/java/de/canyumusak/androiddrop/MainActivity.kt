@@ -19,6 +19,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
+        val tutorial = resources.getStringArray(R.array.welcome_to_androp_tutorial).toList()
+
+        findViewById<TextView>(R.id.main_activity_tutorial).text = tutorial.withLeadingEnumeration(this, paragraphSpacing = 16)
+
         billingViewModel = ViewModelProviders.of(this).get(BillingViewModel::class.java)
 
         val smallAmountButton = findViewById<TextView>(R.id.smallAmountButton)
