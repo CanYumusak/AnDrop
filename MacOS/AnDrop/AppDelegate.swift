@@ -39,7 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         serviceDelegate = Connection(filePropositionDelegate: self)
 
-        let icon = NSImage(named: NSImage.Name("statusIcon"))
+        let icon = NSImage(named: "statusIcon")
         icon?.isTemplate = true
         statusItem.image = icon
         statusItem.menu = statusMenu
@@ -66,7 +66,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
         DispatchQueue.main.async {
             let service = NetService(domain: "local.", type: "_androp._tcp.", name: Host.current().localizedName ?? "Unknown MacBook", port: 0)
             service.publish(options: [.listenForConnections])
-            service.schedule(in: .main, forMode: .defaultRunLoopMode)
+            service.schedule(in: .main, forMode: RunLoop.Mode.default)
             
             service.delegate = self.serviceDelegate
             print("broadcasting services")
