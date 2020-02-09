@@ -216,8 +216,8 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
         inputStream.delegate = self
         outputStream.delegate = self
 
-        outputStream.schedule(in: .current, forMode: .commonModes)
-        inputStream.schedule(in: .current, forMode: .commonModes)
+        outputStream.schedule(in: .current, forMode: RunLoop.Mode.common)
+        inputStream.schedule(in: .current, forMode: RunLoop.Mode.common)
         
         inputStream.open()
         outputStream.open()

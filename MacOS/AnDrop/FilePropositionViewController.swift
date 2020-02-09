@@ -44,8 +44,8 @@ class FilePropositionViewController: NSViewController {
 
 extension FilePropositionViewController {
     static func freshController(fileProposition: FileProposition, callback: @escaping (UserAnswer) -> Void) -> FilePropositionViewController {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        let identifier = NSStoryboard.SceneIdentifier(rawValue: "FilePropositionViewController")
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let identifier = "FilePropositionViewController"
         guard let viewcontroller = storyboard.instantiateController(withIdentifier: identifier) as? FilePropositionViewController else {
             fatalError("Why cant i find FilePropositionViewController?")
         }
