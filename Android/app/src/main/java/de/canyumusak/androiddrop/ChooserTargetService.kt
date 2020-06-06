@@ -20,7 +20,7 @@ class AndropChooserTargetService : ChooserTargetService() {
     }
 
     override fun onGetChooserTargets(targetActivityName: ComponentName?, matchedFilter: IntentFilter?): List<ChooserTarget> {
-        val componentName = ComponentName(packageName, TransferServiceWrapperActivity::class.java.canonicalName)
+        val componentName = ComponentName(packageName, TransferServiceWrapperActivity::class.java.canonicalName!!)
 
         runBlocking { delay(1000) }
         discoveryViewModel.discovery?.dispose()

@@ -8,7 +8,7 @@ import java.io.InputStream
 class ContentProviderFile(val context: Context, val uri: Uri) : SendableFile {
 
     override val inputStream: InputStream
-        get() = context.contentResolver.openInputStream(uri)
+        get() = context.contentResolver.openInputStream(uri)!!
 
     override val size: Long
         get() {

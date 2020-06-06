@@ -3,15 +3,9 @@ package de.canyumusak.androiddrop
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.net.ConnectivityManager
-import android.net.ConnectivityManager.CONNECTIVITY_ACTION
-import android.net.NetworkInfo
-import android.net.Uri
+import android.net.*
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
@@ -26,7 +20,6 @@ import de.mannodermaus.rxbonjour.platforms.android.AndroidPlatform
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import android.net.wifi.WifiManager
 
 
 class DiscoveryViewModel(application: Application) : AndroidViewModel(application) {
@@ -41,36 +34,39 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
     var discovery: Disposable? = null
     val wifiState = MutableLiveData<WifiState>()
 
-    val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            updateWifiState()
-        }
-    }
-
-    private fun updateWifiState() {
-        val wifiState = currentWifiState()
-        this@DiscoveryViewModel.wifiState.value = wifiState
-
-        when (wifiState) {
-            WifiState.Disabled -> endDiscovery()
-            is WifiState.Enabled -> {
-                if (discovery?.isDisposed != false) {
-                    discoverClients()
-                }
-            }
-        }
-    }
-
-    val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager
         get() = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            wifiState.postValue(WifiState.Enabled)
+            discoverClients()
+        }
+
+        override fun onLost(network: Network) {
+            wifiState.postValue(WifiState.Disabled)
+            endDiscovery()
+        }
+
+        override fun onUnavailable() {
+            wifiState.postValue(WifiState.Disabled)
+            endDiscovery()
+        }
+    }
+
     init {
-        application.registerReceiver(broadcastReceiver, IntentFilter(CONNECTIVITY_ACTION))
-        updateWifiState()
+        val builder = NetworkRequest.Builder()
+        builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+
+        val networkRequest = builder.build()
+        connectivityManager.registerNetworkCallback(
+                networkRequest,
+                networkCallback
+        )
     }
 
     override fun onCleared() {
-        getApplication<Application>().unregisterReceiver(broadcastReceiver)
+        connectivityManager.unregisterNetworkCallback(networkCallback)
         super.onCleared()
     }
 
@@ -135,18 +131,6 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
                 getApplication(),
                 Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun currentWifiState(): WifiState {
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-        val isConnected: Boolean = activeNetwork?.isConnected == true
-        val isWiFi: Boolean = activeNetwork?.type == ConnectivityManager.TYPE_WIFI
-
-        return if (isWiFi && isConnected) {
-            WifiState.Enabled
-        } else {
-            WifiState.Disabled
-        }
     }
 }
 
