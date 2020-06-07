@@ -23,21 +23,21 @@ class AndropChooserTargetService : ChooserTargetService() {
         val componentName = ComponentName(packageName, TransferServiceWrapperActivity::class.java.canonicalName!!)
 
         runBlocking { delay(1000) }
-        discoveryViewModel.discovery?.dispose()
+        val results = discoveryViewModel.endDiscovery()
 
-        return discoveryViewModel.clients.value?.map { client ->
+        return results.map { client ->
             val extras = Bundle()
-            extras.putString(TransferService.CLIENT_NAME, client.name)
-            extras.putString(TransferService.IP_ADDRESS, client.v4Host?.canonicalHostName)
+            extras.putString(TransferService.CLIENT_NAME, client.serviceName)
+            extras.putString(TransferService.IP_ADDRESS, client.host?.canonicalHostName)
             extras.putInt(TransferService.PORT, client.port)
 
             ChooserTarget(
-                    client.name,
+                    client.serviceName,
                     Icon.createWithResource(this, R.drawable.icon_share_small_24dp),
                     1.0f,
                     componentName,
                     extras)
-        } ?: listOf()
+        }
     }
 
 }

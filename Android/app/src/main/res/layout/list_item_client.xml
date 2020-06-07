@@ -5,9 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="client"
-            type="de.mannodermaus.rxbonjour.BonjourService" />
+            type="android.net.nsd.NsdServiceInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,11 +27,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="@font/open_sans"
+            android:gravity="center_vertical"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:text="@{client.name}"
+            android:text="@{client.serviceName}"
             android:textColor="@android:color/black"
-            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             bind:layout_constraintEnd_toEndOf="parent"
             bind:layout_constraintStart_toStartOf="parent"
