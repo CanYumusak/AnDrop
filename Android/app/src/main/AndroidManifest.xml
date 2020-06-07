@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
     <application
         android:allowBackup="true"
@@ -29,8 +30,8 @@
 
         <activity
             android:name=".TransferServiceWrapperActivity"
-            android:theme="@style/Theme.Transparent"
-            android:excludeFromRecents="true" />
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.Transparent" />
 
         <activity
             android:name=".TransferActivity"
@@ -47,6 +48,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*" />
             </intent-filter>
+
             <meta-data
                 android:name="android.service.chooser.chooser_target_service"
                 android:value=".AndropChooserTargetService" />

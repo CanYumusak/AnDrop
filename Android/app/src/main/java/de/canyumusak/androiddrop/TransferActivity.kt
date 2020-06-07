@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.net.nsd.NsdServiceInfo
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +21,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import de.canyumusak.androiddrop.databinding.ListItemClientBinding
 import de.canyumusak.androiddrop.databinding.RootFragmentBinding
-import de.mannodermaus.rxbonjour.BonjourService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -59,14 +59,16 @@ class TransferActivity : AppCompatActivity() {
         inflate.viewModel = viewModel
 
         with(inflate.clientList) {
-            val clientListAdapter = BonjourServiceListAdapter()
+            val clientListAdapter = NsdServiceInfoListAdapter()
             adapter = clientListAdapter
             layoutManager = LinearLayoutManager(context)
 
-            viewModel.clients.observe(this@TransferActivity, Observer {
-                updateEmptyLayout(inflate)
-                clientListAdapter.submitList(it)
-            })
+            if (dataUris != null) {
+                viewModel.clients.observe(this@TransferActivity, Observer {
+                    updateEmptyLayout(inflate)
+                    clientListAdapter.submitList(it)
+                })
+            }
 
             viewModel.wifiState.observe(this@TransferActivity, Observer {
                 updateEmptyLayout(inflate)
@@ -87,6 +89,18 @@ class TransferActivity : AppCompatActivity() {
     }
 
     private fun updateEmptyLayout(inflate: RootFragmentBinding) {
+        if (dataUris == null) {
+            val emptyLayout = inflate.emptyLayout
+            emptyLayout.textView.text = getString(R.string.unsupoorted_file_type)
+            emptyLayout.emptyLayoutRoot.visibility = View.VISIBLE
+            emptyLayout.progressBar.visibility = View.GONE
+            emptyLayout.noWifiIcon.visibility = View.GONE
+        } else {
+            updateEmptyLayoutForWifiState(inflate)
+        }
+    }
+
+    private fun updateEmptyLayoutForWifiState(inflate: RootFragmentBinding) {
         val emptyLayout = inflate.emptyLayout
 
         when (viewModel.wifiState.value) {
@@ -132,24 +146,24 @@ class TransferActivity : AppCompatActivity() {
         }
     }
 
-    inner class BonjourServiceListAdapter : ListAdapter<BonjourService, BonjourServiceViewHolder>(
-            object : DiffUtil.ItemCallback<BonjourService>() {
-                override fun areItemsTheSame(oldItem: BonjourService, newItem: BonjourService) = newItem.name == oldItem.name
-                override fun areContentsTheSame(oldItem: BonjourService, newItem: BonjourService) = newItem.name == oldItem.name
+    inner class NsdServiceInfoListAdapter : ListAdapter<NsdServiceInfo, NsdServiceInfoViewHolder>(
+            object : DiffUtil.ItemCallback<NsdServiceInfo>() {
+                override fun areItemsTheSame(oldItem: NsdServiceInfo, newItem: NsdServiceInfo) = newItem.serviceName == oldItem.serviceName
+                override fun areContentsTheSame(oldItem: NsdServiceInfo, newItem: NsdServiceInfo) = newItem.serviceName == oldItem.serviceName
             }) {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BonjourServiceViewHolder {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NsdServiceInfoViewHolder {
             val view = LayoutInflater.from(this@TransferActivity).inflate(R.layout.list_item_client, parent, false)
-            return BonjourServiceViewHolder(view)
+            return NsdServiceInfoViewHolder(view)
         }
 
-        override fun onBindViewHolder(holder: BonjourServiceViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: NsdServiceInfoViewHolder, position: Int) {
             return holder.bind(getItem(position))
         }
     }
 
-    inner class BonjourServiceViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+    inner class NsdServiceInfoViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val listItemBinding = DataBindingUtil.bind<ListItemClientBinding>(view)
-        fun bind(client: BonjourService) {
+        fun bind(client: NsdServiceInfo) {
             listItemBinding?.client = client
             listItemBinding?.root?.isEnabled = !needsStoragePermission
             val textColor = if (needsStoragePermission) {
@@ -163,9 +177,9 @@ class TransferActivity : AppCompatActivity() {
                 viewModel.endDiscovery()
 
                 GlobalScope.launch {
-                    client.v4Host?.canonicalHostName?.let { ipaddress ->
+                    client.host?.canonicalHostName?.let { ipaddress ->
                         val intent = Intent(this@TransferActivity, TransferService::class.java)
-                        intent.putExtra(TransferService.CLIENT_NAME, client.name)
+                        intent.putExtra(TransferService.CLIENT_NAME, client.serviceName)
                         intent.putExtra(TransferService.IP_ADDRESS, ipaddress)
                         intent.putExtra(TransferService.PORT, client.port)
                         intent.putExtra(TransferService.DATA, dataUris)

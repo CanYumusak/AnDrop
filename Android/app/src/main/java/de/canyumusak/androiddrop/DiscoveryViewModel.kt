@@ -6,41 +6,45 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.*
+import android.net.nsd.NsdManager
+import android.net.nsd.NsdServiceInfo
+import android.net.wifi.WifiManager
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import de.canyumusak.androiddrop.sendables.ClassicFile
 import de.canyumusak.androiddrop.sendables.SendableFile
-import de.mannodermaus.rxbonjour.BonjourEvent
-import de.mannodermaus.rxbonjour.BonjourService
-import de.mannodermaus.rxbonjour.RxBonjour
-import de.mannodermaus.rxbonjour.drivers.jmdns.JmDNSDriver
-import de.mannodermaus.rxbonjour.platforms.android.AndroidPlatform
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class DiscoveryViewModel(application: Application) : AndroidViewModel(application) {
 
-    val bonjour = RxBonjour.Builder()
-            .platform(AndroidPlatform.create(application))
-            .driver(JmDNSDriver.create())
-            .create()
+    val clients = MutableLiveData<List<NsdServiceInfo>>().also { it.value = listOf() }
+    val wifiState = MutableLiveData<WifiState>(WifiState.Disabled)
+    val nsdManager: NsdManager
+        get() = getApplication<Application>().getSystemService(Context.NSD_SERVICE) as NsdManager
 
-    val clients = MutableLiveData<List<BonjourService>>().also { it.value = listOf() }
-    val error = MutableLiveData<String>()
-    var discovery: Disposable? = null
-    val wifiState = MutableLiveData<WifiState>()
+    val wifiManager: WifiManager
+        get() = getApplication<Application>().getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+    private val discoveryListener = DiscoveryListener()
+
+    val multicastLock = wifiManager.createMulticastLock("DiscoveryViewModel")
+
+    private var discovering = false
 
     private val connectivityManager: ConnectivityManager
         get() = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
-            wifiState.postValue(WifiState.Enabled)
-            discoverClients()
+            if (wifiState.value !is WifiState.Enabled) {
+                wifiState.postValue(WifiState.Enabled)
+                discoverClients()
+            }
         }
 
         override fun onLost(network: Network) {
@@ -52,6 +56,11 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
             wifiState.postValue(WifiState.Disabled)
             endDiscovery()
         }
+
+        override fun onLosing(network: Network, maxMsToLive: Int) {
+            wifiState.postValue(WifiState.Disabled)
+            endDiscovery()
+        }
     }
 
     init {
@@ -59,6 +68,8 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
         builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
 
         val networkRequest = builder.build()
+        Log.d("DiscoveryViewModel", "Registered Network Request")
+
         connectivityManager.registerNetworkCallback(
                 networkRequest,
                 networkCallback
@@ -66,52 +77,48 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     override fun onCleared() {
+        Log.d("DiscoveryViewModel", "Clearing discovery")
+
         connectivityManager.unregisterNetworkCallback(networkCallback)
+        endDiscovery()
         super.onCleared()
     }
 
     @SuppressLint("CheckResult")
     fun discoverClients() {
-        Log.d("Bonjour", "starting discovery")
+        if (!discovering) {
+            discovering = true
+            Log.d("Bonjour", "starting discovery")
+            try {
+                multicastLock.acquire();
+            } catch (exception: java.lang.RuntimeException) {
+                // fail silently if we can't acquire a multicast lock
+            }
 
-        val discovery = bonjour.newDiscovery("_androp._tcp")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { event ->
-                            when (event) {
-                                is BonjourEvent.Added -> {
-                                    if (discovery?.isDisposed == false) {
-                                        Log.d("Bonjour", "added ${event.service.name} with host ${event.service.host}")
-                                        val oldClients = clients.value?.toMutableList()
-
-                                        oldClients?.removeIf { it.host == event.service.host }
-
-                                        oldClients?.add(event.service)
-                                        clients.value = oldClients
-                                    } else {
-                                        Log.d("Bonjour", "ignoring ${event.service.name} since discovery was disposed")
-                                    }
-                                }
-
-                                is BonjourEvent.Removed -> {
-                                    Log.d("Bonjour", "removed ${event.service.name}")
-
-                                    val oldClients = clients.value?.toMutableList()
-                                    oldClients?.remove(event.service)
-                                    clients.value = oldClients
-                                }
-                            }
-                        },
-                        { error.value = it.message }
-                )
-
-        this.discovery = discovery
+            nsdManager.discoverServices("_androp._tcp", NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+        }
     }
 
-    fun endDiscovery() {
-        clients.value = listOf()
-        discovery?.dispose()
+    fun endDiscovery(): List<NsdServiceInfo> {
+        return if (discovering) {
+            discovering = false
+            val currentList = clients.value?.toList() ?: emptyList()
+            clients.postValue(listOf())
+
+            try {
+                if (multicastLock.isHeld) {
+                    multicastLock.release()
+                }
+
+                nsdManager.stopServiceDiscovery(discoveryListener)
+            } catch (exception: RuntimeException) {
+                // fail silently if those fail
+            }
+
+            currentList
+        } else {
+            emptyList()
+        }
     }
 
     fun needsStoragePermission(dataUris: Array<Uri>?): Boolean {
@@ -131,6 +138,78 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
                 getApplication(),
                 Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private inner class DiscoveryListener : NsdManager.DiscoveryListener {
+
+        override fun onServiceFound(serviceInformation: NsdServiceInfo?) {
+            var retries = 20
+            val listener = object : NsdManager.ResolveListener {
+                override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
+                    val resolveListener = this
+
+                    viewModelScope.launch {
+                        Log.w("DiscoveryViewModel", "onResolveFailed(): Resolve failed (serviceInfo = '$serviceInfo'; errorCode = '$errorCode'; retries = '$retries')")
+                        delay((Math.random() * 20).toLong())
+                        retries -= 1
+                        if (retries > 0) {
+                            nsdManager.resolveService(serviceInformation, resolveListener)
+                        }
+                    }
+                }
+
+                override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
+                    Log.d("DiscoveryViewModel", "onServiceResolved(): Resolve successful (serviceInfo = '$serviceInfo')")
+
+                    val oldClients = clients.value?.toMutableList()
+                    if (oldClients?.any { it.host == serviceInfo.host } == true) {
+                        oldClients.replaceAll {
+                            if (it.host == serviceInfo.host) {
+                                serviceInfo
+                            } else {
+                                it
+                            }
+                        }
+                    } else {
+                        oldClients?.add(serviceInfo)
+                    }
+
+                    clients.postValue(oldClients)
+                }
+            }
+
+            nsdManager.resolveService(serviceInformation, listener)
+        }
+
+        override fun onServiceLost(serviceInformation: NsdServiceInfo?) {
+            serviceInformation?.let { serviceInfo ->
+                Log.d("Bonjour", "removed ${serviceInformation.serviceName}")
+
+                val oldClients = clients.value?.toMutableList()
+
+                oldClients?.removeAll {
+                    it.host == serviceInfo.host
+                }
+
+                clients.postValue(oldClients)
+            }
+        }
+
+        override fun onStartDiscoveryFailed(serviceType: String?, errorCode: Int) {
+            Log.w("DiscoveryViewModel", "onStartDiscoveryFailed(): Discovery start failed (serviceType = '$serviceType'; errorCode = '$errorCode')")
+        }
+
+        override fun onStopDiscoveryFailed(serviceType: String?, errorCode: Int) {
+            Log.w("DiscoveryViewModel", "onStopDiscoveryFailed(): Discovery stop failed (serviceType = '$serviceType'; errorCode = '$errorCode')")
+        }
+
+        override fun onDiscoveryStarted(serviceType: String?) {
+            Log.w("DiscoveryViewModel", "onDiscoveryStarted(): Discovery started (serviceType = '$serviceType')")
+        }
+
+        override fun onDiscoveryStopped(serviceType: String?) {
+            Log.w("DiscoveryViewModel", "onDiscoveryStopped(): Discovery stopped (serviceType = '$serviceType')")
+        }
     }
 }
 
