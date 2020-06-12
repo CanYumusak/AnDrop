@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -23,7 +22,6 @@
 
         <TextView
             android:id="@+id/textView2"
-            style="@style/Base.TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -31,9 +29,9 @@
             android:layout_marginEnd="16dp"
             android:drawableStart="@drawable/ic_share_20"
             android:drawablePadding="8dp"
-            android:fontFamily="@font/open_sans_semibold_1"
             android:gravity="top"
             android:text="@string/discovery_fragment_title"
+            android:textAppearance="?textAppearanceHeadline6"
             android:textColor="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -64,8 +62,8 @@
             android:id="@+id/description_storage_permission_barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="clientList,empty_layout"
-            app:barrierDirection="bottom"/>
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="clientList,empty_layout" />
 
         <TextView
             android:id="@+id/description_storage_permission"
@@ -76,6 +74,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="@string/storage_access_permission"
+            android:textAppearance="?textAppearanceSubtitle1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/description_storage_permission_barrier" />

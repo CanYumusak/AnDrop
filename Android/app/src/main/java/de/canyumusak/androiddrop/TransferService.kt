@@ -185,10 +185,10 @@ class TransferServiceBroadcastReceiver(val service: TransferService) : Broadcast
 data class FileTransferCommand(val clientName: String, val ipAddress: String, val port: Int, val dataUris: List<Uri>) {
 
     constructor(intent: Intent) : this(
-            intent.getStringExtra(TransferService.CLIENT_NAME),
-            intent.getStringExtra(TransferService.IP_ADDRESS),
+            intent.getStringExtra(TransferService.CLIENT_NAME)!!,
+            intent.getStringExtra(TransferService.IP_ADDRESS)!!,
             intent.getIntExtra(TransferService.PORT, 8080),
-            intent.getParcelableArrayExtra(TransferService.DATA).map { it as Uri }
+            intent.getParcelableArrayExtra(TransferService.DATA)!!.map { it as Uri }
     )
 }
 

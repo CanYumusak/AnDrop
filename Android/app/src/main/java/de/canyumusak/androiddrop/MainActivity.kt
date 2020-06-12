@@ -36,17 +36,17 @@ class MainActivity : AppCompatActivity() {
         billingViewModel.billingConnectionState.observe(this, Observer<BillingConnectionState> {
             when (it) {
                 BillingConnectionState.Connected -> {
-                    findViewById<TextView>(R.id.textView4).isVisible = false
+                    findViewById<TextView>(R.id.connectionError).isVisible = false
                 }
                 BillingConnectionState.Failed -> {
-                    findViewById<TextView>(R.id.textView4).isVisible = true
+                    findViewById<TextView>(R.id.connectionError).isVisible = true
                     smallAmountButton.isVisible = false
                     mediumAmountButton.isVisible = false
                     bigAmountButton.isVisible = false
                 }
                 BillingConnectionState.GettingDetails,
                 BillingConnectionState.Connecting -> {
-                    findViewById<TextView>(R.id.textView4).isVisible = false
+                    findViewById<TextView>(R.id.connectionError).isVisible = false
                     smallAmountButton.isVisible = false
                     mediumAmountButton.isVisible = false
                     bigAmountButton.isVisible = false

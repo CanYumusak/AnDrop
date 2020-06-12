@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data />
 
@@ -21,11 +21,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans_semibold_1"
                 android:text="@string/welcome_to_androp"
                 android:textAlignment="center"
+                android:textAppearance="?textAppearanceHeadline5"
                 android:textColor="#000000"
-                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -39,14 +38,14 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:autoLink="all"
-                android:fontFamily="@font/open_sans"
                 android:textAlignment="viewStart"
+                android:textAppearance="?textAppearanceBody1"
                 android:textColor="#000000"
                 android:textColorLink="#000000"
-                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/main_activity_title" />
+                app:layout_constraintTop_toBottomOf="@+id/main_activity_title"
+                tools:text="Tutorial goes here" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -55,11 +54,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans_semibold_1"
                 android:text="@string/tipping_jar_title"
                 android:textAlignment="center"
+                android:textAppearance="?textAppearanceHeadline5"
                 android:textColor="#000000"
-                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_activity_tutorial" />
@@ -71,11 +69,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans"
                 android:text="@string/tipping_jar_description"
+                android:textAppearance="?textAppearanceBody1"
                 android:textColor="#000000"
                 android:textColorLink="#000000"
-                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,9 +85,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans"
                 android:gravity="center"
                 android:text="@string/tipping_jar_button_small_tip"
+                android:textAppearance="?textAppearanceBody2"
                 android:textColor="@color/clickable_greydarker"
                 app:layout_constraintEnd_toStartOf="@id/mediumAmountButton"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -104,9 +101,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:fontFamily="@font/open_sans"
                 android:gravity="center"
                 android:text="@string/tipping_jar_button_medium_tip"
+                android:textAppearance="?textAppearanceBody2"
                 android:textColor="@color/clickable_greydarker"
                 app:layout_constraintEnd_toStartOf="@+id/bigAmountButton"
                 app:layout_constraintStart_toEndOf="@+id/smallAmountButton"
@@ -119,31 +116,30 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans"
                 android:gravity="center"
                 android:text="@string/tipping_jar_button_big_tip"
+                android:textAppearance="?textAppearanceBody2"
                 android:textColor="@color/clickable_greydarker"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/mediumAmountButton"
                 app:layout_constraintTop_toBottomOf="@+id/main_activity_tutorial2" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/connectionError"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/tipping_jar_connection_error"
-                android:visibility="gone"
-                android:fontFamily="@font/open_sans"
                 android:textAlignment="viewStart"
+                android:textAppearance="?textAppearanceBody2"
                 android:textColor="@color/black"
-                android:textSize="15sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_activity_tutorial2"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -152,7 +148,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/open_sans"
+                android:fontFamily="@font/work_sans"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textColorLink="#000000"
@@ -161,8 +157,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mediumAmountButton"
-                tools:text="@string/tipping_jar_tips_message"
-                tools:visibility="visible" />
+                tools:text="@string/tipping_jar_tips_message" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
