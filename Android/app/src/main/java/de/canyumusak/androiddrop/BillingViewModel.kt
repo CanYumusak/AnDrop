@@ -31,30 +31,33 @@ class BillingViewModel(application: Application)
     private val billingClient = BillingClient
             .newBuilder(application.applicationContext)
             .setListener(this)
+            .enablePendingPurchases()
             .build()
 
     init {
         billingClient.startConnection(this)
     }
 
-    override fun onBillingSetupFinished(responseCode: Int) {
-        Log.d("BillingViewModel", "Billing setup finished with response $responseCode")
+    override fun onBillingSetupFinished(result: BillingResult) {
+        Log.d("BillingViewModel", "Billing setup finished with response $result")
 
-        when (responseCode) {
-            BillingClient.BillingResponse.OK -> {
+        when (result.responseCode) {
+
+            BillingClient.BillingResponseCode.OK -> {
                 billingConnectionState.value = BillingConnectionState.GettingDetails
                 querySkuDetails()
             }
-            BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-            BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-            BillingClient.BillingResponse.USER_CANCELED,
-            BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-            BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-            BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-            BillingClient.BillingResponse.DEVELOPER_ERROR,
-            BillingClient.BillingResponse.ERROR,
-            BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-            BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
+            BillingClient.BillingResponseCode.SERVICE_TIMEOUT,
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+            BillingClient.BillingResponseCode.USER_CANCELED,
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+            BillingClient.BillingResponseCode.ERROR,
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+            BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
                 billingConnectionState.value = BillingConnectionState.Failed
             }
         }
@@ -64,7 +67,7 @@ class BillingViewModel(application: Application)
 //        this does not work as expected
 //        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP) { responseCode: Int, purchasesList: List<Purchase> ->
 //            when (responseCode) {
-//                BillingClient.BillingResponse.OK -> {
+//                BillingClient.BillingResponseCode.OK -> {
 //                    purchasesList.forEach {
 //                        billingClient.consumeAsync(it.purchaseToken) { _, _ -> }
 //                    }
@@ -88,16 +91,16 @@ class BillingViewModel(application: Application)
 //                        } ?: TippingSum.FailedToLoad
 //                    }
 //                }
-//                BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-//                BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-//                BillingClient.BillingResponse.USER_CANCELED,
-//                BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-//                BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-//                BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-//                BillingClient.BillingResponse.DEVELOPER_ERROR,
-//                BillingClient.BillingResponse.ERROR,
-//                BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-//                BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
+//                BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+//                BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+//                BillingClient.BillingResponseCode.USER_CANCELED,
+//                BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+//                BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+//                BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+//                BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+//                BillingClient.BillingResponseCode.ERROR,
+//                BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+//                BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
 //                    tippingSum.value = TippingSum.FailedToLoad
 //                }
 //            }
@@ -116,25 +119,26 @@ class BillingViewModel(application: Application)
         billingClient.querySkuDetailsAsync(queryParams, this@BillingViewModel)
     }
 
-    override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
+    override fun onSkuDetailsResponse(responseCode: BillingResult, skuDetailsList: MutableList<SkuDetails>?) {
         Log.d("BillingViewModel", "Received Sku Details Response $responseCode")
 
-        when (responseCode) {
-            BillingClient.BillingResponse.OK -> {
+        when (responseCode.responseCode) {
+            BillingClient.BillingResponseCode.OK -> {
                 billingConnectionState.value = BillingConnectionState.Connected
                 skuDetails.value = skuDetailsList?.asPriceMap()
                 updatePurchaseHistory()
             }
-            BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-            BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-            BillingClient.BillingResponse.USER_CANCELED,
-            BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-            BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-            BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-            BillingClient.BillingResponse.DEVELOPER_ERROR,
-            BillingClient.BillingResponse.ERROR,
-            BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-            BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
+            BillingClient.BillingResponseCode.SERVICE_TIMEOUT,
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+            BillingClient.BillingResponseCode.USER_CANCELED,
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+            BillingClient.BillingResponseCode.ERROR,
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+            BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
                 billingConnectionState.value = BillingConnectionState.Failed
             }
         }
@@ -159,33 +163,38 @@ class BillingViewModel(application: Application)
         }
     }
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
+    override fun onPurchasesUpdated(responseCode: BillingResult, purchases: MutableList<Purchase>?) {
         val purchase = purchases?.firstOrNull()
         val tip = Tip.fromSku(purchase?.sku)
 
-        when (responseCode) {
-            BillingClient.BillingResponse.OK -> {
+        when (responseCode.responseCode) {
+            BillingClient.BillingResponseCode.OK -> {
                 purchaseResult.value = tip?.let {
                     purchase?.purchaseToken?.let { token ->
-                        billingClient.consumeAsync(token) { _, _ -> }
+                        val consumeParams = ConsumeParams
+                                .newBuilder()
+                                .setPurchaseToken(token)
+                                .build()
+
+                        billingClient.consumeAsync(consumeParams) { _, _ -> }
                     }
                     PurchaseEvent(PurchaseResult.Success, it)
                 } ?: PurchaseEvent(PurchaseResult.Fail, null)
 
                 updatePurchaseHistory()
             }
-            BillingClient.BillingResponse.USER_CANCELED -> {
+            BillingClient.BillingResponseCode.USER_CANCELED -> {
                 purchaseResult.value = PurchaseEvent(PurchaseResult.Cancelled, tip)
             }
-            BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-            BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-            BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-            BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-            BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-            BillingClient.BillingResponse.DEVELOPER_ERROR,
-            BillingClient.BillingResponse.ERROR,
-            BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-            BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+            BillingClient.BillingResponseCode.ERROR,
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+            BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
                 purchaseResult.value = PurchaseEvent(PurchaseResult.Fail, tip)
             }
         }
