@@ -1,8 +1,8 @@
 import Cocoa
+import UserNotifications
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegate {
-    var notificationDelegate: NotificationDelegate?
     
     var downloadFolder: URL? {
         get {
@@ -37,11 +37,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
     var changeAutoAcceptMenuItem : NSMenuItem? = nil
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+
         serviceDelegate = Connection(filePropositionDelegate: self)
 
         let icon = NSImage(named: "statusIcon")
         icon?.isTemplate = true
-        statusItem.image = icon
+        statusItem.button?.image = icon
         statusItem.menu = statusMenu
 
         let menu = NSMenu()
@@ -71,6 +72,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
             service.delegate = self.serviceDelegate
             print("broadcasting services")
         }
+        UNUserNotificationCenter.current().delegate = self
+
     }
     
     @objc func openDownloadFolderChooser(send: AnyObject?) {
@@ -114,69 +117,69 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
     
     func showFileTransferFinishedNotification(states: [FileTransferState]) {
         
-        let notification = NSUserNotification()
-        let failedState = states.first { state in
+        let notification = UNMutableNotificationContent()
+        let allSuccess = states.allSatisfy { state in
             switch state {
             case .success(_):
-               return false
+               return true
                 
             case .failed(_):
-                return true
+                return false
             }
         }
         
-        if (failedState == nil) {
-            notification.informativeText = "Success"
-            notification.informativeText = "Successfully received files."
-            notificationDelegate = NotificationDelegate(isFailed: false, downloadFolder: downloadFolder)
-
-        } else {
-            notification.informativeText = "Failed"
-            notification.informativeText = "Failed to receive files."
-            notificationDelegate = NotificationDelegate(isFailed: true, downloadFolder: downloadFolder)
-
-        }
-   
-        NSUserNotificationCenter.default.delegate = notificationDelegate
-        NSUserNotificationCenter.default.deliver(notification)
-    }
-}
-
-class NotificationDelegate: NSObject, NSUserNotificationCenterDelegate {
-    
-    let isFailed: Bool
-    let downloadFolder: URL?
-    
-    init(isFailed: Bool, downloadFolder: URL?) {
-        self.isFailed = isFailed
-        self.downloadFolder = downloadFolder
-    }
-    
-    func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
-        switch (notification.activationType) {
-        case .additionalActionClicked:
-            print("Action:")
-        case .actionButtonClicked:
-            print("Action Button clicked")
-        case .contentsClicked:
-            if (!isFailed) {
-                if let downloadFolder = self.downloadFolder {
-                    NSWorkspace.shared.openFile(downloadFolder.absoluteString)
-                }
-            } else {
-                print("Clicked on failed notification")
-            }
+        let url : String?
+        
+        switch states[0] {
+        case .success(let fileURL):
+            url = fileURL.absoluteString
             
-        case .none:
-            print("none")
-        case .replied:
-            print("reply clicked")
+        case .failed(_):
+            url = nil
         }
+        
+        let identifier: String
+        if (allSuccess) {
+            notification.title = "Success"
+            notification.body = "Successfully received"
+            notification.targetContentIdentifier = url
+        
+            identifier = url ?? ""
+        } else {
+            notification.title = "Failed"
+            notification.body = "Failed to receive files."
+            identifier = ""
+        }
+        
+        let center = UNUserNotificationCenter.current()
+
+        let request = UNNotificationRequest(identifier: identifier, content: notification, trigger: nil)
+        center.add(request)
     }
 }
-
 
 protocol FilePropositionPromptDelegate {
     func promptUserFileProposition(fileProposition: FileProposition, callback: @escaping (UserAnswer) -> Void)
     func showFileTransferFinishedNotification(states: [FileTransferState])
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+
+        let identifier = response.notification.request.identifier
+        let actionIdentifier = response.actionIdentifier
+
+        switch (actionIdentifier) {
+        case UNNotificationDefaultActionIdentifier:
+            print(identifier)
+            let url = URL(string: identifier)
+            if let url = url {
+                NSWorkspace.shared.activateFileViewerSelecting([url])
+            }
+        default:
+            break;
+        }
+        completionHandler()
+    }
 }
