@@ -100,40 +100,40 @@ class TransferService : Service() {
         fun createStartupNotification(context: TransferService): Notification {
             createLowPriorityChannel(context)
 
-            val intent = PendingIntent.getBroadcast(context, 0, Intent(CANCEL_REQUEST_ACTION), 0)
+            val intent = PendingIntent.getBroadcast(context, 0, Intent(CANCEL_REQUEST_ACTION), PendingIntent.FLAG_IMMUTABLE)
             val action = NotificationCompat.Action(0, "Cancel", intent)
 
             return NotificationCompat.Builder(context, LOW_PRIO_CHANNEL_ID)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setCategory(NotificationCompat.CATEGORY_PROGRESS)
-                    .setSmallIcon(R.drawable.ic_stat_share)
-                    .setColor(context.getColor(R.color.colorPrimaryDark))
-                    .addAction(action)
-                    .setContentTitle("Transferring File")
-                    .setProgress(100, 0, true)
-                    .setContentIntent(null)
-                    .build()
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setCategory(NotificationCompat.CATEGORY_PROGRESS)
+                .setSmallIcon(R.drawable.ic_stat_share)
+                .setColor(context.getColor(R.color.colorPrimaryDark))
+                .addAction(action)
+                .setContentTitle("Transferring File")
+                .setProgress(100, 0, true)
+                .setContentIntent(null)
+                .build()
 
         }
 
         fun createTransferNotification(context: TransferService, progress: Int): Notification {
             createLowPriorityChannel(context)
 
-            val intent = PendingIntent.getBroadcast(context, 0, Intent(CANCEL_REQUEST_ACTION), 0)
+            val intent = PendingIntent.getBroadcast(context, 0, Intent(CANCEL_REQUEST_ACTION), PendingIntent.FLAG_IMMUTABLE)
             val action = NotificationCompat.Action(0, "Cancel", intent)
 
             return NotificationCompat.Builder(context, LOW_PRIO_CHANNEL_ID)
-                    .setDefaults(0)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setCategory(NotificationCompat.CATEGORY_PROGRESS)
-                    .setPriority(NotificationManager.IMPORTANCE_LOW)
-                    .setSmallIcon(R.drawable.ic_stat_share)
-                    .setColor(context.getColor(R.color.colorPrimaryDark))
-                    .addAction(action)
-                    .setContentTitle("Transferring File")
-                    .setProgress(100, progress, false)
-                    .setContentIntent(null)
-                    .build()
+                .setDefaults(0)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setCategory(NotificationCompat.CATEGORY_PROGRESS)
+                .setPriority(NotificationManager.IMPORTANCE_LOW)
+                .setSmallIcon(R.drawable.ic_stat_share)
+                .setColor(context.getColor(R.color.colorPrimaryDark))
+                .addAction(action)
+                .setContentTitle("Transferring File")
+                .setProgress(100, progress, false)
+                .setContentIntent(null)
+                .build()
 
         }
 
@@ -142,15 +142,15 @@ class TransferService : Service() {
 
             val sendableFiles = SendableFile.fromUris(fileTransferCommand.dataUris, context)
             return NotificationCompat.Builder(context, HIGH_PRIO_CHANNEL_ID)
-                    .setShowWhen(true)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setCategory(NotificationCompat.CATEGORY_ERROR)
-                    .setSmallIcon(R.drawable.ic_stat_share)
-                    .setColor(context.getColor(R.color.colorPrimaryDark))
-                    .setContentTitle("Failed")
-                    .setContentText("Could not send ${sendableFiles.joinToString { it.fileName }}")
-                    .setContentIntent(null)
-                    .build()
+                .setShowWhen(true)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setCategory(NotificationCompat.CATEGORY_ERROR)
+                .setSmallIcon(R.drawable.ic_stat_share)
+                .setColor(context.getColor(R.color.colorPrimaryDark))
+                .setContentTitle("Failed")
+                .setContentText("Could not send ${sendableFiles.joinToString { it.fileName }}")
+                .setContentIntent(null)
+                .build()
 
         }
 
@@ -159,15 +159,15 @@ class TransferService : Service() {
 
             val sendableFiles = SendableFile.fromUris(fileTransferCommand.dataUris, context)
             return NotificationCompat.Builder(context, HIGH_PRIO_CHANNEL_ID)
-                    .setShowWhen(true)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                    .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                    .setSmallIcon(R.drawable.ic_stat_share)
-                    .setColor(context.getColor(R.color.colorPrimaryDark))
-                    .setContentTitle("Succeeded")
-                    .setContentText("Successfully sent ${sendableFiles.joinToString { it.fileName }}")
-                    .setContentIntent(null)
-                    .build()
+                .setShowWhen(true)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setSmallIcon(R.drawable.ic_stat_share)
+                .setColor(context.getColor(R.color.colorPrimaryDark))
+                .setContentTitle("Succeeded")
+                .setContentText("Successfully sent ${sendableFiles.joinToString { it.fileName }}")
+                .setContentIntent(null)
+                .build()
 
         }
     }
@@ -185,10 +185,10 @@ class TransferServiceBroadcastReceiver(val service: TransferService) : Broadcast
 data class FileTransferCommand(val clientName: String, val ipAddress: String, val port: Int, val dataUris: List<Uri>) {
 
     constructor(intent: Intent) : this(
-            intent.getStringExtra(TransferService.CLIENT_NAME),
-            intent.getStringExtra(TransferService.IP_ADDRESS),
-            intent.getIntExtra(TransferService.PORT, 8080),
-            intent.getParcelableArrayExtra(TransferService.DATA).map { it as Uri }
+        intent.getStringExtra(TransferService.CLIENT_NAME)!!,
+        intent.getStringExtra(TransferService.IP_ADDRESS)!!,
+        intent.getIntExtra(TransferService.PORT, 8080),
+        intent.getParcelableArrayExtra(TransferService.DATA)!!.map { it as Uri }
     )
 }
 

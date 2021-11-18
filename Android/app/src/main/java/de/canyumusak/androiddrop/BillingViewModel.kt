@@ -5,20 +5,20 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.android.billingclient.api.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class BillingViewModel(application: Application)
-    : AndroidViewModel(application),
-        PurchasesUpdatedListener,
-        BillingClientStateListener,
-        SkuDetailsResponseListener {
+class BillingViewModel(application: Application) : AndroidViewModel(application),
+    PurchasesUpdatedListener,
+    BillingClientStateListener,
+    SkuDetailsResponseListener {
 
     val billingConnectionState = MutableLiveData<BillingConnectionState>().also {
-        it.value = BillingConnectionState.Connecting
+        it.postValue(BillingConnectionState.Connecting)
     }
 
     val skuDetails = MutableLiveData<Map<Tip, Details>>()
@@ -26,60 +26,66 @@ class BillingViewModel(application: Application)
 
     val purchaseResult = MutableLiveData<PurchaseEvent>()
 
-    private val viewModelScope = CoroutineScope(Job() + Dispatchers.Main)
-
     private val billingClient = BillingClient
-            .newBuilder(application.applicationContext)
-            .setListener(this)
-            .build()
+        .newBuilder(application.applicationContext)
+        .enablePendingPurchases()
+        .setListener(this)
+        .build()
 
     init {
         billingClient.startConnection(this)
     }
 
-    override fun onBillingSetupFinished(responseCode: Int) {
+    override fun onBillingSetupFinished(billingResult: BillingResult) {
+        val responseCode = billingResult.responseCode
         Log.d("BillingViewModel", "Billing setup finished with response $responseCode")
 
         when (responseCode) {
-            BillingClient.BillingResponse.OK -> {
-                billingConnectionState.value = BillingConnectionState.GettingDetails
+            BillingClient.BillingResponseCode.OK -> {
+                billingConnectionState.postValue(BillingConnectionState.GettingDetails)
                 querySkuDetails()
+                viewModelScope.launch {
+                    Log.d("BillingViewModel", "TEST")
+                }
             }
-            BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-            BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-            BillingClient.BillingResponse.USER_CANCELED,
-            BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-            BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-            BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-            BillingClient.BillingResponse.DEVELOPER_ERROR,
-            BillingClient.BillingResponse.ERROR,
-            BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-            BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
-                billingConnectionState.value = BillingConnectionState.Failed
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+            BillingClient.BillingResponseCode.USER_CANCELED,
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+            BillingClient.BillingResponseCode.ERROR,
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+            BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
+                billingConnectionState.postValue(BillingConnectionState.Failed)
             }
         }
     }
 
-    private fun updatePurchaseHistory() = viewModelScope.launch {
-//        this does not work as expected
-//        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP) { responseCode: Int, purchasesList: List<Purchase> ->
-//            when (responseCode) {
-//                BillingClient.BillingResponse.OK -> {
-//                    purchasesList.forEach {
-//                        billingClient.consumeAsync(it.purchaseToken) { _, _ -> }
+//    private fun updatePurchaseHistory() = viewModelScope.launch {
+////        this does not work as expected
+//        val listener = PurchaseHistoryResponseListener { result, purchasesList ->
+//            when (result.responseCode) {
+//                BillingClient.BillingResponseCode.OK -> {
+//                    purchasesList?.forEach {
+//                        val consumeParams = ConsumeParams.newBuilder().setPurchaseToken(it.purchaseToken).build()
+//                        billingClient.consumeAsync(consumeParams) { _, _ -> }
 //                    }
 //
-//                    val tips = purchasesList.map { purchase ->
-//                        Tip.fromSku(purchase.sku)
-//                    }
+//                    val tips = purchasesList
+//                        ?.filter { it. }
+//                        ?.map { purchase ->
+//                            Tip.fromSku(purchase.skus.firstOrNull())
+//                        }
 //
-//                    val sumOfTips = tips.mapNotNull {
+//                    val sumOfTips = tips?.mapNotNull {
 //                        skuDetails.value?.get(it)
-//                    }.sumByDouble {
+//                    }?.sumOf {
 //                        it.skuDetails.priceAmountMicros.toDouble() / 1_000_000
-//                    }
+//                    } ?: 0
 //
-//                    tippingSum.value = if (tips.isEmpty()) {
+//                    val value = if (tips.isEmpty()) {
 //                        TippingSum.NoTips
 //                    } else {
 //                        skuDetails.value?.get(Tip.Big)?.currencyCode?.let {
@@ -87,55 +93,59 @@ class BillingViewModel(application: Application)
 //                            TippingSum.Suceeded(formattedSum)
 //                        } ?: TippingSum.FailedToLoad
 //                    }
+//                    tippingSum.postValue(value)
 //                }
-//                BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-//                BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-//                BillingClient.BillingResponse.USER_CANCELED,
-//                BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-//                BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-//                BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-//                BillingClient.BillingResponse.DEVELOPER_ERROR,
-//                BillingClient.BillingResponse.ERROR,
-//                BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-//                BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
-//                    tippingSum.value = TippingSum.FailedToLoad
+//                BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+//                BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+//                BillingClient.BillingResponseCode.USER_CANCELED,
+//                BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+//                BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+//                BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+//                BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+//                BillingClient.BillingResponseCode.ERROR,
+//                BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+//                BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
+//                    tippingSum.postValue(TippingSum.FailedToLoad)
 //                }
 //            }
 //        }
-    }
+//
+//        billingClient.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP, listener)
+//    }
 
     private fun querySkuDetails() = viewModelScope.launch {
         Log.d("BillingViewModel", "Querying sku details")
 
         val queryParams = SkuDetailsParams
-                .newBuilder()
-                .setType(BillingClient.SkuType.INAPP)
-                .setSkusList(Tip.values.map { it.id })
-                .build()
+            .newBuilder()
+            .setType(BillingClient.SkuType.INAPP)
+            .setSkusList(Tip.values.map { it.id })
+            .build()
 
         billingClient.querySkuDetailsAsync(queryParams, this@BillingViewModel)
     }
 
-    override fun onSkuDetailsResponse(responseCode: Int, skuDetailsList: MutableList<SkuDetails>?) {
+    override fun onSkuDetailsResponse(billingResult: BillingResult, skuDetailsList: MutableList<SkuDetails>?) {
+        val responseCode = billingResult.responseCode
         Log.d("BillingViewModel", "Received Sku Details Response $responseCode")
 
         when (responseCode) {
-            BillingClient.BillingResponse.OK -> {
-                billingConnectionState.value = BillingConnectionState.Connected
-                skuDetails.value = skuDetailsList?.asPriceMap()
-                updatePurchaseHistory()
+            BillingClient.BillingResponseCode.OK -> {
+                billingConnectionState.postValue(BillingConnectionState.Connected)
+                skuDetails.postValue(skuDetailsList?.asPriceMap())
+//                updatePurchaseHistory()
             }
-            BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-            BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-            BillingClient.BillingResponse.USER_CANCELED,
-            BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-            BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-            BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-            BillingClient.BillingResponse.DEVELOPER_ERROR,
-            BillingClient.BillingResponse.ERROR,
-            BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-            BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
-                billingConnectionState.value = BillingConnectionState.Failed
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+            BillingClient.BillingResponseCode.USER_CANCELED,
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+            BillingClient.BillingResponseCode.ERROR,
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+            BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
+                billingConnectionState.postValue(BillingConnectionState.Failed)
             }
         }
     }
@@ -143,50 +153,53 @@ class BillingViewModel(application: Application)
     override fun onBillingServiceDisconnected() {
         Log.d("BillingViewModel", "Billing Service disconnected")
 
-        billingConnectionState.value = BillingConnectionState.Failed
+        billingConnectionState.postValue(BillingConnectionState.Failed)
     }
 
     fun buyTip(activity: Activity, tip: Tip) {
         skuDetails.value?.get(tip)?.let { details ->
             val purchaseParams = BillingFlowParams
-                    .newBuilder()
-                    .setSkuDetails(details.skuDetails)
-                    .build()
+                .newBuilder()
+                .setSkuDetails(details.skuDetails)
+                .build()
 
             billingClient.launchBillingFlow(activity, purchaseParams)
         } ?: run {
-            purchaseResult.value = PurchaseEvent(PurchaseResult.Fail, tip)
+            purchaseResult.postValue(PurchaseEvent(PurchaseResult.Fail, tip))
         }
     }
 
-    override fun onPurchasesUpdated(responseCode: Int, purchases: MutableList<Purchase>?) {
+    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
         val purchase = purchases?.firstOrNull()
-        val tip = Tip.fromSku(purchase?.sku)
-
-        when (responseCode) {
-            BillingClient.BillingResponse.OK -> {
-                purchaseResult.value = tip?.let {
+        val tip = Tip.fromSku(purchase?.skus?.firstOrNull())
+        when (billingResult.responseCode) {
+            BillingClient.BillingResponseCode.OK -> {
+                val value = tip?.let {
                     purchase?.purchaseToken?.let { token ->
-                        billingClient.consumeAsync(token) { _, _ -> }
+                        val params = ConsumeParams.newBuilder().setPurchaseToken(token).build()
+                        billingClient.consumeAsync(params) { _, _ -> }
                     }
                     PurchaseEvent(PurchaseResult.Success, it)
                 } ?: PurchaseEvent(PurchaseResult.Fail, null)
 
-                updatePurchaseHistory()
+                purchaseResult.postValue(value)
+
+//                updatePurchaseHistory()
             }
-            BillingClient.BillingResponse.USER_CANCELED -> {
-                purchaseResult.value = PurchaseEvent(PurchaseResult.Cancelled, tip)
+            BillingClient.BillingResponseCode.USER_CANCELED -> {
+                purchaseResult.postValue(PurchaseEvent(PurchaseResult.Cancelled, tip))
             }
-            BillingClient.BillingResponse.FEATURE_NOT_SUPPORTED,
-            BillingClient.BillingResponse.SERVICE_DISCONNECTED,
-            BillingClient.BillingResponse.SERVICE_UNAVAILABLE,
-            BillingClient.BillingResponse.BILLING_UNAVAILABLE,
-            BillingClient.BillingResponse.ITEM_UNAVAILABLE,
-            BillingClient.BillingResponse.DEVELOPER_ERROR,
-            BillingClient.BillingResponse.ERROR,
-            BillingClient.BillingResponse.ITEM_ALREADY_OWNED,
-            BillingClient.BillingResponse.ITEM_NOT_OWNED -> {
-                purchaseResult.value = PurchaseEvent(PurchaseResult.Fail, tip)
+            BillingClient.BillingResponseCode.SERVICE_TIMEOUT,
+            BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED,
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED,
+            BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE,
+            BillingClient.BillingResponseCode.ITEM_UNAVAILABLE,
+            BillingClient.BillingResponseCode.DEVELOPER_ERROR,
+            BillingClient.BillingResponseCode.ERROR,
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED,
+            BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
+                purchaseResult.postValue(PurchaseEvent(PurchaseResult.Fail, tip))
             }
         }
     }

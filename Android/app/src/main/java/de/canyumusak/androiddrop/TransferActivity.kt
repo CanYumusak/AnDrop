@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
@@ -52,11 +51,9 @@ class TransferActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val inflate = DataBindingUtil.inflate<RootFragmentBinding>(layoutInflater, R.layout.root_fragment, null, false)
+        val inflate = RootFragmentBinding.inflate(layoutInflater, null, false)
 
         viewModel = ViewModelProviders.of(this).get(DiscoveryViewModel::class.java)
-
-        inflate.viewModel = viewModel
 
         with(inflate.clientList) {
             val clientListAdapter = NsdServiceInfoListAdapter()
@@ -162,18 +159,18 @@ class TransferActivity : AppCompatActivity() {
     }
 
     inner class NsdServiceInfoViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val listItemBinding = DataBindingUtil.bind<ListItemClientBinding>(view)
+        val listItemBinding = ListItemClientBinding.bind(view)
         fun bind(client: NsdServiceInfo) {
-            listItemBinding?.client = client
-            listItemBinding?.root?.isEnabled = !needsStoragePermission
+            listItemBinding.textView.text = client.serviceName
+            listItemBinding.root.isEnabled = !needsStoragePermission
             val textColor = if (needsStoragePermission) {
                 Color.GRAY
             } else {
                 Color.BLACK
             }
 
-            listItemBinding?.textView?.setTextColor(textColor)
-            listItemBinding?.root?.setOnClickListener {
+            listItemBinding.textView.setTextColor(textColor)
+            listItemBinding.root.setOnClickListener {
                 viewModel.endDiscovery()
 
                 GlobalScope.launch {
