@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 
 class FileConnection(val context: Context, fileTransferCommand: FileTransferCommand, val callback: (State) -> Unit) {
 
@@ -62,8 +63,13 @@ class FileConnection(val context: Context, fileTransferCommand: FileTransferComm
     }
 }
 
-val bluetoothName = BluetoothAdapter.getDefaultAdapter().name
-val deviceName = bluetoothName ?: Build.MODEL
+fun deviceName(context: Context): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        Settings.Global.getString(context.contentResolver, Settings.Global.DEVICE_NAME) ?: Build.MODEL
+    } else {
+        Build.MODEL
+    }
+}
 
 sealed class State {
     object Idle : State()

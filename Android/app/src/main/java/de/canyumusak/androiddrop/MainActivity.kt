@@ -4,15 +4,14 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var billingViewModel: BillingViewModel
+    private val billingViewModel by viewModels<BillingViewModel>()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,8 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.main_activity_tutorial).text = tutorial.withLeadingEnumeration(this, paragraphSpacing = 16)
 
-        billingViewModel = ViewModelProviders.of(this).get(BillingViewModel::class.java)
-
         val smallAmountButton = findViewById<TextView>(R.id.smallAmountButton)
         val mediumAmountButton = findViewById<TextView>(R.id.mediumAmountButton)
         val bigAmountButton = findViewById<TextView>(R.id.bigAmountButton)
@@ -33,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         mediumAmountButton.setOnClickListener { billingViewModel.buyTip(this, Tip.Medium) }
         bigAmountButton.setOnClickListener { billingViewModel.buyTip(this, Tip.Big) }
 
-        billingViewModel.billingConnectionState.observe(this, Observer<BillingConnectionState> {
+        billingViewModel.billingConnectionState.observe(this) {
             when (it) {
                 BillingConnectionState.Connected -> {
                     findViewById<TextView>(R.id.textView4).isVisible = false
@@ -52,10 +49,10 @@ class MainActivity : AppCompatActivity() {
                     bigAmountButton.isVisible = false
                 }
             }
-        })
+        }
 
-        billingViewModel.skuDetails.observe(this, Observer<Map<Tip, Details>> {
-            it.forEach { tip, details ->
+        billingViewModel.skuDetails.observe(this) {
+            it.forEach { (tip, details) ->
                 val textView = when (tip) {
                     Tip.Big -> bigAmountButton
                     Tip.Medium -> mediumAmountButton
@@ -65,9 +62,9 @@ class MainActivity : AppCompatActivity() {
                 textView.text = "${details.title}\n${details.price}"
                 textView.isVisible = true
             }
-        })
+        }
 
-        billingViewModel.purchaseResult.observe(this, Observer<PurchaseEvent> { event ->
+        billingViewModel.purchaseResult.observe(this) { event ->
 
             if (event.result is PurchaseResult.Success) {
                 val alertDialog = AlertDialog.Builder(this).create()
@@ -86,12 +83,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 alertDialog.show()
             }
-
-        })
+        }
 
         val tippingSumView = findViewById<TextView>(R.id.textView5)
 
-        billingViewModel.tippingSum.observe(this, Observer<TippingSum> { sum ->
+        billingViewModel.tippingSum.observe(this) { sum ->
             when (sum) {
                 is TippingSum.FailedToLoad -> {
                     tippingSumView.isVisible = false
@@ -104,6 +100,6 @@ class MainActivity : AppCompatActivity() {
                     tippingSumView.isVisible = false
                 }
             }
-        })
+        }
     }
 }
