@@ -9,11 +9,11 @@ android {
         viewBinding = true
     }
 
-    compileSdkVersion(31)
+    compileSdk = 31
     defaultConfig {
         applicationId = "de.canyumusak.androiddrop"
-        minSdkVersion(24)
-        targetSdkVersion(31)
+        minSdk = 24
+        targetSdk = 31
         versionCode = 150
         versionName = "1.5"
     }
@@ -26,12 +26,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_15
+        targetCompatibility = JavaVersion.VERSION_15
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "15"
     }
 }
 
