@@ -30,7 +30,9 @@ sealed class FilePropositionResponse : Event() {
 @Serializable
 data class FileProposition(val deviceName: String, val files: List<File>, val type: String = "send_file") : SentRequest {
     override fun serialize(): String {
-        return Json.encodeToString(serializer(), this)
+        return Json {
+            encodeDefaults = true
+        }.encodeToString(FileProposition.serializer(), this)
     }
 }
 
