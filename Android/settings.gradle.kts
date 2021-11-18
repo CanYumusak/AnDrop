@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "AnDrop"
-include ':app'
+include(":app")

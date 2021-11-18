@@ -62,10 +62,9 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
             if (socket == null) {
                 throw IllegalStateException("Trying to send file before socket is initialized")
             }
-                val serialize = event.serialize()
             socket?.getOutputStream()?.let {
                 val writer = PrintWriter(it, false)
-                writer.println(serialize)
+                writer.println(event.serialize())
                 writer.println()
                 writer.flush()
             }
