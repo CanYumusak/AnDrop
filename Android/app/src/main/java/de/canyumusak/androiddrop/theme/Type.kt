@@ -13,6 +13,7 @@ private val fontFamily = FontFamily(
     Font(R.font.open_sans_regular, FontWeight.W400),
     Font(R.font.open_sans_medium, FontWeight.Medium),
     Font(R.font.open_sans_semi_bold, FontWeight.SemiBold),
+    Font(R.font.open_sans_bold, FontWeight.Bold),
     Font(R.font.open_sans_extra_bold, FontWeight.ExtraBold),
 )
 
@@ -20,7 +21,7 @@ private val fontFamily = FontFamily(
 val Typography = Typography(
     titleSmall = TextStyle(
         fontFamily = fontFamily,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         lineHeight = 20.0.sp,
         letterSpacing = 0.1.sp,
@@ -53,17 +54,4 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
     ),
-
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
-    ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
 )
