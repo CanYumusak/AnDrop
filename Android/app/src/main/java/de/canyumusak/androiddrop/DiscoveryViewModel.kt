@@ -1,44 +1,50 @@
 package de.canyumusak.androiddrop
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.*
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiManager
 import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import de.canyumusak.androiddrop.permissions.Permissions
 import de.canyumusak.androiddrop.sendables.ClassicFile
 import de.canyumusak.androiddrop.sendables.SendableFile
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.net.InetAddress
 
+class DiscoveryViewModel(
+    application: Application,
+) : AndroidViewModel(application) {
 
-class DiscoveryViewModel(application: Application) : AndroidViewModel(application) {
+    private val _uris = MutableStateFlow<Array<Uri>?>(null)
 
-    val _clients = MutableStateFlow<List<AnDropClient>>(listOf())
+    val needsStoragePermission: StateFlow<Boolean> = combine(_uris, Permissions.storagePermission) { uris, hasStoragePermssion ->
+        needsStoragePermission(uris, hasStoragePermssion)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        false
+    )
+
+    private val _clients = MutableStateFlow<List<AnDropClient>>(listOf())
     val clients: StateFlow<List<AnDropClient>> = _clients.asStateFlow()
 
     val wifiState = MutableLiveData<WifiState>(WifiState.Disabled)
     val nsdManager: NsdManager
         get() = getApplication<Application>().getSystemService(Context.NSD_SERVICE) as NsdManager
 
-    val wifiManager: WifiManager
+    private val wifiManager: WifiManager
         get() = getApplication<Application>().getSystemService(Context.WIFI_SERVICE) as WifiManager
 
     private val discoveryListener = DiscoveryListener()
 
-    val multicastLock = wifiManager.createMulticastLock("DiscoveryViewModel")
+    private val multicastLock = wifiManager.createMulticastLock("DiscoveryViewModel")
 
     private var discovering = false
 
@@ -127,23 +133,20 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun needsStoragePermission(dataUris: Array<Uri>?): Boolean {
+    suspend fun dataUrisRequested(uris: Array<Uri>?) {
+        _uris.emit(uris)
+    }
+
+    private fun needsStoragePermission(dataUris: Array<Uri>?, hasStoragePermssion: Boolean): Boolean {
         return dataUris?.any { dataUri ->
             val sendableFile = SendableFile.fromUri(dataUri, getApplication())
             val needsStorage = sendableFile is ClassicFile
             if (needsStorage) {
-                !hasStoragePermssion()
+                !hasStoragePermssion
             } else {
                 false
             }
         } ?: false
-    }
-
-    private fun hasStoragePermssion(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            getApplication(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private inner class DiscoveryListener : NsdManager.DiscoveryListener {

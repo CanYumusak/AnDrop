@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="de.canyumusak.androiddrop">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -68,6 +69,15 @@
             </intent-filter>
         </service>
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            tools:node="merge"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false">
+            <meta-data
+                android:name="de.canyumusak.androiddrop.permissions.PermissionsInitializer"
+                android:value="androidx.startup" />
+        </provider>
     </application>
 
 </manifest>
