@@ -1,29 +1,11 @@
 package de.canyumusak.androiddrop
 
-import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
-import android.net.nsd.NsdServiceInfo
-import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import de.canyumusak.androiddrop.databinding.ListItemClientBinding
-import de.canyumusak.androiddrop.databinding.RootFragmentBinding
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.ui.ScanScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class ComposeTransferActivity : AppCompatActivity() {
 
@@ -54,7 +36,7 @@ class ComposeTransferActivity : AppCompatActivity() {
 
         setContent {
             AnDropTheme {
-                ScanScreen()
+                ScanScreen(viewModel())
             }
         }
     }

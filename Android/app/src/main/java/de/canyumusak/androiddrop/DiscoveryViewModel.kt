@@ -17,12 +17,18 @@ import androidx.lifecycle.viewModelScope
 import de.canyumusak.androiddrop.sendables.ClassicFile
 import de.canyumusak.androiddrop.sendables.SendableFile
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.net.InetAddress
 
 
 class DiscoveryViewModel(application: Application) : AndroidViewModel(application) {
 
-    val clients = MutableLiveData<List<NsdServiceInfo>>().also { it.value = listOf() }
+    val _clients = MutableStateFlow<List<AnDropClient>>(listOf())
+    val clients: StateFlow<List<AnDropClient>> = _clients.asStateFlow()
+
     val wifiState = MutableLiveData<WifiState>(WifiState.Disabled)
     val nsdManager: NsdManager
         get() = getApplication<Application>().getSystemService(Context.NSD_SERVICE) as NsdManager
@@ -71,8 +77,8 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
         Log.d("DiscoveryViewModel", "Registered Network Request")
 
         connectivityManager.registerNetworkCallback(
-                networkRequest,
-                networkCallback
+            networkRequest,
+            networkCallback
         )
     }
 
@@ -99,11 +105,11 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun endDiscovery(): List<NsdServiceInfo> {
+    fun endDiscovery(): List<AnDropClient> {
         return if (discovering) {
             discovering = false
             val currentList = clients.value?.toList() ?: emptyList()
-            clients.postValue(listOf())
+            _clients.value = listOf()
 
             try {
                 if (multicastLock.isHeld) {
@@ -135,8 +141,8 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
 
     private fun hasStoragePermssion(): Boolean {
         return ContextCompat.checkSelfPermission(
-                getApplication(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
+            getApplication(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -161,20 +167,20 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
                 override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
                     Log.d("DiscoveryViewModel", "onServiceResolved(): Resolve successful (serviceInfo = '$serviceInfo')")
 
-                    val oldClients = clients.value?.toMutableList()
-                    if (oldClients?.any { it.host == serviceInfo.host } == true) {
+                    val oldClients = clients.value.toMutableList()
+                    if (oldClients.any { it.host == serviceInfo.host.canonicalHostName }) {
                         oldClients.replaceAll {
-                            if (it.host == serviceInfo.host) {
-                                serviceInfo
+                            if (it.host == serviceInfo.host.canonicalHostName) {
+                                AnDropClient.fromServiceInfo(serviceInfo)
                             } else {
                                 it
                             }
                         }
                     } else {
-                        oldClients?.add(serviceInfo)
+                        oldClients.add(AnDropClient.fromServiceInfo(serviceInfo))
                     }
 
-                    clients.postValue(oldClients)
+                    _clients.value = oldClients
                 }
             }
 
@@ -185,13 +191,13 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
             serviceInformation?.let { serviceInfo ->
                 Log.d("Bonjour", "removed ${serviceInformation.serviceName}")
 
-                val oldClients = clients.value?.toMutableList()
+                val oldClients = clients.value.toMutableList()
 
-                oldClients?.removeAll {
-                    it.host == serviceInfo.host
+                oldClients.removeAll {
+                    it.host == serviceInfo.host.canonicalHostName
                 }
 
-                clients.postValue(oldClients)
+                _clients.value = oldClients
             }
         }
 
@@ -216,4 +222,20 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
 sealed class WifiState {
     object Disabled : WifiState()
     object Enabled : WifiState()
+}
+
+data class AnDropClient(
+    val name: String,
+    val host: String = "localhost",
+    val port: Int = 8008,
+) {
+    companion object {
+        fun fromServiceInfo(serviceInfo: NsdServiceInfo): AnDropClient {
+            return AnDropClient(
+                serviceInfo.serviceName,
+                serviceInfo.host.canonicalHostName,
+                serviceInfo.port,
+            )
+        }
+    }
 }
