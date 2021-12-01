@@ -2,7 +2,9 @@ package de.canyumusak.androiddrop
 
 import org.json.JSONObject
 import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.json.*
 
 
 interface SentRequest {
@@ -29,6 +31,7 @@ sealed class FilePropositionResponse : Event() {
 
 @Serializable
 data class FileProposition(val deviceName: String, val files: List<File>, val type: String = "send_file") : SentRequest {
+
     override fun serialize(): String {
         return Json {
             encodeDefaults = true

@@ -1,109 +1,88 @@
 package de.canyumusak.androiddrop
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import android.content.pm.PackageManager
-import android.net.*
+import android.net.Uri
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiManager
 import android.util.Log
-import androidx.core.content.ContextCompat
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import de.canyumusak.androiddrop.permissions.storagePermissionFlow
+import de.canyumusak.androiddrop.permissions.wifiStateFlow
 import de.canyumusak.androiddrop.sendables.ClassicFile
 import de.canyumusak.androiddrop.sendables.SendableFile
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+class DiscoveryViewModel(
+    application: Application,
+) : AndroidViewModel(application) {
 
-class DiscoveryViewModel(application: Application) : AndroidViewModel(application) {
+    private val _uris = MutableStateFlow<Array<Uri>?>(null)
+    private val _clients = MutableStateFlow<List<AnDropClient>>(listOf())
 
-    val clients = MutableLiveData<List<NsdServiceInfo>>().also { it.value = listOf() }
-    val wifiState = MutableLiveData<WifiState>(WifiState.Disabled)
-    val nsdManager: NsdManager
-        get() = getApplication<Application>().getSystemService(Context.NSD_SERVICE) as NsdManager
+    private val storagePermission = storagePermissionFlow(getApplication<Application>())
 
-    val wifiManager: WifiManager
-        get() = getApplication<Application>().getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val needsStoragePermission: StateFlow<Boolean> = combine(_uris, storagePermission) { uris, hasStoragePermssion ->
+        needsStoragePermission(uris, hasStoragePermssion)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
+    val clients: StateFlow<List<AnDropClient>> = _clients.asStateFlow()
+    val fileTypeUnsupported = _uris.map { it == null }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    val wifiState = viewModelScope.wifiStateFlow(getApplication<Application>())
+
+    val nsdManager: NsdManager get() = getApplication<Application>().getSystemService(Context.NSD_SERVICE) as NsdManager
+    private val wifiManager: WifiManager get() = getApplication<Application>().getSystemService(Context.WIFI_SERVICE) as WifiManager
     private val discoveryListener = DiscoveryListener()
 
-    val multicastLock = wifiManager.createMulticastLock("DiscoveryViewModel")
+    private val multicastLock = wifiManager.createMulticastLock("DiscoveryViewModel")
 
     private var discovering = false
 
-    private val connectivityManager: ConnectivityManager
-        get() = getApplication<Application>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            if (wifiState.value !is WifiState.Enabled) {
-                wifiState.postValue(WifiState.Enabled)
-                discoverClients()
-            }
-        }
-
-        override fun onLost(network: Network) {
-            wifiState.postValue(WifiState.Disabled)
-            endDiscovery()
-        }
-
-        override fun onUnavailable() {
-            wifiState.postValue(WifiState.Disabled)
-            endDiscovery()
-        }
-
-        override fun onLosing(network: Network, maxMsToLive: Int) {
-            wifiState.postValue(WifiState.Disabled)
-            endDiscovery()
-        }
-    }
-
     init {
-        val builder = NetworkRequest.Builder()
-        builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-
-        val networkRequest = builder.build()
         Log.d("DiscoveryViewModel", "Registered Network Request")
 
-        connectivityManager.registerNetworkCallback(
-                networkRequest,
-                networkCallback
-        )
+        viewModelScope.launch {
+            wifiState.collectLatest {
+                when (it) {
+                    WifiState.Disabled -> if (discovering) performEndDiscovery()
+                    WifiState.Enabled -> if (discovering) performDiscoverClients()
+                }
+            }
+        }
     }
 
     override fun onCleared() {
         Log.d("DiscoveryViewModel", "Clearing discovery")
-
-        connectivityManager.unregisterNetworkCallback(networkCallback)
         endDiscovery()
         super.onCleared()
     }
 
-    @SuppressLint("CheckResult")
+    suspend fun dataUrisRequested(uris: Array<Uri>?) {
+        discoverClients()
+        _uris.emit(uris)
+    }
+
     fun discoverClients() {
         if (!discovering) {
             discovering = true
-            Log.d("Bonjour", "starting discovery")
-            try {
-                multicastLock.acquire();
-            } catch (exception: java.lang.RuntimeException) {
-                // fail silently if we can't acquire a multicast lock
-            }
-
-            nsdManager.discoverServices("_androp._tcp", NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+            performDiscoverClients()
         }
     }
 
-    fun endDiscovery(): List<NsdServiceInfo> {
+    fun endDiscovery(): List<AnDropClient> {
+        discovering = false
+        return performEndDiscovery()
+    }
+
+    private fun performEndDiscovery(): List<AnDropClient> {
         return if (discovering) {
-            discovering = false
-            val currentList = clients.value?.toList() ?: emptyList()
-            clients.postValue(listOf())
+            val currentList = clients.value.toList()
+            _clients.value = listOf()
 
             try {
                 if (multicastLock.isHeld) {
@@ -121,28 +100,32 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun needsStoragePermission(dataUris: Array<Uri>?): Boolean {
+    private fun performDiscoverClients() {
+        Log.d("Bonjour", "starting discovery")
+        try {
+            multicastLock.acquire();
+            nsdManager.discoverServices("_androp._tcp", NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+        } catch (exception: RuntimeException) {
+            // fail silently if we can't acquire a multicast lock
+        }
+    }
+
+    private fun needsStoragePermission(dataUris: Array<Uri>?, hasStoragePermssion: Boolean): Boolean {
         return dataUris?.any { dataUri ->
             val sendableFile = SendableFile.fromUri(dataUri, getApplication())
             val needsStorage = sendableFile is ClassicFile
             if (needsStorage) {
-                !hasStoragePermssion()
+                !hasStoragePermssion
             } else {
                 false
             }
         } ?: false
     }
 
-    private fun hasStoragePermssion(): Boolean {
-        return ContextCompat.checkSelfPermission(
-                getApplication(),
-                Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
     private inner class DiscoveryListener : NsdManager.DiscoveryListener {
 
         override fun onServiceFound(serviceInformation: NsdServiceInfo?) {
+            Log.w("DiscoveryViewModel", "Found $serviceInformation")
             var retries = 20
             val listener = object : NsdManager.ResolveListener {
                 override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
@@ -161,20 +144,20 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
                 override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
                     Log.d("DiscoveryViewModel", "onServiceResolved(): Resolve successful (serviceInfo = '$serviceInfo')")
 
-                    val oldClients = clients.value?.toMutableList()
-                    if (oldClients?.any { it.host == serviceInfo.host } == true) {
+                    val oldClients = clients.value.toMutableList()
+                    if (oldClients.any { it.host == serviceInfo.host.canonicalHostName }) {
                         oldClients.replaceAll {
-                            if (it.host == serviceInfo.host) {
-                                serviceInfo
+                            if (it.host == serviceInfo.host.canonicalHostName) {
+                                AnDropClient.fromServiceInfo(serviceInfo)
                             } else {
                                 it
                             }
                         }
                     } else {
-                        oldClients?.add(serviceInfo)
+                        oldClients.add(AnDropClient.fromServiceInfo(serviceInfo))
                     }
 
-                    clients.postValue(oldClients)
+                    _clients.value = oldClients
                 }
             }
 
@@ -185,13 +168,13 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
             serviceInformation?.let { serviceInfo ->
                 Log.d("Bonjour", "removed ${serviceInformation.serviceName}")
 
-                val oldClients = clients.value?.toMutableList()
+                val oldClients = clients.value.toMutableList()
 
-                oldClients?.removeAll {
-                    it.host == serviceInfo.host
+                oldClients.removeAll {
+                    it.host == serviceInfo.host.canonicalHostName
                 }
 
-                clients.postValue(oldClients)
+                _clients.value = oldClients
             }
         }
 
@@ -216,4 +199,20 @@ class DiscoveryViewModel(application: Application) : AndroidViewModel(applicatio
 sealed class WifiState {
     object Disabled : WifiState()
     object Enabled : WifiState()
+}
+
+data class AnDropClient(
+    val name: String,
+    val host: String = "localhost",
+    val port: Int = 8008,
+) {
+    companion object {
+        fun fromServiceInfo(serviceInfo: NsdServiceInfo): AnDropClient {
+            return AnDropClient(
+                serviceInfo.serviceName,
+                serviceInfo.host.canonicalHostName,
+                serviceInfo.port,
+            )
+        }
+    }
 }
