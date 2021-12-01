@@ -36,7 +36,7 @@
             android:theme="@style/Theme.Transparent" />
 
         <activity
-            android:name=".ComposeTransferActivity"
+            android:name=".TransferActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:theme="@style/Theme.Popup">
