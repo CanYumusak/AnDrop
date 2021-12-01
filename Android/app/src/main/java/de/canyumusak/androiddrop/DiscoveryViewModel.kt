@@ -7,6 +7,7 @@ import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiManager
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.canyumusak.androiddrop.permissions.storagePermissionFlow
@@ -31,7 +32,7 @@ class DiscoveryViewModel(
     }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     val clients: StateFlow<List<AnDropClient>> = _clients.asStateFlow()
-    val fileSizeIsUnsupported = _uris.map { it == null }
+    val fileTypeUnsupported = _uris.map { it == null }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
     val wifiState = viewModelScope.wifiStateFlow(getApplication<Application>())
 
     val nsdManager: NsdManager get() = getApplication<Application>().getSystemService(Context.NSD_SERVICE) as NsdManager
@@ -59,6 +60,11 @@ class DiscoveryViewModel(
         Log.d("DiscoveryViewModel", "Clearing discovery")
         endDiscovery()
         super.onCleared()
+    }
+
+    suspend fun dataUrisRequested(uris: Array<Uri>?) {
+        discoverClients()
+        _uris.emit(uris)
     }
 
     fun discoverClients() {
@@ -98,15 +104,10 @@ class DiscoveryViewModel(
         Log.d("Bonjour", "starting discovery")
         try {
             multicastLock.acquire();
+            nsdManager.discoverServices("_androp._tcp", NsdManager.PROTOCOL_DNS_SD, discoveryListener)
         } catch (exception: RuntimeException) {
             // fail silently if we can't acquire a multicast lock
         }
-
-        nsdManager.discoverServices("_androp._tcp", NsdManager.PROTOCOL_DNS_SD, discoveryListener)
-    }
-
-    suspend fun dataUrisRequested(uris: Array<Uri>?) {
-        _uris.emit(uris)
     }
 
     private fun needsStoragePermission(dataUris: Array<Uri>?, hasStoragePermssion: Boolean): Boolean {
@@ -124,6 +125,7 @@ class DiscoveryViewModel(
     private inner class DiscoveryListener : NsdManager.DiscoveryListener {
 
         override fun onServiceFound(serviceInformation: NsdServiceInfo?) {
+            Log.w("DiscoveryViewModel", "Found $serviceInformation")
             var retries = 20
             val listener = object : NsdManager.ResolveListener {
                 override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {

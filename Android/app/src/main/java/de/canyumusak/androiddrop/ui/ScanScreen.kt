@@ -41,12 +41,14 @@ fun ScanScreen(
     val list by discoveryViewModel.clients.collectAsState()
     val permissionMissing by discoveryViewModel.needsStoragePermission.collectAsState()
     val wifiState by discoveryViewModel.wifiState.collectAsState()
+    val unsupportedFileType by discoveryViewModel.fileTypeUnsupported.collectAsState()
     ScanScreen(
         list = list,
-        permissionRequested,
-        clientSelected,
-        permissionMissing,
-        wifiState == WifiState.Disabled,
+        permissionRequested = permissionRequested,
+        clientSelected = clientSelected,
+        permissionMissing = permissionMissing,
+        wifiDisabled = wifiState == WifiState.Disabled,
+        unsupportedFileType = unsupportedFileType
     )
 }
 
@@ -57,6 +59,7 @@ private fun ScanScreen(
     clientSelected: (AnDropClient) -> Unit,
     permissionMissing: Boolean,
     wifiDisabled: Boolean,
+    unsupportedFileType: Boolean,
 ) {
     Surface(
         modifier = Modifier
@@ -67,11 +70,19 @@ private fun ScanScreen(
     ) {
         Column {
             Title()
-            if (wifiDisabled) {
-            } else if (list.isEmpty()) {
-                Loading()
-            } else {
-                Clients(list, onClick = clientSelected, permissionMissing = permissionMissing)
+            when {
+                wifiDisabled -> {
+                    WifiDisabled()
+                }
+                unsupportedFileType -> {
+                    UnsupportedFileType()
+                }
+                list.isEmpty() -> {
+                    Loading()
+                }
+                else -> {
+                    Clients(list, onClick = clientSelected, permissionMissing = permissionMissing)
+                }
             }
 
             if (permissionMissing) {
@@ -133,7 +144,7 @@ private fun Clients(list: List<AnDropClient>, onClick: (AnDropClient) -> Unit, p
 private fun Loading() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(all = Spacings.m)
+        modifier = Modifier.padding(horizontal = Spacings.m, vertical = Spacings.s)
     ) {
         CircularProgressIndicator(
             color = MaterialTheme.colorScheme.secondary,
@@ -144,6 +155,44 @@ private fun Loading() {
         Box(modifier = Modifier.size(Spacings.s))
         Text(
             text = stringResource(id = R.string.searching_clients),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.secondary,
+        )
+    }
+}
+
+@Composable
+private fun WifiDisabled() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(horizontal = Spacings.m, vertical = Spacings.s)
+    ) {
+        Image(
+            colorFilter = ColorFilter.tint(
+                MaterialTheme.colorScheme.secondary,
+                BlendMode.SrcAtop,
+            ),
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(id = R.drawable.icon_no_wifi),
+            contentDescription = "No Wifi",
+        )
+        Box(modifier = Modifier.size(Spacings.s))
+        Text(
+            text = stringResource(id = R.string.not_connected_to_wifi),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.secondary,
+        )
+    }
+}
+
+@Composable
+private fun UnsupportedFileType() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.padding(horizontal = Spacings.m, vertical = Spacings.s)
+    ) {
+        Text(
+            text = stringResource(id = R.string.unsupoorted_file_type),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.secondary,
         )
@@ -195,6 +244,7 @@ fun ScanScreenPreview() {
             clientSelected = {},
             permissionMissing = false,
             wifiDisabled = false,
+            unsupportedFileType = false,
         )
     }
 }
@@ -208,7 +258,38 @@ fun ScanScreenPreviewWifi() {
             permissionRequested = {},
             clientSelected = {},
             permissionMissing = false,
-            wifiDisabled = true
+            wifiDisabled = true,
+            unsupportedFileType = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ScanScreenPreviewWifiPermission() {
+    AnDropTheme {
+        ScanScreen(
+            listOf(),
+            permissionRequested = {},
+            clientSelected = {},
+            permissionMissing = true,
+            wifiDisabled = true,
+            unsupportedFileType = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ScanScreenPreviewUnuspported() {
+    AnDropTheme {
+        ScanScreen(
+            listOf(),
+            permissionRequested = {},
+            clientSelected = {},
+            permissionMissing = false,
+            wifiDisabled = false,
+            unsupportedFileType = true,
         )
     }
 }
@@ -225,7 +306,8 @@ fun ScanScreenPreviewPermission() {
             permissionRequested = {},
             clientSelected = {},
             permissionMissing = true,
-            wifiDisabled = false
+            wifiDisabled = false,
+            unsupportedFileType = false,
         )
     }
 }
@@ -240,6 +322,7 @@ fun ScanScreenEmptyPreview() {
             clientSelected = {},
             permissionMissing = true,
             wifiDisabled = false,
+            unsupportedFileType = false,
         )
     }
 }
