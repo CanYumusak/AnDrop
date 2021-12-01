@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import de.canyumusak.androiddrop.AnDropClient
 import de.canyumusak.androiddrop.DiscoveryViewModel
 import de.canyumusak.androiddrop.R
+import de.canyumusak.androiddrop.WifiState
 import de.canyumusak.androiddrop.theme.Alphas
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.theme.Spacings
@@ -39,11 +40,13 @@ fun ScanScreen(
 ) {
     val list by discoveryViewModel.clients.collectAsState()
     val permissionMissing by discoveryViewModel.needsStoragePermission.collectAsState()
+    val wifiState by discoveryViewModel.wifiState.collectAsState()
     ScanScreen(
         list = list,
         permissionRequested,
         clientSelected,
         permissionMissing,
+        wifiState == WifiState.Disabled,
     )
 }
 
@@ -53,20 +56,24 @@ private fun ScanScreen(
     permissionRequested: () -> Unit,
     clientSelected: (AnDropClient) -> Unit,
     permissionMissing: Boolean,
+    wifiDisabled: Boolean,
 ) {
     Surface(
         modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
             .background(color = MaterialTheme.colorScheme.background)
             .padding(all = Spacings.s)
             .fillMaxWidth()
     ) {
         Column {
             Title()
-            if (list.isEmpty()) {
-                Empty()
+            if (wifiDisabled) {
+            } else if (list.isEmpty()) {
+                Loading()
             } else {
                 Clients(list, onClick = clientSelected, permissionMissing = permissionMissing)
             }
+
             if (permissionMissing) {
                 PermissionIndicator(permissionRequested = permissionRequested)
             }
@@ -123,7 +130,7 @@ private fun Clients(list: List<AnDropClient>, onClick: (AnDropClient) -> Unit, p
 }
 
 @Composable
-private fun Empty() {
+private fun Loading() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(all = Spacings.m)
@@ -184,9 +191,24 @@ fun ScanScreenPreview() {
                 AnDropClient("Can's MacBook Pro"),
                 AnDropClient("Adrian's MacBook Pro"),
             ),
-            permissionMissing = false,
             permissionRequested = {},
             clientSelected = {},
+            permissionMissing = false,
+            wifiDisabled = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ScanScreenPreviewWifi() {
+    AnDropTheme {
+        ScanScreen(
+            listOf(),
+            permissionRequested = {},
+            clientSelected = {},
+            permissionMissing = false,
+            wifiDisabled = true
         )
     }
 }
@@ -200,9 +222,10 @@ fun ScanScreenPreviewPermission() {
                 AnDropClient("Can's MacBook Pro"),
                 AnDropClient("Adrian's MacBook Pro"),
             ),
-            permissionMissing = true,
             permissionRequested = {},
             clientSelected = {},
+            permissionMissing = true,
+            wifiDisabled = false
         )
     }
 }
@@ -213,9 +236,10 @@ fun ScanScreenEmptyPreview() {
     AnDropTheme {
         ScanScreen(
             listOf(),
-            permissionMissing = true,
             permissionRequested = {},
             clientSelected = {},
+            permissionMissing = true,
+            wifiDisabled = false,
         )
     }
 }
