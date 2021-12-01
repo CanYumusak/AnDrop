@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="de.canyumusak.androiddrop">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -19,8 +20,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
@@ -37,8 +38,8 @@
         <activity
             android:name=".TransferActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/Theme.Popup"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Popup">
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -57,20 +58,16 @@
         </activity>
 
         <service android:name=".TransferService" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
 
         <service
             android:name=".AndropChooserTargetService"
+            android:exported="true"
             android:label="@string/app_name"
-            android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE"
-            android:exported="true">
+            android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE">
             <intent-filter>
                 <action android:name="android.service.chooser.ChooserTargetService" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

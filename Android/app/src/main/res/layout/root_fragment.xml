@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:orientation="vertical"
-    android:paddingBottom="16dp"
-    tools:context=".ui.root.DiscoveryFragment">
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/textView2"
@@ -20,7 +19,7 @@
         android:layout_marginEnd="16dp"
         android:drawableStart="@drawable/ic_share_20"
         android:drawablePadding="8dp"
-        android:fontFamily="@font/open_sans_semibold_1"
+        android:fontFamily="@font/open_sans_semi_bold"
         android:gravity="top"
         android:text="@string/discovery_fragment_title"
         android:textColor="@android:color/black"

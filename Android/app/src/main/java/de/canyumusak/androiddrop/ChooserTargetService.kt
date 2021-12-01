@@ -27,16 +27,17 @@ class AndropChooserTargetService : ChooserTargetService() {
 
         return results.map { client ->
             val extras = Bundle()
-            extras.putString(TransferService.CLIENT_NAME, client.serviceName)
-            extras.putString(TransferService.IP_ADDRESS, client.host?.canonicalHostName)
+            extras.putString(TransferService.CLIENT_NAME, client.name)
+            extras.putString(TransferService.IP_ADDRESS, client.host)
             extras.putInt(TransferService.PORT, client.port)
 
             ChooserTarget(
-                    client.serviceName,
-                    Icon.createWithResource(this, R.drawable.icon_share_small_24dp),
-                    1.0f,
-                    componentName,
-                    extras)
+                client.name,
+                Icon.createWithResource(this, R.drawable.icon_share_small_24dp),
+                1.0f,
+                componentName,
+                extras
+            )
         }
     }
 
