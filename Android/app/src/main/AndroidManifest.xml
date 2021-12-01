@@ -68,16 +68,6 @@
                 <action android:name="android.service.chooser.ChooserTargetService" />
             </intent-filter>
         </service>
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            tools:node="merge"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false">
-            <meta-data
-                android:name="de.canyumusak.androiddrop.permissions.PermissionsInitializer"
-                android:value="androidx.startup" />
-        </provider>
     </application>
 
 </manifest>
