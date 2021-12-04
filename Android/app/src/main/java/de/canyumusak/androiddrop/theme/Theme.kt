@@ -1,6 +1,7 @@
 package de.canyumusak.androiddrop.theme
 
 import android.content.Context
+import android.os.Build
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ripple.LocalRippleTheme
@@ -16,9 +17,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private fun darkColorPalette(context: Context) = dynamicDarkColorScheme(context)
+private fun darkColorPalette(context: Context): ColorScheme {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        dynamicDarkColorScheme(context)
+    } else {
+        darkColorScheme(
+            primary = Color.Gray,
+            secondary = Color.White,
+            background = Color.Black,
+        )
+    }
+}
 
-private fun lightColorPalette(context: Context) = dynamicLightColorScheme(context)
+private fun lightColorPalette(context: Context): ColorScheme {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        dynamicLightColorScheme(context)
+    } else {
+        lightColorScheme(
+            primary = Color.Gray,
+            secondary = Color.Black,
+            background = Color.White,
+        )
+    }
+}
 
 @Composable
 fun AnDropTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
