@@ -1,2 +1,2 @@
-json_key_file("pc-api-5055056955621484785-731-7f640aadab92.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
-package_name("de.canyumusak.androiddrop") # e.g. com.krausefx.app
+json_key_file("play_config.json")
+package_name("de.canyumusak.androiddrop")
