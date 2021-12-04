@@ -25,6 +25,7 @@ jobs:
           
       - name: Configure Keystore
         run: |
+          cd Android
           echo "$ANDROID_KEYSTORE_FILE" > keystore.jks.b64
           base64 -d -i keystore.jks.b64 > app/keystore.jks
           echo "storeFile=keystore.jks" >> keystore.properties
@@ -39,10 +40,13 @@ jobs:
 
       - name: Create Google Play Config file
         run : |
+          cd Android
           echo "$PLAY_CONFIG_JSON" > play_config.json.b64
           base64 -d -i play_config.json.b64 > play_config.json
         env:
           PLAY_CONFIG_JSON: ${{ secrets.PLAY_CONFIG_JSON }}
           
       - name: Distribute app to Beta track 🚀
-        run: bundle exec fastlane beta
+        run : |
+          cd Android    
+          run: bundle exec fastlane beta
