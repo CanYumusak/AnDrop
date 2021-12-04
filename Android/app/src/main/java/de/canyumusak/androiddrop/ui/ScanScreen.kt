@@ -2,6 +2,7 @@ package de.canyumusak.androiddrop.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -61,9 +63,11 @@ private fun ScanScreen(
     wifiDisabled: Boolean,
     unsupportedFileType: Boolean,
 ) {
+    val shape = RoundedCornerShape(16.dp)
     Surface(
         modifier = Modifier
-            .clip(RoundedCornerShape(16.dp))
+            .border(0.dp, color = MaterialTheme.colorScheme.primary, shape)
+            .clip(shape)
             .background(color = MaterialTheme.colorScheme.background)
             .padding(all = Spacings.s)
             .fillMaxWidth()
