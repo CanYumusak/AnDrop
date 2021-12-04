@@ -4,7 +4,7 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val composeVersion = "1.1.0-beta03"
+val composeVersion = "1.1.0-beta04"
 
 android {
     buildFeatures {
@@ -17,8 +17,8 @@ android {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 24
         targetSdk = 31
-        versionCode = 150
-        versionName = "1.5"
+        versionCode = 151
+        versionName = "1.5.1"
     }
 
     buildTypes {
