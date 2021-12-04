@@ -2,7 +2,9 @@ name: Deploy
 
 on:
   push:
-    tags: []
+    tags:
+      - "v*.*.*"
+
 
 jobs:
   distribute:
