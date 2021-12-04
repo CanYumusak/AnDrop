@@ -1,0 +1,11 @@
+default_platform(:android)
+
+platform :android do
+
+  desc "Deploy a beta version to the Google Play"
+  lane :beta do
+    gradle(task: "clean bundleRelease")
+    upload_to_play_store(track: 'beta')
+  end
+  
+end
