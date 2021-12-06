@@ -165,16 +165,9 @@ class DiscoveryViewModel(
         }
 
         override fun onServiceLost(serviceInformation: NsdServiceInfo?) {
-            serviceInformation?.let { serviceInfo ->
-                Log.d("Bonjour", "removed ${serviceInformation.serviceName}")
-
-                val oldClients = clients.value.toMutableList()
-
-                oldClients.removeAll {
-                    it.host == serviceInfo.host.canonicalHostName
-                }
-
-                _clients.value = oldClients
+            serviceInformation?.let {
+                Log.d("Bonjour", "onServiceLost(): $serviceInformation")
+                _clients.value = clients.value.filterNot { it.name == serviceInformation.serviceName }
             }
         }
 
