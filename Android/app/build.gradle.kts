@@ -20,8 +20,8 @@ android {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 24
         targetSdk = 31
-        versionCode = 153
-        versionName = "1.5.3"
+        versionCode = 154
+        versionName = "1.5.4"
     }
 
     signingConfigs {
@@ -46,7 +46,7 @@ android {
 
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
@@ -67,7 +67,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.compose.material3:material3:1.0.0-alpha01")
+    implementation("androidx.compose.material3:material3:1.0.0-alpha02")
 
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
