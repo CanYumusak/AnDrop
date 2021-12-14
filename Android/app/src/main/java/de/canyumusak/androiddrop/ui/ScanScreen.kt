@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -116,7 +115,7 @@ private fun Title() {
             contentDescription = "Icon"
         )
         Text(
-            stringResource(id = R.string.discovery_fragment_title),
+            stringResource(id = R.string.discovery_dialog_title),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = Spacings.s)

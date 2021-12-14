@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AnDrop</string>
     <string name="welcome_to_androp">Welcome to AnDrop</string>
-    <string name="discovery_fragment_title">Share file to</string>
+    <string name="discovery_dialog_title">Share file to</string>
     <string name="welcome_to_androp_description">This is a lightweight tool to transfer files between your Android phone and your macOS devices.</string>
     <string-array name="welcome_to_androp_tutorial">
         <item>Install and launch AnDrop for mac on your macOS device from the App Store.</item>
