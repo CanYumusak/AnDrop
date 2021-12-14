@@ -22,7 +22,7 @@
 
     <string name="tipping_jar_button_small_tip">Generous Tip of 0,99€</string>
     <string name="tipping_jar_button_medium_tip">Massive Tip of 1,99€</string>
-    <string name="tipping_jar_button_big_tip">4,99€の素晴らしいヒント</string>
+    <string name="tipping_jar_button_big_tip">Amazing Tip of 4,99€ </string>
 
     <string name="tipping_jar_dialog_sucess_title">Thanks a bunch!</string>
     <string name="tipping_jar_dialog_sucess_message">Big thanks for supporting the development of AnDrop. You are great and the developer will never forget you!</string>
