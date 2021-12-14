@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  AnDrop
+
+  Created by Can Yumusak on 14.12.21.
+  Copyright © 2021 Can Yumusak. All rights reserved.
+*/
+"menu_item_auto_accept" = "Auto Accept Files";
+"menu_item_quit" = "Quit Androp";
+
+"client_name_fallback" = "Unknown MacBook";
+
+"transfer_notification_success_title" = "Success";
+"transfer_notification_success_body" = "Successfully received.";
+
+"transfer_notification_failed_title" = "Failed";
+"transfer_notification_failed_body" = "Failed to receive files.";
+
+"unknown_fallback" = "Unknown";
+
+"file_count_hint" = "%1$@ Files";

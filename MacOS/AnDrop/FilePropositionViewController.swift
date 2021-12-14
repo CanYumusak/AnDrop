@@ -12,13 +12,14 @@ class FilePropositionViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        hostNameLabel.stringValue = fileProposition?.hostName ?? "Unknown"
+        hostNameLabel.stringValue = fileProposition?.hostName ?? NSLocalizedString("unknown_fallback", comment: "")
         
         let fileName: String
         if (fileProposition?.files.count == 1) {
-            fileName = fileProposition?.files[0].filename ?? "Unknown"
+            fileName = fileProposition?.files[0].filename ?? NSLocalizedString("unknown_fallback", comment: "")
         } else {
-            fileName = "\(fileProposition?.files.count ?? 0) files"
+            let fileCount = fileProposition?.files.count ?? 0
+            fileName = String(format: NSLocalizedString("file_count_hint", comment: ""), fileCount)
         }
         
         fileNameLabel.stringValue = fileName
@@ -28,7 +29,7 @@ class FilePropositionViewController: NSViewController {
             let readableFileSize = ByteCountFormatter.string(fromByteCount: totalSize, countStyle: .file)
             fileSizeLabel.stringValue = readableFileSize
         } else {
-            fileSizeLabel.stringValue = "Unknown"
+            fileSizeLabel.stringValue = NSLocalizedString("unknown_fallback", comment: "")
         }
     }
     

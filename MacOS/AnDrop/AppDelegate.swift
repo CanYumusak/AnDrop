@@ -50,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
 //        changeFolderMenuItem.target = self
 //        menu.addItem(changeFolderMenuItem)
         
-        let changeAutoAcceptMenuItem = NSMenuItem(title: "Auto Accept Files", action: #selector(self.toggleAutoAccept), keyEquivalent: "a")
+        let changeAutoAcceptMenuItem = NSMenuItem(title: NSLocalizedString("menu_item_auto_accept", comment: ""), action: #selector(self.toggleAutoAccept), keyEquivalent: "a")
         changeAutoAcceptMenuItem.target = self
         if (autoAcceptFiles) {
             changeAutoAcceptMenuItem.state = .on
@@ -61,11 +61,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
         
         menu.addItem(changeAutoAcceptMenuItem)
         
-        menu.addItem(NSMenuItem(title: "Quit Androp", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("menu_item_quit", comment: ""), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
         
         DispatchQueue.main.async {
-            let service = NetService(domain: "local.", type: "_androp._tcp.", name: Host.current().localizedName ?? "Unknown MacBook", port: 0)
+        
+            let service = NetService(domain: "local.", type: "_androp._tcp.", name: Host.current().localizedName ?? NSLocalizedString("client_name_fallback", comment: ""), port: 0)
             service.publish(options: [.listenForConnections])
             service.schedule(in: .main, forMode: RunLoop.Mode.default)
             
@@ -140,14 +141,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
         
         let identifier: String
         if (allSuccess) {
-            notification.title = "Success"
-            notification.body = "Successfully received"
+            notification.title = NSLocalizedString("transfer_notification_success_title", comment: "")
+            notification.body = NSLocalizedString("transfer_notification_success_body", comment: "")
             notification.targetContentIdentifier = url
         
             identifier = url ?? ""
         } else {
-            notification.title = "Failed"
-            notification.body = "Failed to receive files."
+            notification.title = NSLocalizedString("transfer_notification_failed_title", comment: "")
+            notification.body = NSLocalizedString("transfer_notification_failed_body", comment: "")
             identifier = ""
         }
         
