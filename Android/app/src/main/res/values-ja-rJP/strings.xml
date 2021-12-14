@@ -2,7 +2,7 @@
     <string name="app_name">AnDrop</string>
     <string name="welcome_to_androp">AnDropへようこそ</string>
     <string name="discovery_dialog_title">ファイルを共有する</string>
-    <string name="welcome_to_androp_description">これは、AndroidフォンとmacOSデバイス間でファイルを転送するための軽量ツールです。</string>
+    <string name="welcome_to_androp_description">Android と macOS 間でファイル転送するための軽量アプリです。</string>
     <string-array name="welcome_to_androp_tutorial">
         <item>AppStoreからmacOSデバイスにAnDropformacをインストールして起動します。</item>
         <item>AndroidデバイスがMacと同じWi-Fiに接続されていることを確認してください。</item>
