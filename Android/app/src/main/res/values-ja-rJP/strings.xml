@@ -2,14 +2,14 @@
     <string name="app_name">AnDrop</string>
     <string name="welcome_to_androp">AnDropへようこそ</string>
     <string name="discovery_dialog_title">ファイルを共有する</string>
-    <string name="welcome_to_androp_description">Android と macOS 間でファイル転送するための軽量アプリです。</string>
+    <string name="welcome_to_androp_description">AnDropは、Android と macOS のデバイス間でファイル転送するための軽量で高速なアプリです。</string>
     <string-array name="welcome_to_androp_tutorial">
-        <item>AppStoreからmacOSデバイスにAnDropformacをインストールして起動します。</item>
-        <item>AndroidデバイスがMacと同じWi-Fiに接続されていることを確認してください。</item>
+        <item>AppStore から macOSデバイス に AnDrop for Mac をインストールし、起動します。</item>
+        <item>Androidデバイス が macOSデバイス と同じネットワーク(Wi-Fi)に接続されていることを確認してください。</item>
         <item>写真、PDF、または共有したいその他のファイルのAndroid共有ボタンを押します。</item>
         <item>Android共有シートのAnDropアプリをクリックします。</item>
         <item>ターゲットのmacOSデバイスを選択します。</item>
-        <item>おめでとう！これで、ファイルはmacOSデバイスのダウンロードフォルダーにあります。</item>
+        <item>共有が完了しました！ファイルは、macOSデバイスのダウンロードフォルダーにあります。</item>
     </string-array>
     <string name="searching_clients">クライアントを探しています…</string>
     <string name="not_connected_to_wifi">Wi-Fiに接続されていません</string>
@@ -17,20 +17,20 @@
     <string name="storage_access_permission">このファイルを共有するには、AnDropストレージアクセス許可を付与する必要があります</string>
     <string name="grant_storage_permission_button_title">ストレージ許可を付与する</string>
     <string name="tipping_jar_title">チップジャー</string>
-    <string name="tipping_jar_description">AnDropは完全に無料ですが、その開発に資金を提供するためにあなたのサポートに依存しています。役立つと思われる場合は、チップジャーにチップを残してアプリのサポートを検討してください。</string>
+    <string name="tipping_jar_description">AnDrop は無料アプリですが、寄付金を必要としています。寄付金は開発資金に充てられます。チップへのご協力をお願いします。</string>
     <string name="tipping_jar_connection_error">請求サービスに接続できませんでした</string>
 
-    <string name="tipping_jar_button_small_tip">130JPYの寛大なヒント</string>
-    <string name="tipping_jar_button_medium_tip">250JPYの大規模なヒント</string>
-    <string name="tipping_jar_button_big_tip">640JPYの素晴らしいヒント</string>
+    <string name="tipping_jar_button_small_tip">130円のチップを寄付する</string>
+    <string name="tipping_jar_button_medium_tip">250円のチップを寄付する</string>
+    <string name="tipping_jar_button_big_tip">640円のチップを寄付する</string>
 
-    <string name="tipping_jar_dialog_sucess_title">本当にありがとう！</string>
-    <string name="tipping_jar_dialog_sucess_message">AnDropの開発をサポートしてくれてありがとう。あなたは素晴らしく、開発者はあなたを決して忘れません！</string>
+    <string name="tipping_jar_dialog_sucess_title">チップの寄付ありがとうございます。</string>
+    <string name="tipping_jar_dialog_sucess_message">この度は、AnDropへの開発サポートをありがとうございます。</string>
     <string name="tipping_jar_dialog_sucess_button_title">どういたしまして</string>
 
     <string name="tipping_jar_dialog_error_title">チップに失敗しました</string>
-    <string name="tipping_jar_dialog_error_message">残念ながら、チップ取引の実行中に何か悪いことが起こりました。悲しいことはありません。もう一度やり直して、AnDropを楽しんでください。</string>
-    <string name="tipping_jar_dialog_error_button_title">ああ、撃つ</string>
+    <string name="tipping_jar_dialog_error_message">チップ取引中にエラーが発生しました。もう一度やり直してください。</string>
+    <string name="tipping_jar_dialog_error_button_title">おっと！</string>
 
     <string name="tipping_jar_tips_message">合計％sをチップしました。あなたは素晴らしいです！</string>
 </resources>
