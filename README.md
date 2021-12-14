@@ -1,7 +1,7 @@
 # AnDrop
+[Change to Japanese](README-jp.md)
 
 Readme currently is a work in progress
-
 
 ## Get AnDrop in the stores
 
