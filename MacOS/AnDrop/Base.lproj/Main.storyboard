@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.15" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.15"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,7 +15,7 @@
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="AndroidDrop" customModuleProvider="target">
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="AnDrop" customModuleProvider="target">
                     <connections>
                         <outlet property="statusMenu" destination="AYu-sK-qS6" id="sQ2-oJ-AWs"/>
                     </connections>
@@ -28,13 +28,13 @@
         <!--FilePropositionViewController-->
         <scene sceneID="Shh-sR-XGJ">
             <objects>
-                <viewController title="FilePropositionViewController" storyboardIdentifier="FilePropositionViewController" id="Jrv-BN-auz" customClass="FilePropositionViewController" customModule="AndroidDrop" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="FilePropositionViewController" storyboardIdentifier="FilePropositionViewController" id="Jrv-BN-auz" customClass="FilePropositionViewController" customModule="AnDrop" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="eBR-am-JFe">
-                        <rect key="frame" x="0.0" y="0.0" width="352" height="183"/>
+                        <rect key="frame" x="0.0" y="0.0" width="352" height="178"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="opx-Cs-Jtg">
-                                <rect key="frame" x="18" y="146" width="316" height="17"/>
+                                <rect key="frame" x="18" y="142" width="316" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Received File" id="ZnC-aI-qXJ">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -42,7 +42,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pc1-F0-liS">
-                                <rect key="frame" x="18" y="83" width="316" height="17"/>
+                                <rect key="frame" x="18" y="81" width="316" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Some Phone" id="Wnf-23-llG">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -50,7 +50,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XC5-2K-buh">
-                                <rect key="frame" x="18" y="61" width="316" height="17"/>
+                                <rect key="frame" x="18" y="60" width="316" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Some Phone" id="bGg-t3-KuU">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -58,7 +58,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n9U-56-zk4">
-                                <rect key="frame" x="18" y="105" width="316" height="21"/>
+                                <rect key="frame" x="18" y="102" width="316" height="20"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Some Phone" id="89l-JH-JzU">
                                     <font key="font" metaFont="system" size="17"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -66,7 +66,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EXJ-0b-N10">
-                                <rect key="frame" x="186" y="13" width="71" height="32"/>
+                                <rect key="frame" x="201" y="13" width="65" height="32"/>
                                 <buttonCell key="cell" type="push" title="Deny" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Nql-OP-b00">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -76,7 +76,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="318-yz-gVG">
-                                <rect key="frame" x="255" y="13" width="83" height="32"/>
+                                <rect key="frame" x="262" y="13" width="77" height="32"/>
                                 <buttonCell key="cell" type="push" title="Accept" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="USo-yK-cuh">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>

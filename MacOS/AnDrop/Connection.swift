@@ -101,7 +101,7 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
             let length = stream.read(buffer, maxLength: self.maxLength)
             data.append(buffer, count: length)
             
-            let object = try? JSONSerialization.jsonObject(with: data) as! [String: Any]
+            let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
             let event = self.parseMessage(message: object)
             
             switch (event) {
