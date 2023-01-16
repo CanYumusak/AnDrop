@@ -9,12 +9,12 @@ import androidx.compose.ui.unit.sp
 import de.canyumusak.androiddrop.R
 
 private val fontFamily = FontFamily(
-    Font(R.font.open_sans_light, FontWeight.Light),
-    Font(R.font.open_sans_regular, FontWeight.W400),
-    Font(R.font.open_sans_medium, FontWeight.Medium),
-    Font(R.font.open_sans_semi_bold, FontWeight.SemiBold),
-    Font(R.font.open_sans_bold, FontWeight.Bold),
-    Font(R.font.open_sans_extra_bold, FontWeight.ExtraBold),
+    Font(R.font.product_sans_light, FontWeight.Light),
+    Font(R.font.product_sans_regular, FontWeight.W400),
+    Font(R.font.product_sans_regular, FontWeight.Normal),
+    Font(R.font.product_sans_medium, FontWeight.Medium),
+    Font(R.font.product_sans_bold, FontWeight.Bold),
+    Font(R.font.product_sans_black, FontWeight.Black),
 )
 
 // Set of Material typography styles to start with
