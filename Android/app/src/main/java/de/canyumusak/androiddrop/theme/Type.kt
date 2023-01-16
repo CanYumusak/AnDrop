@@ -21,7 +21,7 @@ private val fontFamily = FontFamily(
 val Typography = Typography(
     titleSmall = TextStyle(
         fontFamily = fontFamily,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.0.sp,
         letterSpacing = 0.1.sp,
@@ -35,7 +35,7 @@ val Typography = Typography(
     ),
     titleLarge = TextStyle(
         fontFamily = fontFamily,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Medium,
         fontSize = 22.sp,
         lineHeight = 28.0.sp,
         letterSpacing = 0.0.sp,
