@@ -1,10 +1,12 @@
 package de.canyumusak.androiddrop.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import de.canyumusak.androiddrop.R
 
@@ -17,41 +19,107 @@ private val fontFamily = FontFamily(
     Font(R.font.product_sans_black, FontWeight.Black),
 )
 
-// Set of Material typography styles to start with
+private val defaultTextStyle = TextStyle(
+    fontFamily = fontFamily,
+    lineHeightStyle = LineHeightStyle(
+        alignment = LineHeightStyle.Alignment.Center,
+        trim = LineHeightStyle.Trim.None
+    ),
+    platformStyle = PlatformTextStyle(
+        includeFontPadding = false
+    )
+)
+
+
 val Typography = Typography(
-    titleSmall = TextStyle(
-        fontFamily = fontFamily,
+    displayLarge = defaultTextStyle.copy(
         fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.0.sp,
-        letterSpacing = 0.1.sp,
+        fontSize = 50.sp,
+        lineHeight = 80.0.sp,
+        letterSpacing = 2.0.sp,
     ),
-    titleMedium = TextStyle(
-        fontFamily = fontFamily,
+    displayMedium = defaultTextStyle.copy(
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 24.0.sp,
-        letterSpacing = 0.2.sp,
+        fontSize = 45.sp,
+        lineHeight = 52.0.sp,
+        letterSpacing = 0.sp,
     ),
-    titleLarge = TextStyle(
-        fontFamily = fontFamily,
+    displaySmall = defaultTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = 36.sp,
+        lineHeight = 44.0.sp,
+        letterSpacing = 0.0.sp,
+    ),
+    headlineLarge = defaultTextStyle.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = 22.sp,
+        lineHeight = 40.0.sp,
+        letterSpacing = 0.sp,
+    ),
+    headlineMedium = defaultTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = 28.sp,
+        lineHeight = 36.0.sp,
+        letterSpacing = 0.sp,
+    ),
+    headlineSmall = defaultTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = 24.sp,
+        lineHeight = 32.0.sp,
+        letterSpacing = 0.0.sp,
+    ),
+    titleLarge = defaultTextStyle.copy(
         fontWeight = FontWeight.Medium,
         fontSize = 22.sp,
         lineHeight = 28.0.sp,
         letterSpacing = 0.0.sp,
     ),
-    bodyMedium = TextStyle(
-        fontFamily = fontFamily,
+    titleMedium = defaultTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.0.sp,
+        letterSpacing = 0.2.sp,
+    ),
+    titleSmall = defaultTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.0.sp,
+        letterSpacing = 0.1.sp,
+    ),
+    bodyLarge = defaultTextStyle.copy(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
+        lineHeight = 24.0.sp,
+        letterSpacing = 0.5.sp,
+    ),
+    bodyMedium = defaultTextStyle.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
         lineHeight = 20.0.sp,
         letterSpacing = 0.2.sp,
     ),
-    bodySmall = TextStyle(
-        fontFamily = fontFamily,
+    bodySmall = defaultTextStyle.copy(
         fontSize = 12.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 16.sp,
         letterSpacing = 0.4.sp,
+    ),
+    labelLarge = defaultTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 20.0.sp,
+        letterSpacing = 0.1.sp,
+    ),
+    labelMedium = defaultTextStyle.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.0.sp,
+        letterSpacing = 0.5.sp,
+    ),
+    labelSmall = defaultTextStyle.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp,
     ),
 )

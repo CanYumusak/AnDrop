@@ -4,18 +4,37 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.TextView
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
+import de.canyumusak.androiddrop.onboarding.OnboardingScreen
+import de.canyumusak.androiddrop.theme.AnDropTheme
 
 class MainActivity : AppCompatActivity() {
 
     private val billingViewModel by viewModels<BillingViewModel>()
 
+    val newScreens = true
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (newScreens) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            setContent {
+                AnDropTheme {
+                    OnboardingScreen()
+                }
+            }
+        } else {
+            setupOldScreens()
+        }
+    }
+
+    private fun setupOldScreens() {
         setContentView(R.layout.main_activity)
 
         val tutorial = resources.getStringArray(R.array.welcome_to_androp_tutorial).toList()
@@ -35,12 +54,14 @@ class MainActivity : AppCompatActivity() {
                 BillingConnectionState.Connected -> {
                     findViewById<TextView>(R.id.textView4).isVisible = false
                 }
+
                 BillingConnectionState.Failed -> {
                     findViewById<TextView>(R.id.textView4).isVisible = true
                     smallAmountButton.isVisible = false
                     mediumAmountButton.isVisible = false
                     bigAmountButton.isVisible = false
                 }
+
                 BillingConnectionState.GettingDetails,
                 BillingConnectionState.Connecting -> {
                     findViewById<TextView>(R.id.textView4).isVisible = false
@@ -92,10 +113,12 @@ class MainActivity : AppCompatActivity() {
                 is TippingSum.FailedToLoad -> {
                     tippingSumView.isVisible = false
                 }
+
                 is TippingSum.Suceeded -> {
                     tippingSumView.isVisible = true
                     tippingSumView.text = getString(R.string.tipping_jar_tips_message, sum.sum)
                 }
+
                 is TippingSum.NoTips -> {
                     tippingSumView.isVisible = false
                 }
