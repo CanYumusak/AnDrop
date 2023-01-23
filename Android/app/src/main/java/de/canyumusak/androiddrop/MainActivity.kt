@@ -6,10 +6,15 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
+import de.canyumusak.androiddrop.onboarding.OnboardingPages
 import de.canyumusak.androiddrop.onboarding.OnboardingScreen
 import de.canyumusak.androiddrop.theme.AnDropTheme
 
@@ -26,7 +31,16 @@ class MainActivity : AppCompatActivity() {
             WindowCompat.setDecorFitsSystemWindows(window, false)
             setContent {
                 AnDropTheme {
-                    OnboardingScreen()
+                    var currentState by remember { mutableStateOf(OnboardingPages.Welcome) }
+                    OnboardingScreen(
+                        onboardingPages = currentState,
+                        nextRequested = {
+//                            val values = enumValues<OnboardingPages>()
+//                            val currentIndex = values.indexOf(currentState)
+//                            val next = (currentIndex + 1).takeIf { it >= values.size } ?: 0
+                            currentState = OnboardingPages.DownloadMac
+                        },
+                    ) {}
                 }
             }
         } else {
