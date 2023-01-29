@@ -7,66 +7,65 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.canyumusak.androiddrop.ui.extension.ScaleIn
+import de.canyumusak.androiddrop.ui.extension.primaryColor
+import de.canyumusak.androiddrop.ui.extension.secondaryColor
+
 
 @Composable
-fun WelcomePage(
+fun InstallPage(
     nextRequested: () -> Unit,
     skipRequested: () -> Unit
 ) {
     OnboardingScaffold(
-        animateEntry = true,
-        nextText = "Start Setup",
+        nextText = "Done!",
         nextRequested = nextRequested,
         skipRequested = skipRequested
     ) {
-        WelcomeText()
+        Title()
         Subtitle()
     }
 }
 
 @Composable
-private fun WelcomeText() {
+private fun Title() {
     val string = buildAnnotatedString {
-        withStyle(SpanStyle(MaterialTheme.colorScheme.secondary)) {
-            append("Welcome to\n")
-        }
-        withStyle(SpanStyle(MaterialTheme.colorScheme.primary)) {
-            append("AnDrop")
-        }
+        secondaryColor("On your ")
+        primaryColor("Mac")
+        secondaryColor(" visit:")
     }
     Text(
         text = string,
         style = MaterialTheme.typography.displayLarge,
-        color = MaterialTheme.colorScheme.secondary
     )
+    ScaleIn(delayTacts = 2) {
+        Text(
+            text = "AnDrop.app",
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
 }
 
 @Composable
 private fun Subtitle() {
-    ScaleIn(delayTacts = 4) {
+    ScaleIn(delayTacts = 6) {
         Column {
             Spacer(modifier = Modifier.height(32.dp))
+
             val string = buildAnnotatedString {
-                withStyle(SpanStyle(MaterialTheme.colorScheme.secondary)) {
-                    append("The ")
-                }
-                withStyle(SpanStyle(MaterialTheme.colorScheme.primary)) {
-                    append("easiest ")
-                }
-                withStyle(SpanStyle(MaterialTheme.colorScheme.secondary)) {
-                    append("way to send files")
-                }
+                primaryColor("Install ")
+                secondaryColor("and ")
+                primaryColor("open ")
+                primaryColor(" AnDrop ")
+                secondaryColor("there")
             }
             Text(
                 text = string,
                 style = MaterialTheme.typography.displaySmall,
-                color = MaterialTheme.colorScheme.secondary
             )
         }
     }
@@ -75,6 +74,6 @@ private fun Subtitle() {
 
 @Preview
 @Composable
-private fun WelcomePagePreview() {
-    OnboardingScreen(OnboardingPages.Welcome, {}) {}
+private fun InstallPagePreview() {
+    OnboardingScreen(OnboardingPages.Install, {}) {}
 }

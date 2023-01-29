@@ -20,13 +20,12 @@ fun OnboardingScreen(
             color = MaterialTheme.colorScheme.surfaceVariant
         ) {
             when (onboardingPages) {
-                OnboardingPages.Welcome -> WelcomePage()
-                OnboardingPages.DownloadMac -> DownloadMac()
+                OnboardingPages.Welcome -> WelcomePage(nextRequested, skipRequested)
+                OnboardingPages.Install -> InstallPage(nextRequested, skipRequested)
             }
         }
     }
 }
-
 
 @Preview
 @Composable

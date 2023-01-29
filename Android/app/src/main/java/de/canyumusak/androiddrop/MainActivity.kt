@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 //                            val values = enumValues<OnboardingPages>()
 //                            val currentIndex = values.indexOf(currentState)
 //                            val next = (currentIndex + 1).takeIf { it >= values.size } ?: 0
-                            currentState = OnboardingPages.DownloadMac
+                            currentState = OnboardingPages.Install
                         },
                     ) {}
                 }
