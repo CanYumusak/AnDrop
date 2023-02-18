@@ -21,7 +21,8 @@ fun InstallPage(
     skipRequested: () -> Unit
 ) {
     OnboardingScaffold(
-        nextText = "Done!",
+        animateEntry = false,
+        nextText = "AnDrop is running",
         nextRequested = nextRequested,
         skipRequested = skipRequested
     ) {
@@ -60,8 +61,7 @@ private fun Subtitle() {
                 primaryColor("Install ")
                 secondaryColor("and ")
                 primaryColor("open ")
-                primaryColor(" AnDrop ")
-                secondaryColor("there")
+                secondaryColor("it there")
             }
             Text(
                 text = string,
@@ -75,5 +75,5 @@ private fun Subtitle() {
 @Preview
 @Composable
 private fun InstallPagePreview() {
-    OnboardingScreen(OnboardingPages.Install, {}) {}
+    OnboardingScreen(rememberOnboardingState(OnboardingPage.Install))
 }

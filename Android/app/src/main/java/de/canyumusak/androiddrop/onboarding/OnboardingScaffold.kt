@@ -1,6 +1,8 @@
 package de.canyumusak.androiddrop.onboarding
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,20 +28,19 @@ fun OnboardingScaffold(
     skipRequested: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    var modifier = Modifier
-        .statusBarsPadding()
-        .navigationBarsPadding()
-        .padding(Spacings.l)
-        .wrapContentHeight()
-    modifier = if (animateEntry) modifier.animateAppearanceAlpha(500) else modifier
     Column(
-        modifier = modifier,
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .padding(Spacings.l)
+            .wrapContentHeight()
+            .animateAppearanceAlpha(500, animateEntry),
         verticalArrangement = Arrangement.spacedBy(Spacings.l),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .animateAppearanceAlpha(1500)
+                .animateAppearanceAlpha(1500, animateEntry)
         ) {
             Spacer(modifier = Modifier.weight(1.0f))
             OutlinedButton(onClick = {
@@ -54,10 +55,10 @@ fun OnboardingScaffold(
         Spacer(modifier = Modifier.weight(1.0f))
         content()
         Spacer(modifier = Modifier.weight(1.0f))
-        var buttonModifier = Modifier.fillMaxWidth()
-        buttonModifier = if (animateEntry) buttonModifier.animateAppearanceAlpha(500) else buttonModifier
         Button(
-            modifier = buttonModifier,
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateAppearanceAlpha(500, animateEntry),
             onClick = {
                 nextRequested()
             }

@@ -1,6 +1,7 @@
 package de.canyumusak.androiddrop.onboarding
 
-enum class OnboardingPages {
+enum class OnboardingPage {
     Welcome,
     Install,
+    CheckSetup,
 }

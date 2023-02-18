@@ -76,5 +76,5 @@ private fun Subtitle() {
 @Preview
 @Composable
 private fun WelcomePagePreview() {
-    OnboardingScreen(OnboardingPages.Welcome, {}) {}
+    OnboardingScreen(rememberOnboardingState())
 }

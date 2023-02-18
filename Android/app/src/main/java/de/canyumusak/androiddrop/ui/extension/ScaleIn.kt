@@ -15,12 +15,17 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import kotlinx.coroutines.delay
 
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ScaleIn(delayTacts: Int = 1, content: @Composable () -> Unit) {
+    ScaleIn(delayTacts = delayTacts, initiallyVisible = false, content = content)
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun ScaleIn(delayTacts: Int = 1, initiallyVisible: Boolean, content: @Composable () -> Unit) {
     val inspectorMode = LocalInspectionMode.current
     var visible by remember {
-        mutableStateOf(inspectorMode)
+        mutableStateOf(inspectorMode || initiallyVisible)
     }
     LaunchedEffect(true) {
         delay(delayTacts * 500L)

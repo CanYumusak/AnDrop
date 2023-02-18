@@ -5,15 +5,37 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalInspectionMode
+import kotlinx.coroutines.delay
 
 
-fun Modifier.animateAppearanceAlpha(delay: Int = 500): Modifier = composed {
-    alpha(rememberAnimatedAppearanceAlpha(delay))
+fun Modifier.animateAppearanceAlpha(delay: Int = 500, condition: Boolean = true): Modifier = composed {
+    if (condition) {
+        alpha(rememberAnimatedAppearanceAlpha(delay))
+    } else {
+        this
+    }
+}
+
+@Composable
+fun rememberBoolean(initialValue: Boolean, targetValue: Boolean, delayMs: Long): Boolean {
+    var value by remember {
+        mutableStateOf(initialValue)
+    }
+
+    LaunchedEffect(true) {
+        delay(delayMs)
+        value = targetValue
+    }
+
+    return value
 }
 
 @Composable

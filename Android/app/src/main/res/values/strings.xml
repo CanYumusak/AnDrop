@@ -33,4 +33,7 @@
     <string name="tipping_jar_dialog_error_button_title">Aw, shoot</string>
 
     <string name="tipping_jar_tips_message">You tipped a total of %s. You are awesome!</string>
+
+
+    <string name="onboarding_scan_screen_title">Searching Clients…</string>
 </resources>

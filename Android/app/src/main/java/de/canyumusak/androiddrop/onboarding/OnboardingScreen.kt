@@ -4,25 +4,31 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import de.canyumusak.androiddrop.theme.AnDropTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingScreen(
-    onboardingPages: OnboardingPages,
-    nextRequested: () -> Unit,
-    skipRequested: () -> Unit
+    onboardingState: OnboardingState,
 ) {
-    AnDropTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.surfaceVariant
-        ) {
-            when (onboardingPages) {
-                OnboardingPages.Welcome -> WelcomePage(nextRequested, skipRequested)
-                OnboardingPages.Install -> InstallPage(nextRequested, skipRequested)
-            }
+    val scope = rememberCoroutineScope()
+    val currentPage by onboardingState.currentPage
+    val nextRequested: () -> Unit = { scope.launch { onboardingState.next() } }
+    val skipRequested: () -> Unit = { scope.launch { onboardingState.skip() } }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.surfaceVariant
+    ) {
+        when (currentPage) {
+            OnboardingPage.Welcome -> WelcomePage(nextRequested, skipRequested)
+            OnboardingPage.Install -> InstallPage(nextRequested, skipRequested)
+            OnboardingPage.CheckSetup -> CheckSetupPage(nextRequested, skipRequested)
         }
     }
 }
@@ -30,8 +36,9 @@ fun OnboardingScreen(
 @Preview
 @Composable
 private fun OnboardingScreenPreview() {
-    OnboardingScreen(
-        OnboardingPages.Welcome,
-        {},
-    ) {}
+    AnDropTheme {
+        OnboardingScreen(
+            rememberOnboardingState(),
+        )
+    }
 }

@@ -1,0 +1,147 @@
+package de.canyumusak.androiddrop.onboarding
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import de.canyumusak.androiddrop.AnDropClient
+import de.canyumusak.androiddrop.DiscoveryViewModel
+import de.canyumusak.androiddrop.WifiState
+import de.canyumusak.androiddrop.theme.AnDropTheme
+import de.canyumusak.androiddrop.ui.ScanScreen
+import de.canyumusak.androiddrop.ui.extension.ScaleIn
+import de.canyumusak.androiddrop.ui.extension.rememberBoolean
+
+@Composable
+fun CheckSetupPage(
+    nextRequested: () -> Unit,
+    skipRequested: () -> Unit,
+    viewModel: DiscoveryViewModel = viewModel(),
+) {
+    val list by viewModel.clients.collectAsState()
+    val wifiState by viewModel.wifiState.collectAsState()
+    DisposableEffect(viewModel) {
+        viewModel.discoverClients()
+        onDispose { viewModel.endDiscovery() }
+    }
+    CheckSetupPage(
+        list = list,
+        wifiState = wifiState,
+        nextRequested = nextRequested,
+        skipRequested = skipRequested
+    )
+}
+
+@Composable
+fun CheckSetupPage(
+    list: List<AnDropClient>,
+    wifiState: WifiState,
+    nextRequested: () -> Unit,
+    skipRequested: () -> Unit
+) {
+    val showFirstHint = rememberBoolean(
+        initialValue = false,
+        targetValue = true,
+        delayMs = 10_000L
+    )
+    val buttonLabel = when {
+        list.isNotEmpty() -> "Yes!"
+        else -> "Continue Anyway"
+    }
+    OnboardingScaffold(
+        animateEntry = false,
+        nextText = buttonLabel,
+        nextRequested = nextRequested,
+        skipRequested = skipRequested
+    ) {
+        Title()
+        ScaleIn(delayTacts = 2) {
+            ScanScreen(
+                list = list,
+                permissionRequested = {},
+                wifiDisabled = wifiState == WifiState.Disabled,
+                permissionMissing = false,
+                scanForDemoPurposes = true,
+                unsupportedFileType = false,
+                clientSelected = {},
+                modifier = Modifier,
+            )
+        }
+        Hint(showFirstHint, list)
+    }
+}
+
+@Composable
+private fun Title() {
+    Text(
+        text = "Let's see if we can find it",
+        style = MaterialTheme.typography.displaySmall,
+    )
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun Hint(showFirstHint: Boolean, list: List<AnDropClient>) {
+    AnimatedVisibility(
+        visible = showFirstHint && list.isEmpty(),
+        enter = fadeIn() + expandVertically() + scaleIn(),
+        exit = fadeOut() + shrinkVertically() + scaleOut(),
+    ) {
+        Text(
+            text = "Is AnDrop running and are you in the same WiFi?",
+            style = MaterialTheme.typography.headlineSmall,
+        )
+    }
+
+    AnimatedVisibility(
+        visible = list.isNotEmpty(),
+        enter = fadeIn() + expandVertically() + scaleIn(),
+        exit = fadeOut() + shrinkVertically() + scaleOut(),
+    ) {
+        val text = when (list.size) {
+            1 -> "Is this your Mac?"
+            else -> "Is your Mac in this list?"
+        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.headlineSmall,
+        )
+    }
+}
+
+
+@Preview
+@Composable
+private fun CheckSetupPagePreview() {
+    AnDropTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.surfaceVariant
+        ) {
+            CheckSetupPage(
+                list = listOf(
+                    AnDropClient("Can's MacBook Pro"),
+                    AnDropClient("Adrian's MacBook Pro"),
+                ),
+                wifiState = WifiState.Disabled,
+                nextRequested = {},
+                skipRequested = {},
+            )
+        }
+    }
+}
