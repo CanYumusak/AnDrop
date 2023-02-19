@@ -7,7 +7,6 @@ import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import android.net.wifi.WifiManager
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import de.canyumusak.androiddrop.permissions.storagePermissionFlow
@@ -103,7 +102,7 @@ class DiscoveryViewModel(
     private fun performDiscoverClients() {
         Log.d("Bonjour", "starting discovery")
         try {
-            multicastLock.acquire();
+            multicastLock.acquire()
             nsdManager.discoverServices("_androp._tcp", NsdManager.PROTOCOL_DNS_SD, discoveryListener)
         } catch (exception: RuntimeException) {
             // fail silently if we can't acquire a multicast lock
@@ -113,8 +112,9 @@ class DiscoveryViewModel(
     private fun needsStoragePermission(dataUris: Array<Uri>?, hasStoragePermssion: Boolean): Boolean {
         return dataUris?.any { dataUri ->
             val sendableFile = SendableFile.fromUri(dataUri, getApplication())
-            val needsStorage = sendableFile is ClassicFile
-            if (needsStorage) {
+            val isClassic = sendableFile is ClassicFile
+            val isMyOwn = dataUri.host == getApplication<Application>().packageName
+            if (isClassic && !isMyOwn) {
                 !hasStoragePermssion
             } else {
                 false

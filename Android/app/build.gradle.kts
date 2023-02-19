@@ -53,7 +53,6 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
-            applicationIdSuffix = ".debug"
 
         }
     }
@@ -73,12 +72,13 @@ android {
 }
 
 dependencies {
-    api(platform("dev.chrisbanes.compose:compose-bom:2023.02.00-alpha01"))
+    api(platform("dev.chrisbanes.compose:compose-bom:2023.02.00-beta01"))
 
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha06")
     implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.compose.ui:ui-util")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
