@@ -1,4 +1,4 @@
-package de.canyumusak.androiddrop.ui.extension
+package de.canyumusak.androiddrop.extension
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

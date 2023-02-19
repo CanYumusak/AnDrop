@@ -24,8 +24,8 @@ import de.canyumusak.androiddrop.DiscoveryViewModel
 import de.canyumusak.androiddrop.WifiState
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.ui.ScanScreen
-import de.canyumusak.androiddrop.ui.extension.ScaleIn
-import de.canyumusak.androiddrop.ui.extension.rememberBoolean
+import de.canyumusak.androiddrop.extension.ScaleIn
+import de.canyumusak.androiddrop.extension.rememberBoolean
 
 @Composable
 fun CheckSetupPage(

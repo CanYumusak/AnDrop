@@ -12,7 +12,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.canyumusak.androiddrop.ui.extension.ScaleIn
+import de.canyumusak.androiddrop.extension.ScaleIn
 
 @Composable
 fun WelcomePage(

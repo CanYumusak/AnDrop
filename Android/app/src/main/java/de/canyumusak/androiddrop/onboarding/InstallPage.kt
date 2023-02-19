@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import de.canyumusak.androiddrop.ui.extension.ScaleIn
-import de.canyumusak.androiddrop.ui.extension.primaryColor
-import de.canyumusak.androiddrop.ui.extension.secondaryColor
+import de.canyumusak.androiddrop.extension.ScaleIn
+import de.canyumusak.androiddrop.extension.primaryColor
+import de.canyumusak.androiddrop.extension.secondaryColor
 
 
 @Composable

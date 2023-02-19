@@ -1,4 +1,4 @@
-package de.canyumusak.androiddrop.ui.extension
+package de.canyumusak.androiddrop.extension
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi

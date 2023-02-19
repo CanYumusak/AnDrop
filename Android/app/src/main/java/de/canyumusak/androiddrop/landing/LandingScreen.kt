@@ -34,7 +34,10 @@ import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.theme.Spacings
 
 @Composable
-fun LandingScreen(startOnboarding: () -> Unit) {
+fun LandingScreen(
+    startOnboarding: () -> Unit,
+    openTipBox: () -> Unit,
+) {
     AnDropTheme {
         Surface(
             modifier = Modifier
@@ -71,9 +74,7 @@ fun LandingScreen(startOnboarding: () -> Unit) {
                     paragraph = "Make sure to install AnDrop on your Mac as well. We recommend going through the onboarding again.",
                     buttonText = "Start Onboarding",
                     painter = rememberVectorPainter(image = Icons.Default.PlayArrow),
-                    action = {
-                        startOnboarding()
-                    }
+                    action = startOnboarding
                 )
 
                 Paragraph(
@@ -81,8 +82,7 @@ fun LandingScreen(startOnboarding: () -> Unit) {
                     paragraph = "AnDrop is free to use. However the developers rely on your help to keep it that way. Please consider leaving a tip if you find it useful.",
                     buttonText = "To the Tip Box",
                     painter = rememberVectorPainter(image = Icons.Default.ShoppingCart),
-                    action = {
-                    }
+                    action = openTipBox
                 )
             }
         }
@@ -130,7 +130,7 @@ private fun Paragraph(
 @Preview
 @Composable
 fun LandingScreenPreview() {
-    LandingScreen {
-
-    }
+    LandingScreen(
+        {}, {}
+    )
 }

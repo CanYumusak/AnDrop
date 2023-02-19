@@ -10,8 +10,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import de.canyumusak.androiddrop.ui.extension.PreferenceKeys
-import de.canyumusak.androiddrop.ui.extension.dataStore
+import de.canyumusak.androiddrop.extension.PreferenceKeys
+import de.canyumusak.androiddrop.extension.dataStore
 import kotlinx.coroutines.flow.first
 
 @Composable
