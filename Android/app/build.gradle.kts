@@ -72,11 +72,11 @@ android {
 }
 
 dependencies {
-    api(platform("dev.chrisbanes.compose:compose-bom:2023.02.00-beta01"))
+    api(platform("dev.chrisbanes.compose:compose-bom:2023.02.00-beta02"))
 
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha06")
+    implementation("androidx.compose.material3:material3")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.compose.ui:ui-util")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
@@ -84,9 +84,12 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0-beta01")
-    implementation("androidx.activity:activity-compose:1.7.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
+    implementation("androidx.activity:activity-compose")
     implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    implementation("app.rive:rive-android:4.0.0")
+    implementation("androidx.startup:startup-runtime:1.1.1")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")

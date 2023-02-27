@@ -51,10 +51,32 @@ fun LandingScreen(
                     .padding(Spacings.l),
                 verticalArrangement = Arrangement.spacedBy(Spacings.l),
             ) {
+                Column(
+                ) {
+                    Text(
+                        text = "AnDrop",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Text(
+                        text = "Made in Munich with Love",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
+                Paragraph(
+                    title = "Support AnDrop",
+                    paragraph = "AnDrop is free. However the developers rely on your help to keep it that way. Please consider leaving a tip if you find it useful.",
+                    buttonText = "To the Tip Box",
+                    painter = rememberVectorPainter(image = Icons.Default.ShoppingCart),
+                    important = true,
+                    action = openTipBox
+                )
 
                 Text(
-                    text = "AnDrop",
-                    style = MaterialTheme.typography.displaySmall,
+                    text = "Troubleshoot",
+                    style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.secondary
                 )
 
@@ -64,6 +86,7 @@ fun LandingScreen(
                     paragraph = "AnDrop is a share menu app and thus works out of the share menu.",
                     buttonText = "Send Example",
                     painter = painterResource(R.drawable.ic_share_20),
+                    important = false,
                     action = {
                         LandingShare.shareDefaultFile(context)
                     }
@@ -74,15 +97,8 @@ fun LandingScreen(
                     paragraph = "Make sure to install AnDrop on your Mac as well. We recommend going through the onboarding again.",
                     buttonText = "Start Onboarding",
                     painter = rememberVectorPainter(image = Icons.Default.PlayArrow),
+                    important = false,
                     action = startOnboarding
-                )
-
-                Paragraph(
-                    title = "Support AnDrop",
-                    paragraph = "AnDrop is free to use. However the developers rely on your help to keep it that way. Please consider leaving a tip if you find it useful.",
-                    buttonText = "To the Tip Box",
-                    painter = rememberVectorPainter(image = Icons.Default.ShoppingCart),
-                    action = openTipBox
                 )
             }
         }
@@ -95,14 +111,19 @@ private fun Paragraph(
     paragraph: String,
     buttonText: String,
     painter: Painter,
+    important: Boolean,
     action: () -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(Spacings.m),
+        verticalArrangement = Arrangement.spacedBy(Spacings.s),
     ) {
+        val titleStyle = when (important) {
+            true -> MaterialTheme.typography.headlineSmall
+            false -> MaterialTheme.typography.titleLarge
+        }
         Text(
             text = title,
-            style = MaterialTheme.typography.titleLarge,
+            style = titleStyle,
             color = MaterialTheme.colorScheme.secondary
         )
         Text(

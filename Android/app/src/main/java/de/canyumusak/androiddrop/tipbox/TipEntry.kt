@@ -1,7 +1,6 @@
 package de.canyumusak.androiddrop.tipbox
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,10 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import de.canyumusak.androiddrop.Details
+import de.canyumusak.androiddrop.R
 import de.canyumusak.androiddrop.Tip
 import de.canyumusak.androiddrop.theme.Spacings
 
@@ -48,7 +43,7 @@ fun TipEntry(
         ) {
             Icon(
                 modifier = Modifier.size(36.dp),
-                painter = rememberVectorPainter(image = tip.icon()),
+                painter = painterResource(tip.icon()),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary
             )
@@ -69,10 +64,10 @@ fun TipEntry(
     }
 }
 
-private fun Tip.icon(): ImageVector {
+private fun Tip.icon(): Int {
     return when (this) {
-        Tip.Small -> Icons.Filled.Home
-        Tip.Medium -> Icons.Filled.Add
-        Tip.Big -> Icons.Filled.PlayArrow
+        Tip.Small -> R.drawable.coin1
+        Tip.Medium -> R.drawable.coin2
+        Tip.Big -> R.drawable.coin3
     }
 }
