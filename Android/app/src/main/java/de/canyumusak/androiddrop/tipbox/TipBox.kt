@@ -37,6 +37,7 @@ import de.canyumusak.androiddrop.R
 import de.canyumusak.androiddrop.Tip
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.theme.Spacings
+import de.canyumusak.androiddrop.ui.RiveAnimation
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -101,6 +102,39 @@ fun TipBox(
     skuDetails: Map<Tip, Details>?,
     onClick: (Tip) -> Unit,
 ) {
+    when (billingConnectionState) {
+        BillingConnectionState.Connected -> {
+            TipBoxList(skuDetails, onClick)
+        }
+
+        BillingConnectionState.Failed -> {
+            Failed()
+        }
+
+        BillingConnectionState.Connecting,
+        BillingConnectionState.GettingDetails -> {
+            RiveAnimation(R.raw.loading, 100.dp)
+        }
+    }
+}
+
+@Composable
+private fun Failed() {
+    Column(
+        modifier = Modifier.padding(Spacings.m),
+        verticalArrangement = Arrangement.spacedBy(Spacings.m),
+    ) {
+        RiveAnimation(R.raw.failed, 100.dp)
+        Text(
+            text = "Failed to reach the Google Play Billing. But we highly appreciate the gesture!",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
+@Composable
+private fun TipBoxList(skuDetails: Map<Tip, Details>?, onClick: (Tip) -> Unit) {
     Column(
         modifier = Modifier.padding(Spacings.m),
         verticalArrangement = Arrangement.spacedBy(Spacings.m),
@@ -131,15 +165,7 @@ private fun ThankYou() {
         modifier = Modifier.padding(Spacings.m),
         verticalArrangement = Arrangement.spacedBy(Spacings.m),
     ) {
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-            AndroidView(
-                modifier = Modifier.height(100.dp),
-                factory = { RiveAnimationView(it) },
-                update = {
-                    it.setRiveResource(R.raw.heart_animation)
-                }
-            )
-        }
+        RiveAnimation(R.raw.heart_animation, 100.dp)
 
         Text(
             text = "You are amazing",
