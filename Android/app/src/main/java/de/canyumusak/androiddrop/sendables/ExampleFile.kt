@@ -2,10 +2,9 @@ package de.canyumusak.androiddrop.sendables
 
 import android.content.Context
 import android.net.Uri
-import java.io.File
 import java.io.InputStream
 
-class ExampleFile(val context: Context, uri: Uri) : SendableFile {
+class ExampleFile(val context: Context) : SendableFile {
 
     private val exampleFile = "examplepic.jpg"
 

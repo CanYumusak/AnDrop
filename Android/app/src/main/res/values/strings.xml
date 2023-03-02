@@ -1,39 +1,68 @@
 <resources>
     <string name="app_name">AnDrop</string>
     <string name="welcome_to_androp">Welcome to AnDrop</string>
+
+    <!-- Transfer Dialog -->
     <string name="discovery_dialog_title">Share file to</string>
-    <string name="welcome_to_androp_description">This is a lightweight tool to transfer files between your Android phone and your macOS devices.</string>
-    <string-array name="welcome_to_androp_tutorial">
-        <item>Install and launch AnDrop for mac on your macOS device from the App Store.</item>
-        <item>Make sure your Android device is in the same Wifi as your mac.</item>
-        <item>Press on the Android share button of a photo, pdf or any other file you\'d like to share.</item>
-        <item>Click on the AnDrop app in the Android sharing sheet.</item>
-        <item>Select your target macOS device.</item>
-        <item>Congratulations! Your file is now in the Download folder of your macOS device.</item>
-    </string-array>
     <string name="searching_clients">Searching for clients…</string>
     <string name="not_connected_to_wifi">Not connected to Wi-Fi</string>
     <string name="unsupoorted_file_type">Unfortunately AnDrop can\'t send this type of file currently</string>
     <string name="storage_access_permission">To share this file you need to grant AnDrop storage access permission</string>
     <string name="grant_storage_permission_button_title">Grant storage permission</string>
+
+    <!-- Tipping Jar -->
     <string name="tipping_jar_title">Tip Jar</string>
     <string name="tipping_jar_description">AnDrop is absolutely free but relies on your support to fund its development. If you find it useful, please consider supporting the app by leaving a tip in our Tip Jar.</string>
     <string name="tipping_jar_connection_error">Failed to connect to billing services</string>
-
     <string name="tipping_jar_button_small_tip">Generous Tip of 0,99€</string>
     <string name="tipping_jar_button_medium_tip">Massive Tip of 1,99€</string>
     <string name="tipping_jar_button_big_tip">Amazing Tip of 4,99€ </string>
 
-    <string name="tipping_jar_dialog_sucess_title">Thanks a bunch!</string>
-    <string name="tipping_jar_dialog_sucess_message">Big thanks for supporting the development of AnDrop. You are great and the developer will never forget you!</string>
-    <string name="tipping_jar_dialog_sucess_button_title">You are welcome</string>
+    <!-- Landing -->
+    <string name="landing_made_in_munich">Made in Munich with Love</string>
 
-    <string name="tipping_jar_dialog_error_title">Failed to tip</string>
-    <string name="tipping_jar_dialog_error_message">Unfortunately something bad happened while performing the tipping transaction. Do not be sad, just try again another time and enjoy AnDrop</string>
-    <string name="tipping_jar_dialog_error_button_title">Aw, shoot</string>
+    <string name="landing_support_androp_title">Support AnDrop</string>
+    <string name="landing_support_androp_description">AnDrop is free. However the developers rely on your help to keep it that way. Please consider leaving a tip if you find it useful.</string>
+    <string name="landing_support_androp_action">To the Tip Jar</string>
 
-    <string name="tipping_jar_tips_message">You tipped a total of %s. You are awesome!</string>
+    <string name="landing_support_support_title">Troubleshoot</string>
 
+    <string name="landing_support_first_file_title">Share your first file</string>
+    <string name="landing_support_first_file_description">AnDrop is a share menu app and thus works out of the share menu.</string>
+    <string name="landing_support_first_file_action">Send Example</string>
 
+    <string name="landing_support_reonboard_title">I can\'t make it work</string>
+    <string name="landing_support_reonboard_description">Make sure to install AnDrop on your Mac as well. We recommend going through the onboarding again.</string>
+    <string name="landing_support_reonboard_action">Start Onboarding</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Skip Setup</string>
+
+    <!-- Onboarding Welcome -->
+    <string name="onboarding_welcome_action">Start Setup</string>
+    <string name="onboarding_welcome_greeting">Welcome to \n**AnDrop**</string>
+    <string name="onboarding_welcome_subtitle">The **easiest** way to send files</string>
+
+    <!-- Onboarding Install -->
+    <string name="onboarding_install_action">AnDrop is running</string>
+    <string name="onboarding_install_title">On your **Mac** visit:</string>
+    <string name="onboarding_install_subtitle">**Install** and **open** it there</string>
+
+    <!-- Onboarding CheckSetup -->
+    <string name="onboarding_check_confirm_computer">Yes!</string>
+    <string name="onboarding_check_continue_anyway">Continue Anyway</string>
+    <string name="onboarding_check_title">Let\'s see if we can find it</string>
     <string name="onboarding_scan_screen_title">Searching Clients…</string>
+    <string name="onboarding_check_hint">Is **AnDrop** running and are you in the same **WiFi**?</string>
+    <string name="onboarding_check_single_result_question">Is this your **Mac**?</string>
+    <string name="onboarding_check_multiple_result_question">Is your **Mac** in this list?</string>
+    <string name="transfer_notification_success_title">Succeeded</string>
+    <string name="transfer_notification_success_description">Successfully sent %1$s</string>
+
+    <!-- Onboarding Push Permission -->
+    <string name="onboarding_push_permission_title">Want **notifications**?</string>
+    <string name="onboarding_push_permission_description">To show you the transfer status, **AnDrop** requires permission.</string>
+    <string name="onboarding_push_permission_hint">**AnDrop** will not disturb you otherwise.\n**Promised**.</string>
+    <string name="onboarding_push_permission_action">Grant Permission</string>
+    <string name="onboarding_push_permission_skip">No need</string>
 </resources>

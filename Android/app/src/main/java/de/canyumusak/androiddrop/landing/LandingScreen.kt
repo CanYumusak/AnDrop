@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.canyumusak.androiddrop.R
@@ -51,40 +52,39 @@ fun LandingScreen(
                     .padding(Spacings.l),
                 verticalArrangement = Arrangement.spacedBy(Spacings.l),
             ) {
-                Column(
-                ) {
+                Column {
                     Text(
-                        text = "AnDrop",
+                        text = stringResource(id = R.string.app_name),
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.secondary
                     )
                     Text(
-                        text = "Made in Munich with Love",
+                        text = stringResource(id = R.string.landing_made_in_munich),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.secondary
                     )
                 }
 
                 Paragraph(
-                    title = "Support AnDrop",
-                    paragraph = "AnDrop is free. However the developers rely on your help to keep it that way. Please consider leaving a tip if you find it useful.",
-                    buttonText = "To the Tip Box",
+                    title = stringResource(id = R.string.landing_support_androp_title),
+                    paragraph = stringResource(id = R.string.landing_support_androp_description),
+                    buttonText = stringResource(id = R.string.landing_support_androp_action),
                     painter = rememberVectorPainter(image = Icons.Default.ShoppingCart),
                     important = true,
                     action = openTipBox
                 )
 
                 Text(
-                    text = "Troubleshoot",
+                    text = stringResource(id = R.string.landing_support_support_title),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.secondary
                 )
 
                 val context = LocalContext.current
                 Paragraph(
-                    title = "Share your first file",
-                    paragraph = "AnDrop is a share menu app and thus works out of the share menu.",
-                    buttonText = "Send Example",
+                    title = stringResource(id = R.string.landing_support_first_file_title),
+                    paragraph = stringResource(id = R.string.landing_support_first_file_description),
+                    buttonText = stringResource(id = R.string.landing_support_first_file_action),
                     painter = painterResource(R.drawable.ic_share_20),
                     important = false,
                     action = {
@@ -93,9 +93,9 @@ fun LandingScreen(
                 )
 
                 Paragraph(
-                    title = "I can't make it work",
-                    paragraph = "Make sure to install AnDrop on your Mac as well. We recommend going through the onboarding again.",
-                    buttonText = "Start Onboarding",
+                    title = stringResource(id = R.string.landing_support_reonboard_title),
+                    paragraph = stringResource(id = R.string.landing_support_reonboard_description),
+                    buttonText = stringResource(id = R.string.landing_support_reonboard_action),
                     painter = rememberVectorPainter(image = Icons.Default.PlayArrow),
                     important = false,
                     action = startOnboarding
@@ -119,7 +119,7 @@ private fun Paragraph(
     ) {
         val titleStyle = when (important) {
             true -> MaterialTheme.typography.headlineSmall
-            false -> MaterialTheme.typography.titleLarge
+            false -> MaterialTheme.typography.titleMedium
         }
         Text(
             text = title,

@@ -1,4 +1,4 @@
-package de.canyumusak.androiddrop
+package de.canyumusak.androiddrop.connection
 
 import android.content.Context
 import android.net.Uri

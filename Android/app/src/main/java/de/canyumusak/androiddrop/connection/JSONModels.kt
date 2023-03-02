@@ -1,9 +1,7 @@
-package de.canyumusak.androiddrop
+package de.canyumusak.androiddrop.connection
 
 import org.json.JSONObject
 import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.json.*
 
 

@@ -76,8 +76,8 @@ val Typography = Typography(
     ),
     titleMedium = defaultTextStyle.copy(
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 24.0.sp,
+        fontSize = 18.sp,
+        lineHeight = 22.0.sp,
         letterSpacing = 0.2.sp,
     ),
     titleSmall = defaultTextStyle.copy(

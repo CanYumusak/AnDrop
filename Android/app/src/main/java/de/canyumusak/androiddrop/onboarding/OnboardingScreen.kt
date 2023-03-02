@@ -29,8 +29,18 @@ fun OnboardingScreen(
             OnboardingPage.Welcome -> WelcomePage(nextRequested, skipRequested)
             OnboardingPage.Install -> InstallPage(nextRequested, skipRequested)
             OnboardingPage.CheckSetup -> CheckSetupPage(nextRequested, skipRequested)
+            OnboardingPage.PushPermission -> PushPermissionPage(nextRequested, skipRequested)
+//            OnboardingPage.AnalyticsPermission -> AnalyticsPage(nextRequested, skipRequested)
         }
     }
+}
+
+enum class OnboardingPage {
+    Welcome,
+    Install,
+    CheckSetup,
+    PushPermission,
+//    AnalyticsPermission,
 }
 
 @Preview

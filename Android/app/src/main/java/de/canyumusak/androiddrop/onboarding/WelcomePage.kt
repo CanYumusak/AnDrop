@@ -7,12 +7,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.canyumusak.androiddrop.R
 import de.canyumusak.androiddrop.extension.ScaleIn
+import de.canyumusak.androiddrop.extension.highlightedStringResource
 
 @Composable
 fun WelcomePage(
@@ -21,7 +21,7 @@ fun WelcomePage(
 ) {
     OnboardingScaffold(
         animateEntry = true,
-        nextText = "Start Setup",
+        nextText = stringResource(id = R.string.onboarding_welcome_action),
         nextRequested = nextRequested,
         skipRequested = skipRequested
     ) {
@@ -32,18 +32,9 @@ fun WelcomePage(
 
 @Composable
 private fun WelcomeText() {
-    val string = buildAnnotatedString {
-        withStyle(SpanStyle(MaterialTheme.colorScheme.secondary)) {
-            append("Welcome to\n")
-        }
-        withStyle(SpanStyle(MaterialTheme.colorScheme.primary)) {
-            append("AnDrop")
-        }
-    }
     Text(
-        text = string,
+        text = highlightedStringResource(id = R.string.onboarding_welcome_greeting),
         style = MaterialTheme.typography.displayLarge,
-        color = MaterialTheme.colorScheme.secondary
     )
 }
 
@@ -52,21 +43,9 @@ private fun Subtitle() {
     ScaleIn(delayTacts = 4) {
         Column {
             Spacer(modifier = Modifier.height(32.dp))
-            val string = buildAnnotatedString {
-                withStyle(SpanStyle(MaterialTheme.colorScheme.secondary)) {
-                    append("The ")
-                }
-                withStyle(SpanStyle(MaterialTheme.colorScheme.primary)) {
-                    append("easiest ")
-                }
-                withStyle(SpanStyle(MaterialTheme.colorScheme.secondary)) {
-                    append("way to send files")
-                }
-            }
             Text(
-                text = string,
+                text = highlightedStringResource(id = R.string.onboarding_welcome_subtitle),
                 style = MaterialTheme.typography.displaySmall,
-                color = MaterialTheme.colorScheme.secondary
             )
         }
     }

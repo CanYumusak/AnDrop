@@ -17,14 +17,18 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.canyumusak.androiddrop.AnDropClient
 import de.canyumusak.androiddrop.DiscoveryViewModel
+import de.canyumusak.androiddrop.R
 import de.canyumusak.androiddrop.WifiState
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.ui.ScanScreen
 import de.canyumusak.androiddrop.extension.ScaleIn
+import de.canyumusak.androiddrop.extension.highlightedStringResource
 import de.canyumusak.androiddrop.extension.rememberBoolean
 
 @Composable
@@ -60,9 +64,10 @@ fun CheckSetupPage(
         delayMs = 10_000L
     )
     val buttonLabel = when {
-        list.isNotEmpty() -> "Yes!"
-        else -> "Continue Anyway"
+        list.isNotEmpty() -> stringResource(id = R.string.onboarding_check_confirm_computer)
+        else -> stringResource(id = R.string.onboarding_check_continue_anyway)
     }
+
     OnboardingScaffold(
         animateEntry = false,
         nextText = buttonLabel,
@@ -89,7 +94,7 @@ fun CheckSetupPage(
 @Composable
 private fun Title() {
     Text(
-        text = "Let's see if we can find it",
+        text = highlightedStringResource(R.string.onboarding_check_title),
         style = MaterialTheme.typography.displaySmall,
     )
 }
@@ -103,7 +108,7 @@ private fun Hint(showFirstHint: Boolean, list: List<AnDropClient>) {
         exit = fadeOut() + shrinkVertically() + scaleOut(),
     ) {
         Text(
-            text = "Is AnDrop running and are you in the same WiFi?",
+            text = stringResource(R.string.onboarding_check_hint),
             style = MaterialTheme.typography.headlineSmall,
         )
     }
@@ -113,9 +118,9 @@ private fun Hint(showFirstHint: Boolean, list: List<AnDropClient>) {
         enter = fadeIn() + expandVertically() + scaleIn(),
         exit = fadeOut() + shrinkVertically() + scaleOut(),
     ) {
-        val text = when (list.size) {
-            1 -> "Is this your Mac?"
-            else -> "Is your Mac in this list?"
+        val text : AnnotatedString = when (list.size) {
+            1 -> highlightedStringResource(R.string.onboarding_check_single_result_question)
+            else -> highlightedStringResource(R.string.onboarding_check_multiple_result_question)
         }
         Text(
             text = text,
