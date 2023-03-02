@@ -8,6 +8,8 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import de.canyumusak.androiddrop.connection.FileConnection
+import de.canyumusak.androiddrop.connection.State
 import de.canyumusak.androiddrop.sendables.SendableFile
 
 class TransferService : Service() {
@@ -151,7 +153,6 @@ class TransferService : Service() {
                 .setContentText("Could not send ${sendableFiles.joinToString { it.fileName }}")
                 .setContentIntent(null)
                 .build()
-
         }
 
         fun createSuccessNotification(context: Context, fileTransferCommand: FileTransferCommand): Notification {
@@ -164,8 +165,8 @@ class TransferService : Service() {
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
                 .setSmallIcon(R.drawable.ic_stat_share)
                 .setColor(context.getColor(R.color.colorPrimaryDark))
-                .setContentTitle("Succeeded")
-                .setContentText("Successfully sent ${sendableFiles.joinToString { it.fileName }}")
+                .setContentTitle(context.getString(R.string.transfer_notification_success_title))
+                .setContentText(context.getString(R.string.transfer_notification_success_description, sendableFiles.joinToString { it.fileName }))
                 .setContentIntent(null)
                 .build()
 

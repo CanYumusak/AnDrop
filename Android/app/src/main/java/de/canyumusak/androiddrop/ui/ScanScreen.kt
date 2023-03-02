@@ -6,8 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.TextButton
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,6 +37,8 @@ import de.canyumusak.androiddrop.theme.Spacings
 fun ScanScreen(
     discoveryViewModel: DiscoveryViewModel,
     permissionRequested: () -> Unit,
+    modifier: Modifier = Modifier,
+    scanForDemoPurposes: Boolean = false,
     clientSelected: (AnDropClient) -> Unit,
 ) {
     val list by discoveryViewModel.clients.collectAsState()
@@ -47,24 +49,28 @@ fun ScanScreen(
         list = list,
         permissionRequested = permissionRequested,
         clientSelected = clientSelected,
+        modifier = modifier,
         permissionMissing = permissionMissing,
         wifiDisabled = wifiState == WifiState.Disabled,
-        unsupportedFileType = unsupportedFileType
+        scanForDemoPurposes = scanForDemoPurposes,
+        unsupportedFileType = unsupportedFileType,
     )
 }
 
 @Composable
-private fun ScanScreen(
+fun ScanScreen(
     list: List<AnDropClient>,
     permissionRequested: () -> Unit,
     clientSelected: (AnDropClient) -> Unit,
+    modifier: Modifier,
     permissionMissing: Boolean,
     wifiDisabled: Boolean,
+    scanForDemoPurposes: Boolean,
     unsupportedFileType: Boolean,
 ) {
     val shape = RoundedCornerShape(16.dp)
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .border(0.dp, color = MaterialTheme.colorScheme.primary, shape)
             .clip(shape)
             .background(color = MaterialTheme.colorScheme.background)
@@ -72,19 +78,29 @@ private fun ScanScreen(
             .fillMaxWidth()
     ) {
         Column {
-            Title()
+            if (!scanForDemoPurposes) {
+                Title()
+            }
             when {
                 wifiDisabled -> {
                     WifiDisabled()
                 }
+
                 unsupportedFileType -> {
                     UnsupportedFileType()
                 }
+
                 list.isEmpty() -> {
                     Loading()
                 }
+
                 else -> {
-                    Clients(list, onClick = clientSelected, permissionMissing = permissionMissing)
+                    Clients(
+                        list,
+                        onClick = clientSelected,
+                        enableClientSelection = !permissionMissing,
+                        scanForDemoPurposes = scanForDemoPurposes
+                    )
                 }
             }
 
@@ -124,15 +140,20 @@ private fun Title() {
 }
 
 @Composable
-private fun Clients(list: List<AnDropClient>, onClick: (AnDropClient) -> Unit, permissionMissing: Boolean) {
+private fun Clients(
+    list: List<AnDropClient>,
+    onClick: (AnDropClient) -> Unit,
+    enableClientSelection: Boolean,
+    scanForDemoPurposes: Boolean,
+) {
     Column {
         list.forEach {
             key(it) {
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .alpha(if (permissionMissing) Alphas.disabled else 1.0f)
-                        .clickable(enabled = !permissionMissing, onClick = { onClick(it) })
+                        .alpha(if (!enableClientSelection && !scanForDemoPurposes) Alphas.disabled else 1.0f)
+                        .clickable(enabled = enableClientSelection  && !scanForDemoPurposes, onClick = { onClick(it) })
                         .padding(horizontal = Spacings.m, vertical = Spacings.xxs)
                         .fillMaxWidth()
                 ) {
@@ -198,7 +219,8 @@ private fun UnsupportedFileType() {
             text = stringResource(id = R.string.unsupoorted_file_type),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.secondary,
-        )
+
+            )
     }
 }
 
@@ -239,15 +261,17 @@ private fun PermissionIndicator(permissionRequested: () -> Unit) {
 fun ScanScreenPreview() {
     AnDropTheme {
         ScanScreen(
-            listOf(
+            list = listOf(
                 AnDropClient("Can's MacBook Pro"),
                 AnDropClient("Adrian's MacBook Pro"),
             ),
             permissionRequested = {},
             clientSelected = {},
+            modifier = Modifier,
             permissionMissing = false,
             wifiDisabled = false,
             unsupportedFileType = false,
+            scanForDemoPurposes = false,
         )
     }
 }
@@ -260,9 +284,11 @@ fun ScanScreenPreviewWifi() {
             listOf(),
             permissionRequested = {},
             clientSelected = {},
+            modifier = Modifier,
             permissionMissing = false,
             wifiDisabled = true,
             unsupportedFileType = false,
+            scanForDemoPurposes = false,
         )
     }
 }
@@ -275,9 +301,11 @@ fun ScanScreenPreviewWifiPermission() {
             listOf(),
             permissionRequested = {},
             clientSelected = {},
+            modifier = Modifier,
             permissionMissing = true,
             wifiDisabled = true,
             unsupportedFileType = false,
+            scanForDemoPurposes = false,
         )
     }
 }
@@ -290,9 +318,11 @@ fun ScanScreenPreviewUnuspported() {
             listOf(),
             permissionRequested = {},
             clientSelected = {},
+            modifier = Modifier,
             permissionMissing = false,
             wifiDisabled = false,
             unsupportedFileType = true,
+            scanForDemoPurposes = false,
         )
     }
 }
@@ -308,9 +338,11 @@ fun ScanScreenPreviewPermission() {
             ),
             permissionRequested = {},
             clientSelected = {},
+            modifier = Modifier,
             permissionMissing = true,
             wifiDisabled = false,
             unsupportedFileType = false,
+            scanForDemoPurposes = false,
         )
     }
 }
@@ -323,9 +355,11 @@ fun ScanScreenEmptyPreview() {
             listOf(),
             permissionRequested = {},
             clientSelected = {},
+            modifier = Modifier,
             permissionMissing = true,
             wifiDisabled = false,
             unsupportedFileType = false,
+            scanForDemoPurposes = false,
         )
     }
 }

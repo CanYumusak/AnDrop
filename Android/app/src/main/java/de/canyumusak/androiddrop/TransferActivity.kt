@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.canyumusak.androiddrop.sendables.ExampleFile
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.ui.ScanScreen
 import kotlinx.coroutines.Dispatchers
@@ -75,15 +76,24 @@ class TransferActivity : AppCompatActivity() {
                     arrayOf(it)
                 }
             }
+
             Intent.ACTION_SEND_MULTIPLE -> {
                 (intent.extras?.get(TransferService.DATA) as List<Uri?>?)?.let {
                     it.filterNotNull().toTypedArray()
                 }
             }
+
+            INTENT_SEND_EXAMPLE -> {
+                arrayOf(ExampleFile.URI)
+            }
+
             else -> {
                 null
             }
         }
     }
 
+    companion object {
+        const val INTENT_SEND_EXAMPLE = "SEND_EXAMPLE_FILE"
+    }
 }

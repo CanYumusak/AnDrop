@@ -15,6 +15,7 @@ interface SendableFile : Serializable {
         fun fromUri(uri: Uri, context: Context): SendableFile {
             return when {
                 uri.toString().startsWith("content") -> ContentProviderFile(context, uri)
+                uri == ExampleFile.URI -> ExampleFile(context)
                 else -> ClassicFile(context, uri)
             }
         }

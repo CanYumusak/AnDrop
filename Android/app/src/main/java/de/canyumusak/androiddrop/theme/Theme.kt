@@ -56,7 +56,7 @@ fun AnDropTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
         CompositionLocalProvider(
             LocalRippleTheme provides AnDropRippleTheme,
             LocalContentColor provides MaterialTheme.colorScheme.primary,
-            LocalIndication provides rememberRipple()
+            LocalIndication provides rememberRipple(),
         ) {
             content()
         }

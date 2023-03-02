@@ -9,7 +9,7 @@ plugins {
     kotlin("plugin.serialization")
 }
 
-val composeVersion = "1.3.2"
+val composeVersion = "1.4.0"
 
 android {
     buildFeatures {
@@ -22,8 +22,8 @@ android {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 24
         targetSdk = 33
-        versionCode = 156
-        versionName = "1.6.0"
+        versionCode = 157
+        versionName = "2.0.0"
     }
 
     signingConfigs {
@@ -52,6 +52,9 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
+        getByName("debug") {
+
+        }
     }
 
     compileOptions {
@@ -63,32 +66,41 @@ android {
         kotlinCompilerExtensionVersion = composeVersion
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     namespace = "de.canyumusak.androiddrop"
 }
 
 dependencies {
-    implementation("androidx.compose.material3:material3:1.1.0-alpha04")
+    api(platform("dev.chrisbanes.compose:compose-bom:2023.02.00-beta02"))
 
-    implementation("androidx.appcompat:appcompat:1.6.0")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.compose.ui:ui-util")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
+    implementation("androidx.activity:activity-compose")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    implementation("app.rive:rive-android:4.0.0")
+    implementation("androidx.startup:startup-runtime:1.1.1")
+
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.activity:activity-compose:1.6.1")
 
-    implementation("androidx.compose.ui:ui:${composeVersion}")
-    implementation("androidx.compose.ui:ui-tooling-preview:${composeVersion}")
-    implementation("androidx.compose.material:material:1.3.1")
-    debugImplementation("androidx.compose.ui:ui-tooling:${composeVersion}")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:${composeVersion}")
-
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation("androidx.fragment:fragment-ktx:1.5.5")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 

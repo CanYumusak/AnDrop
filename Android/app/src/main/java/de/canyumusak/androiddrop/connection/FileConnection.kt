@@ -1,12 +1,12 @@
-package de.canyumusak.androiddrop
+package de.canyumusak.androiddrop.connection
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import de.canyumusak.androiddrop.FileTransferCommand
 
 class FileConnection(val context: Context, fileTransferCommand: FileTransferCommand, val callback: (State) -> Unit) {
 
