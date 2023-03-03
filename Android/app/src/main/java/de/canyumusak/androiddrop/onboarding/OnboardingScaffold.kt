@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -56,7 +58,7 @@ fun OnboardingScaffold(
             .statusBarsPadding()
             .navigationBarsPadding()
             .padding(Spacings.l)
-            .wrapContentHeight()
+            .verticalScroll(rememberScrollState())
             .animateAppearanceAlpha(500, animateEntry),
         verticalArrangement = Arrangement.spacedBy(Spacings.l),
     ) {
