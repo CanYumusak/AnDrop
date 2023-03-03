@@ -38,11 +38,6 @@ fun rememberOnboardingState(): OnboardingState {
     return state
 }
 
-@Composable
-fun requestNotificationPermission() {
-
-}
-
 interface OnboardingState {
 
     val show: State<Boolean>
@@ -100,6 +95,10 @@ private class OnboardingStateImpl(
 
     override suspend fun skip() {
         when {
+            index.value == OnboardingPage.PushPermission.ordinal -> {
+                next()
+            }
+
             askForPushPermission() -> {
                 index.value = OnboardingPage.PushPermission.ordinal
             }

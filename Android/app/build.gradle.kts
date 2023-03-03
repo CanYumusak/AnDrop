@@ -22,8 +22,8 @@ android {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 24
         targetSdk = 33
-        versionCode = 201
-        versionName = "2.0.0"
+        versionCode = 203
+        versionName = "2.0.1"
     }
 
     signingConfigs {
