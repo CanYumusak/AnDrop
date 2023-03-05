@@ -21,6 +21,7 @@ fun PushPermissionPage(
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {
+        OnboardingEvents.grantPush(it)
         nextRequested()
     }
     OnboardingScaffold(
@@ -34,7 +35,6 @@ fun PushPermissionPage(
                 nextRequested()
             }
         },
-        allowSkip = true,
         skipRequested = skipRequested,
     ) {
         Text(

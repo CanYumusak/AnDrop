@@ -7,6 +7,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("plugin.serialization")
+    id("com.google.gms.google-services")
 }
 
 val composeVersion = "1.4.0"
@@ -22,8 +23,8 @@ android {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 24
         targetSdk = 33
-        versionCode = 203
-        versionName = "2.0.1"
+        versionCode = 204
+        versionName = "2.0.2"
     }
 
     signingConfigs {
@@ -73,6 +74,8 @@ android {
 
 dependencies {
     api(platform("dev.chrisbanes.compose:compose-bom:2023.02.00-beta02"))
+    implementation(platform("com.google.firebase:firebase-bom:31.2.3"))
+
 
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -105,4 +108,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     implementation("com.android.billingclient:billing:5.1.0")
+
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }

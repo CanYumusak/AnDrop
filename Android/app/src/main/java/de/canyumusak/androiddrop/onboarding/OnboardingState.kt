@@ -1,8 +1,6 @@
 package de.canyumusak.androiddrop.onboarding
 
 import android.content.Context
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -11,10 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import de.canyumusak.androiddrop.analytics.Analytics
 import de.canyumusak.androiddrop.extension.PreferenceKeys
 import de.canyumusak.androiddrop.extension.dataStore
 import kotlinx.coroutines.flow.first
@@ -76,37 +74,48 @@ private class OnboardingStateImpl(
     }
 
     override suspend fun next() {
-        val newIndex = index.value + 1
+        showNextPage(index.value + 1)
+    }
+
+    override suspend fun skip() {
+        OnboardingEvents.skip(currentPage.value)
         when {
-            newIndex < onboardingPages.size -> {
-                index.value = newIndex
+            index.value >= OnboardingPage.PushPermission.ordinal -> {
+                next()
             }
 
             else -> {
-                complete()
+                showNextPage(OnboardingPage.PushPermission.ordinal)
             }
+        }
+    }
+
+    private suspend fun showNextPage(startIndex: Int) {
+        val nextIndex = (startIndex until onboardingPages.size)
+            .firstOrNull { shouldShow(it) }
+
+        if (nextIndex != null) {
+            index.value = nextIndex
+        } else {
+            complete()
+        }
+    }
+
+    private fun shouldShow(index: Int): Boolean {
+        return when (val page = onboardingPages[index]) {
+            OnboardingPage.Welcome,
+            OnboardingPage.Install,
+            OnboardingPage.CheckSetup -> true
+
+            OnboardingPage.PushPermission -> askForPushPermission()
+            OnboardingPage.AnalyticsPermission -> !Analytics.hasConsent()
         }
     }
 
     override fun restart() {
+        OnboardingEvents.restart()
         index.value = 0
         _show.value = true
-    }
-
-    override suspend fun skip() {
-        when {
-            index.value == OnboardingPage.PushPermission.ordinal -> {
-                next()
-            }
-
-            askForPushPermission() -> {
-                index.value = OnboardingPage.PushPermission.ordinal
-            }
-
-            else -> {
-                index.value = OnboardingPage.values().size - 1
-            }
-        }
     }
 
     private fun askForPushPermission(): Boolean {
@@ -114,6 +123,7 @@ private class OnboardingStateImpl(
     }
 
     private suspend fun complete() {
+        OnboardingEvents.complete()
         dataStore.edit {
             it[PreferenceKeys.showOnboardingKey] = false
         }

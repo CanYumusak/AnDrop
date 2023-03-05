@@ -46,7 +46,10 @@ fun CheckSetupPage(
     CheckSetupPage(
         list = list,
         wifiState = wifiState,
-        nextRequested = nextRequested,
+        nextRequested = {
+            OnboardingEvents.checkSetupComplete(list.size)
+            nextRequested()
+        },
         skipRequested = skipRequested
     )
 }
@@ -118,7 +121,7 @@ private fun Hint(showFirstHint: Boolean, list: List<AnDropClient>) {
         enter = fadeIn() + expandVertically() + scaleIn(),
         exit = fadeOut() + shrinkVertically() + scaleOut(),
     ) {
-        val text : AnnotatedString = when (list.size) {
+        val text: AnnotatedString = when (list.size) {
             1 -> highlightedStringResource(R.string.onboarding_check_single_result_question)
             else -> highlightedStringResource(R.string.onboarding_check_multiple_result_question)
         }

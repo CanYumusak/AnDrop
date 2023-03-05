@@ -21,6 +21,10 @@ fun OnboardingScreen(
     val nextRequested: () -> Unit = { scope.launch { onboardingState.next() } }
     val skipRequested: () -> Unit = { scope.launch { onboardingState.skip() } }
 
+    LaunchedEffect(currentPage) {
+        OnboardingEvents.onboardingPage(currentPage)
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.surfaceVariant
@@ -30,7 +34,7 @@ fun OnboardingScreen(
             OnboardingPage.Install -> InstallPage(nextRequested, skipRequested)
             OnboardingPage.CheckSetup -> CheckSetupPage(nextRequested, skipRequested)
             OnboardingPage.PushPermission -> PushPermissionPage(nextRequested, skipRequested)
-//            OnboardingPage.AnalyticsPermission -> AnalyticsPage(nextRequested, skipRequested)
+            OnboardingPage.AnalyticsPermission -> AnalyticsPage(nextRequested, skipRequested)
         }
     }
 }
@@ -40,7 +44,7 @@ enum class OnboardingPage {
     Install,
     CheckSetup,
     PushPermission,
-//    AnalyticsPermission,
+    AnalyticsPermission,
 }
 
 @Preview
