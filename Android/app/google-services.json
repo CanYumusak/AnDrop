@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "56400888235",
+    "project_id": "androp-b7add",
+    "storage_bucket": "androp-b7add.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56400888235:android:14b9ee3fb190e51ecfd2ee",
+        "android_client_info": {
+          "package_name": "de.canyumusak.androiddrop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "56400888235-dffag4kasp0rnebbdln33upkvnh3sbnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAT0TKUdX_LGMokQXv9phzXX0Mt3vKLC_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "56400888235-dffag4kasp0rnebbdln33upkvnh3sbnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
