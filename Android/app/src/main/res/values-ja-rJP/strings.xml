@@ -10,12 +10,4 @@
     <string name="storage_access_permission">このファイルを共有するには、AnDropストレージアクセス許可を付与する必要があります</string>
     <string name="grant_storage_permission_button_title">ストレージ許可を付与する</string>
 
-    <!-- Tipping Jar -->
-    <string name="tipping_jar_title">チップジャー</string>
-    <string name="tipping_jar_description">AnDrop は無料アプリですが、寄付金を必要としています。寄付金は開発資金に充てられます。チップへのご協力をお願いします。</string>
-    <string name="tipping_jar_connection_error">請求サービスに接続できませんでした</string>
-    <string name="tipping_jar_button_small_tip">130円のチップを寄付する</string>
-    <string name="tipping_jar_button_medium_tip">250円のチップを寄付する</string>
-    <string name="tipping_jar_button_big_tip">640円のチップを寄付する</string>
-
 </resources>

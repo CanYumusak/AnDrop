@@ -10,14 +10,6 @@
     <string name="storage_access_permission">To share this file you need to grant AnDrop storage access permission</string>
     <string name="grant_storage_permission_button_title">Grant storage permission</string>
 
-    <!-- Tipping Jar -->
-    <string name="tipping_jar_title">Tip Jar</string>
-    <string name="tipping_jar_description">AnDrop is absolutely free but relies on your support to fund its development. If you find it useful, please consider supporting the app by leaving a tip in our Tip Jar.</string>
-    <string name="tipping_jar_connection_error">Failed to connect to billing services</string>
-    <string name="tipping_jar_button_small_tip">Generous Tip of 0,99€</string>
-    <string name="tipping_jar_button_medium_tip">Massive Tip of 1,99€</string>
-    <string name="tipping_jar_button_big_tip">Amazing Tip of 4,99€ </string>
-
     <!-- Landing -->
     <string name="landing_made_in_munich">Made in Munich with Love</string>
 
@@ -65,4 +57,11 @@
     <string name="onboarding_push_permission_hint">**AnDrop** will not disturb you otherwise.\n**Promised**.</string>
     <string name="onboarding_push_permission_action">Grant Permission</string>
     <string name="onboarding_push_permission_skip">No need</string>
+
+    <!-- Onboarding Analytics-->
+    <string name="onboarding_analytics_title">Help us make **AnDrop** better?</string>
+    <string name="onboarding_analytics_description">We are trying hard to make this app better, please help us understand the next best step.</string>
+    <string name="onboarding_analytics_action">Allow</string>
+    <string name="onboarding_analytics_skip">Decline</string>
+
 </resources>

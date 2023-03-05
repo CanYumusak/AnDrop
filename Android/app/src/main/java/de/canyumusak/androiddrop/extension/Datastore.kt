@@ -10,4 +10,5 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 object PreferenceKeys {
     val showOnboardingKey = booleanPreferencesKey("showOnboarding")
+    val consentToAnalytics = booleanPreferencesKey("consentToAnalytics")
 }
