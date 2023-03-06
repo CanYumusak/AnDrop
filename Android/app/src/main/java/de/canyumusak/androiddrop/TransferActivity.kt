@@ -8,10 +8,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.canyumusak.androiddrop.sendables.ExampleFile
 import de.canyumusak.androiddrop.theme.AnDropTheme
+import de.canyumusak.androiddrop.transfer.TransferEvents
 import de.canyumusak.androiddrop.ui.ScanScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,9 +26,11 @@ class TransferActivity : AppCompatActivity() {
 
         setContent {
             AnDropTheme {
+                val context = LocalContext.current
                 val discoveryViewModel: DiscoveryViewModel = viewModel()
                 LaunchedEffect(true) {
                     discoveryViewModel.dataUrisRequested(dataUris())
+                    TransferEvents.trackTransferRequest(dataUris(), context)
                 }
                 ScanScreen(
                     discoveryViewModel = discoveryViewModel,
@@ -46,6 +50,7 @@ class TransferActivity : AppCompatActivity() {
         viewModel.endDiscovery()
 
         lifecycleScope.launch {
+
             val ipaddress = client.host
             val intent = Intent(this@TransferActivity, TransferService::class.java)
             intent.putExtra(TransferService.CLIENT_NAME, client.name)
