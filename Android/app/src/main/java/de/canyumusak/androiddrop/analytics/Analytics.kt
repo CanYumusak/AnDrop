@@ -7,32 +7,28 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
 import de.canyumusak.androiddrop.extension.PreferenceKeys
 import de.canyumusak.androiddrop.extension.dataStore
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 object Analytics {
 
+    private val events = MutableSharedFlow<BaseEvent>(
+        replay = Int.MAX_VALUE,
+        extraBufferCapacity = 0,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
     private val hasConsent = MutableStateFlow(false)
 
     fun track(event: BaseEvent) {
-        val firebase = Firebase.analytics
-        when (event) {
-            is Event -> {
-                firebase.logEvent(event.name, event.payload.asBundle())
-            }
-
-            is TipEvent -> {
-                firebase.logEvent("Revenue") {
-                    param("id", event.id)
-                    param("price", event.price)
-                }
-            }
-        }
+        events.tryEmit(event)
     }
 
     fun giveConsent(consent: Boolean) {
@@ -49,10 +45,40 @@ object Analytics {
 
         coroutineScope {
             launch {
+                var collectJob: Job? = null
                 hasConsent.collect { consent ->
                     Firebase.analytics.setAnalyticsCollectionEnabled(consent)
                     context.dataStore.edit {
                         it[PreferenceKeys.consentToAnalytics] = consent
+                    }
+
+                    collectJob = if (collectJob == null && consent) {
+                        launchCollection()
+                    } else {
+                        collectJob?.cancel()
+                        null
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun launchCollection(): Job {
+        return coroutineScope {
+            launch {
+                events.collect { event ->
+                    val firebase = Firebase.analytics
+                    when (event) {
+                        is Event -> {
+                            firebase.logEvent(event.name, event.payload.asBundle())
+                        }
+
+                        is TipEvent -> {
+                            firebase.logEvent("Revenue") {
+                                param("id", event.id)
+                                param("price", event.price)
+                            }
+                        }
                     }
                 }
             }

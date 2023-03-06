@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import de.canyumusak.androiddrop.connection.FileConnection
 import de.canyumusak.androiddrop.connection.State
 import de.canyumusak.androiddrop.sendables.SendableFile
+import de.canyumusak.androiddrop.transfer.TransferEvents
 
 class TransferService : Service() {
 
@@ -48,19 +49,26 @@ class TransferService : Service() {
                 is State.Transferring -> {
                     startForeground(SERVICE_ID, createTransferNotification(this, it.progress))
                 }
+
                 is State.Finished -> {
                     stopForeground(true)
                     stopSelf()
                     notificationManager.cancel(RESPONSE_NOTIFICATION_ID)
                     notificationManager.notify(RESPONSE_NOTIFICATION_ID, createSuccessNotification(this, transferCommand))
                 }
+
                 is State.Disconnected -> {
                     stopForeground(true)
                     stopSelf()
                     notificationManager.cancel(RESPONSE_NOTIFICATION_ID)
                     notificationManager.notify(RESPONSE_NOTIFICATION_ID, createErrorNotification(this, transferCommand))
                 }
+
                 else -> Log.i("TransferService", "Change state to $it")
+            }
+
+            if (it !is State.Transferring) {
+                TransferEvents.trackFileConnectionEvent(it)
             }
         }
 
