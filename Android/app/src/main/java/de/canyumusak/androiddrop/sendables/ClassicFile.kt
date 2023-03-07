@@ -7,7 +7,7 @@ import java.io.InputStream
 
 class ClassicFile(val context: Context, uri: Uri) : SendableFile {
 
-    val file = File(uri.path)
+    private val file = File(uri.path)
 
     override val size: Long
         get() = file.length()
