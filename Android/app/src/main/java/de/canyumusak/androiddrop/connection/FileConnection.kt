@@ -36,7 +36,7 @@ class FileConnection(val context: Context, fileTransferCommand: FileTransferComm
         }
     }
 
-    val fileUris: List<Uri>
+    private val fileUris: List<Uri>
 
     init {
         val ipaddress = fileTransferCommand.ipAddress
