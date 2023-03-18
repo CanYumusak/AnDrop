@@ -3,11 +3,65 @@
     <string name="welcome_to_androp">AnDropへようこそ</string>
 
     <!-- Transfer Dialog -->
-    <string name="discovery_dialog_title">ファイルを共有する</string>
-    <string name="searching_clients">クライアントを探しています…</string>
+    <string name="discovery_dialog_title">ファイルを共有</string>
+    <string name="searching_clients">クライアントを検索中…</string>
     <string name="not_connected_to_wifi">Wi-Fiに接続されていません</string>
-    <string name="unsupoorted_file_type">残念ながら、AnDropは現在このタイプのファイルを送信できません</string>
-    <string name="storage_access_permission">このファイルを共有するには、AnDropストレージアクセス許可を付与する必要があります</string>
-    <string name="grant_storage_permission_button_title">ストレージ許可を付与する</string>
+    <string name="unsupoorted_file_type">残念ながら、AnDropは現在この種類のファイルを送信できません</string>
+    <string name="storage_access_permission">このファイルを共有するには、AnDropにストレージへのアクセス許可を付与する必要があります</string>
+    <string name="grant_storage_permission_button_title">ストレージの許可を与える</string>
+
+    <!-- Landing -->
+    <string name="landing_made_in_munich">愛を込めてミュンヘンで作られました</string>
+
+    <string name="landing_support_androp_title">AnDropをサポートする</string>
+    <string name="landing_support_androp_description">AnDropは無料です。しかし、開発者はあなたの助けを必要としています。役に立つと思ったら、チップを残すことを検討してください。</string>
+    <string name="landing_support_androp_action">チップジャーへ</string>
+
+    <string name="landing_support_support_title">トラブルシューティング</string>
+
+    <string name="landing_support_first_file_title">最初のファイルを共有する</string>
+    <string name="landing_support_first_file_description">AnDropは共有メニューアプリであり、共有メニューから動作します。</string>
+    <string name="landing_support_first_file_action">例を送信</string>
+
+    <string name="landing_support_reonboard_title">うまくいかない</string>
+    <string name="landing_support_reonboard_description">あなたのMacにもAnDropをインストールしてください。もう一度オンボーディングを行うことをお勧めします。</string>
+    <string name="landing_support_reonboard_action">オンボーディングを開始</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">セットアップをスキップ</string>
+
+    <!-- Onboarding Welcome -->
+    <string name="onboarding_welcome_action">セットアップを開始</string>
+    <string name="onboarding_welcome_greeting">**AnDrop**へようこそ</string>
+    <string name="onboarding_welcome_subtitle">**最も簡単**なファイル送信方法</string>
+
+    <!-- Onboarding Install -->
+    <string name="onboarding_install_action">AnDropが実行中</string>
+    <string name="onboarding_install_title">あなたの**Mac**で次のことを行ってください:</string>
+    <string name="onboarding_install_subtitle">**インストール**して**開く**</string>
+
+    <!-- Onboarding CheckSetup -->
+    <string name="onboarding_check_confirm_computer">はい！</string>
+    <string name="onboarding_check_continue_anyway">とにかく続ける</string>
+    <string name="onboarding_check_title">見つけられるか確認しましょう</string>
+    <string name="onboarding_scan_screen_title">クライアントを検索中…</string>
+    <string name="onboarding_check_hint">**AnDrop**は実行中で、同じ**WiFi**にいますか？</string>
+    <string name="onboarding_check_single_result_question">これはあなたの**Mac**ですか？</string>
+    <string name="onboarding_check_multiple_result_question">このリストにあなたの**Mac**はありますか？</string>
+    <string name="transfer_notification_success_title">成功</string>
+    <string name="transfer_notification_success_description">%1$sを正常に送信しました</string>
+
+    <!-- Onboarding Push Permission -->
+    <string name="onboarding_push_permission_title">**通知**が欲しいですか？</string>
+    <string name="onboarding_push_permission_description">転送ステータスを表示するために、**AnDrop**に許可が必要です。</string>
+    <string name="onboarding_push_permission_hint">**AnDrop**はそれ以外では邪魔しません。\n**約束**します。</string>
+    <string name="onboarding_push_permission_action">許可を与える</string>
+    <string name="onboarding_push_permission_skip">必要ありません</string>
+
+    <!-- Onboarding Analytics-->
+    <string name="onboarding_analytics_title">**AnDrop**をより良くする手助けをしてくれますか？</string>
+    <string name="onboarding_analytics_description">このアプリをより良くするために努力しています。次のベストなステップを理解する手助けをしてください。</string>
+    <string name="onboarding_analytics_action">許可する</string>
+    <string name="onboarding_analytics_skip">拒否</string>
 
 </resources>

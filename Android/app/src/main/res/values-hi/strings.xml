@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnDrop</string>
+    <string name="welcome_to_androp">AnDrop में आपका स्वागत है</string>
+
+    <!-- Transfer Dialog -->
+    <string name="discovery_dialog_title">फ़ाइल को शेयर करें</string>
+    <string name="searching_clients">क्लाइंट्स खोज रहे हैं…</string>
+    <string name="not_connected_to_wifi">Wi-Fi से नहीं जुड़ा</string>
+    <string name="unsupoorted_file_type">दुर्भाग्य से AnDrop वर्तमान में इस प्रकार की फ़ाइल नहीं भेज सकता</string>
+    <string name="storage_access_permission">इस फ़ाइल को साझा करने के लिए आपको AnDrop को स्टोरेज एक्सेस अनुमति देनी होती है</string>
+    <string name="grant_storage_permission_button_title">स्टोरेज अनुमति प्रदान करें</string>
+
+    <!-- Landing -->
+    <string name="landing_made_in_munich">म्यूनिख में प्यार के साथ बनाया गया</string>
+
+    <string name="landing_support_androp_title">AnDrop का समर्थन करें</string>
+    <string name="landing_support_androp_description">AnDrop मुफ्त है। हालांकि डेवलपर्स इसे ऐसे ही बनाए रखने के लिए आपकी मदद पर निर्भर करते हैं। कृपया इसे उपयोगी पाने पर टिप छोड़ने पर विचार करें।</string>
+    <string name="landing_support_androp_action">टिप जार में</string>
+
+    <string name="landing_support_support_title">ट्रबलशूट</string>
+
+    <string name="landing_support_first_file_title">अपनी पहली फ़ाइल साझा करें</string>
+    <string name="landing_support_first_file_description">AnDrop एक शेयर मेनू ऐप है, इसलिए शेयर मेनू के बाहर काम करता है।</string>
+    <string name="landing_support_first_file_action">उदाहरण भेजें</string>
+
+    <string name="landing_support_reonboard_title">मैं इसे काम कराने में असमर्थ हूँ</string>
+    <string name="landing_support_reonboard_description">अपने Mac पर भी AnDrop स्थापित करना सुनिश्चित करें। हम फिर से ऑनबोर्डिंग के माध्यम से जाने की सलाह देते हैं।</string>
+    <string name="landing_support_reonboard_action">ऑनबोर्डिंग शुरू करें</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">सेटअप छोड़ें</string>
+
+    <!-- Onboarding Welcome -->
+    <string name="onboarding_welcome_action">सेटअप शुरू करें</string>
+    <string name="onboarding_welcome_greeting">AnDrop में आपका स्वागत है</string>
+    <string name="onboarding_welcome_subtitle">फ़ाइलें भेजने का **सबसे आसान** तरीका</string>
+
+    <!-- Onboarding Install -->
+    <string name="onboarding_install_action">AnDrop चल रहा है</string>
+    <string name="onboarding_install_title">अपने **Mac** पर जाएँ:</string>
+    <string name="onboarding_install_subtitle">वहाँ **स्थापित करें** और **खोलें**</string>
+
+    <!-- Onboarding CheckSetup -->
+    <string name="onboarding_check_confirm_computer">हाँ!</string>
+    <string name="onboarding_check_continue_anyway">किसी भी हालत में जारी रखें</string>
+    <string name="onboarding_check_title">चलिए देखते हैं कि हम इसे ढूंढ सकते हैं</string>
+    <string name="onboarding_scan_screen_title">क्लाइंट्स खोज रहे हैं…</string>
+    <string name="onboarding_check_hint">क्या **AnDrop** चल रहा है और क्या आप उसी **WiFi** में हैं?</string>
+    <string name="onboarding_check_single_result_question">क्या यह आपका **Mac** है?</string>
+    <string name="onboarding_check_multiple_result_question">क्या आपका **Mac** इस सूची में है?</string>
+    <string name="transfer_notification_success_title">सफल</string>
+    <string name="transfer_notification_success_description">%1$s को सफलतापूर्वक भेजा गया</string>
+
+    <!-- Onboarding Push Permission -->
+    <string name="onboarding_push_permission_title">**नोटिफिकेशन** चाहते हैं?</string>
+    <string name="onboarding_push_permission_description">ट्रांसफर स्थिति दिखाने के लिए, **AnDrop** को अनुमति की आवश्यकता होती है।</string>
+    <string name="onboarding_push_permission_hint">**AnDrop** अन्यथा आपको परेशान नहीं करेगा।\n**वादा**।</string>
+    <string name="onboarding_push_permission_action">अनुमति दें</string>
+    <string name="onboarding_push_permission_skip">जरूरत नहीं</string>
+
+    <!-- Onboarding Analytics-->
+    <string name="onboarding_analytics_title">हमें **AnDrop** को बेहतर बनाने में मदद करें?</string>
+    <string name="onboarding_analytics_description">हम इस ऐप को बेहतर बनाने के लिए कड़ी मेहनत कर रहे हैं, कृपया हमें अगले सर्वश्रेष्ठ कदम समझने में मदद करें।</string>
+    <string name="onboarding_analytics_action">अनुमति दें</string>
+    <string name="onboarding_analytics_skip">अस्वीकार करें</string>
+
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnDrop</string>
+    <string name="welcome_to_androp">Chào mừng đến với AnDrop</string>
+
+    <!-- Transfer Dialog -->
+    <string name="discovery_dialog_title">Chia sẻ tệp đến</string>
+    <string name="searching_clients">Đang tìm kiếm khách hàng…</string>
+    <string name="not_connected_to_wifi">Không kết nối với Wi-Fi</string>
+    <string name="unsupoorted_file_type">Rất tiếc, AnDrop hiện không thể gửi loại tệp này</string>
+    <string name="storage_access_permission">Để chia sẻ tệp này, bạn cần cấp quyền truy cập bộ nhớ cho AnDrop</string>
+    <string name="grant_storage_permission_button_title">Cấp quyền truy cập bộ nhớ</string>
+
+    <!-- Landing -->
+    <string name="landing_made_in_munich">Được tạo ra ở Munich với tình yêu</string>
+
+    <string name="landing_support_androp_title">Hỗ trợ AnDrop</string>
+    <string name="landing_support_androp_description">AnDrop là miễn phí. Tuy nhiên, nhà phát triển dựa vào sự giúp đỡ của bạn để giữ nó như vậy. Hãy xem xét để để lại tiền boa nếu bạn thấy nó hữu ích.</string>
+    <string name="landing_support_androp_action">Đến Hũ Tiền boa</string>
+
+    <string name="landing_support_support_title">Khắc phục sự cố</string>
+
+    <string name="landing_support_first_file_title">Chia sẻ tệp đầu tiên của bạn</string>
+    <string name="landing_support_first_file_description">AnDrop là một ứng dụng menu chia sẻ và do đó hoạt động từ menu chia sẻ.</string>
+    <string name="landing_support_first_file_action">Gửi ví dụ</string>
+
+    <string name="landing_support_reonboard_title">Tôi không thể làm cho nó hoạt động</string>
+    <string name="landing_support_reonboard_description">Hãy chắc chắn cài đặt AnDrop trên Mac của bạn nữa. Chúng tôi khuyên bạn nên trải qua quá trình làm quen lại.</string>
+    <string name="landing_support_reonboard_action">Bắt đầu Làm quen</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Bỏ qua thiết lập</string>
+
+    <!-- Onboarding Welcome -->
+    <string name="onboarding_welcome_action">Bắt đầu thiết lập</string>
+    <string name="onboarding_welcome_greeting">Chào mừng đến với \n**AnDrop**</string>
+    <string name="onboarding_welcome_subtitle">Cách **đơn giản nhất** để gửi tệp</string>
+    <!-- Onboarding Install -->
+    <string name="onboarding_install_action">AnDrop đang chạy</string>
+    <string name="onboarding_install_title">Trên **Mac** của bạn, truy cập:</string>
+    <string name="onboarding_install_subtitle">**Cài đặt** và **mở** nó ở đó</string>
+
+    <!-- Onboarding CheckSetup -->
+    <string name="onboarding_check_confirm_computer">Có!</string>
+    <string name="onboarding_check_continue_anyway">Tiếp tục dù sao</string>
+    <string name="onboarding_check_title">Hãy xem liệu chúng ta có thể tìm thấy nó</string>
+    <string name="onboarding_scan_screen_title">Đang tìm kiếm khách hàng…</string>
+    <string name="onboarding_check_hint">**AnDrop** có đang chạy và bạn có đang trong cùng một **WiFi** không?</string>
+    <string name="onboarding_check_single_result_question">Đây có phải là **Mac** của bạn không?</string>
+    <string name="onboarding_check_multiple_result_question">**Mac** của bạn có nằm trong danh sách này không?</string>
+    <string name="transfer_notification_success_title">Thành công</string>
+    <string name="transfer_notification_success_description">Đã gửi thành công %1$s</string>
+
+    <!-- Onboarding Push Permission -->
+    <string name="onboarding_push_permission_title">Bạn muốn có **thông báo** không?</string>
+    <string name="onboarding_push_permission_description">Để hiển thị trạng thái chuyển tệp, **AnDrop** cần được cấp quyền.</string>
+    <string name="onboarding_push_permission_hint">**AnDrop** sẽ không làm phiền bạn nếu không có quyền này.\n**Hứa**.</string>
+    <string name="onboarding_push_permission_action">Cấp quyền</string>
+    <string name="onboarding_push_permission_skip">Không cần</string>
+
+    <!-- Onboarding Analytics-->
+    <string name="onboarding_analytics_title">Giúp chúng tôi cải thiện **AnDrop**?</string>
+    <string name="onboarding_analytics_description">Chúng tôi đang nỗ lực làm cho ứng dụng này tốt hơn, vui lòng giúp chúng tôi hiểu bước tiếp theo tốt nhất.</string>
+    <string name="onboarding_analytics_action">Cho phép</string>
+    <string name="onboarding_analytics_skip">Từ chối</string>
+
+</resources>
