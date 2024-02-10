@@ -16,14 +16,14 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'zulu'
-          java-version: '15'
-    
+          java-version: '17'
+
       - name: Install bundle
         run: |
           cd Android
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
-          
+
       - name: Configure Keystore
         run: |
           cd Android
@@ -46,8 +46,8 @@ jobs:
           base64 -d -i play_config.json.b64 > play_config.json
         env:
           PLAY_CONFIG_JSON: ${{ secrets.PLAY_CONFIG_JSON }}
-          
+
       - name: Distribute app to Beta track 🚀
         run : |
-          cd Android    
+          cd Android
           bundle exec fastlane beta
