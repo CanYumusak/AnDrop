@@ -3,6 +3,7 @@ package de.canyumusak.androiddrop.sendables
 import android.content.Context
 import android.net.Uri
 import java.io.InputStream
+import java.time.Instant
 
 class ExampleFile(val context: Context) : SendableFile {
 
@@ -18,6 +19,8 @@ class ExampleFile(val context: Context) : SendableFile {
         get() {
             return context.assets.open(exampleFile)
         }
+
+    override val creationDate : Instant = Instant.now()
 
     companion object {
         val URI = Uri.Builder()

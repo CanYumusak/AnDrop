@@ -37,7 +37,7 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
             } else {
                 downloadFolder = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
             }
-            
+
             return downloadFolder
         }
     }
@@ -126,6 +126,7 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
             
             let fileLength = file.fileLength
             let filename = file.filename
+            let creationDate = file.creationDate
             
             var data = Data()
             let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: self.maxLength)
@@ -133,7 +134,6 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
                 let maxLength = min(self.maxLength, Int64(data.count).distance(to: fileLength))
                 let length = stream.read(buffer, maxLength: maxLength)
                 data.append(buffer, count: length)
-                print("appended \(length), total length is \(data.count) out of \(fileLength)")
             }
             
             if (data.count >= fileLength) {
@@ -142,6 +142,25 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
                     do {
                         let fileURL = dir.appendingPathComponent(filename)
                         try data.write(to: fileURL)
+                        
+                        if let creationDate {
+                            let nsCreationDate = Date(timeIntervalSince1970: TimeInterval(creationDate/1000))
+                            let attributes = [FileAttributeKey.creationDate: nsCreationDate, FileAttributeKey.modificationDate: nsCreationDate]
+                            
+                            
+                            do {
+                                try FileManager.default.setAttributes(attributes, ofItemAtPath: fileURL.path)
+                                print("set creation date to \(nsCreationDate) for file \(fileURL.path)")
+                                
+                                let readCreationDate = try FileManager.default.attributesOfItem(atPath: fileURL.path)[FileAttributeKey.creationDate]
+                                print("Read Creation Date: \(readCreationDate)")
+                            
+                            }
+                            catch {
+                                print("error while writing creation attribute \(error)")
+                            }
+                        }
+                        
                         return .success(url: fileURL)
                     } catch {
                         print("error while writing file \(error)")
@@ -201,7 +220,6 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
     func sendNewline(stream: OutputStream) {
         guard let data = "\r\n".data(using: .utf8) else { return }
         _ = data.withUnsafeBytes { stream.write($0, maxLength: data.count) }
-        print("sent newline")
     }
     
     func parseMessage(message: [String: Any]?) -> ReceivedEvent {
@@ -238,7 +256,11 @@ extension ReceivedEvent: RawRepresentable {
         case .send_file:
             let rawFiles = rawValue["files"] as! [[String: Any]]
             let files = rawFiles.map { rawFile in
-                File(filename: rawFile["fileName"] as! String, fileLength: rawFile["fileLength"]  as! Int64)
+                let filename = rawFile["fileName"] as! String
+                let fileLength = rawFile["fileLength"]  as! Int64
+                let creationDate = rawFile["creationDate"] as? Int64
+
+                return File(filename: filename, fileLength: fileLength, creationDate: creationDate)
             }
             
             self = .fileSendRequest(
@@ -283,4 +305,5 @@ struct FileProposition {
 struct File {
     let filename: String
     let fileLength: Int64
+    let creationDate: Int64?
 }

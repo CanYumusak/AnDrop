@@ -4,12 +4,14 @@ import android.content.Context
 import android.net.Uri
 import java.io.InputStream
 import java.io.Serializable
+import java.time.Instant
 
 sealed interface SendableFile : Serializable {
 
     val size: Long
     val fileName: String
     val inputStream: InputStream
+    val creationDate: Instant?
 
     companion object {
         fun fromUri(uri: Uri, context: Context): SendableFile {

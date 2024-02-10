@@ -8,7 +8,7 @@
     <string name="searching_clients">Recherche de clients…</string>
     <string name="not_connected_to_wifi">Non connecté au Wi-Fi</string>
     <string name="unsupoorted_file_type">Malheureusement, AnDrop ne peut pas envoyer ce type de fichier actuellement</string>
-    <string name="storage_access_permission">Pour partager ce fichier, vous devez accorder à AnDrop la permission d'accéder au stockage</string>
+    <string name="storage_access_permission">Pour partager ce fichier, vous devez accorder à AnDrop la permission d\'accéder au stockage</string>
     <string name="grant_storage_permission_button_title">Accorder la permission de stockage</string>
 
     <!-- Landing -->
@@ -24,9 +24,9 @@
     <string name="landing_support_first_file_description">AnDrop est une application de menu de partage et fonctionne donc à partir du menu de partage.</string>
     <string name="landing_support_first_file_action">Envoyer un exemple</string>
 
-    <string name="landing_support_reonboard_title">Je n'arrive pas à le faire fonctionner</string>
-    <string name="landing_support_reonboard_description">Assurez-vous d'installer AnDrop également sur votre Mac. Nous vous recommandons de suivre à nouveau l'intégration.</string>
-    <string name="landing_support_reonboard_action">Commencer l'intégration</string>
+    <string name="landing_support_reonboard_title">Je n\'arrive pas à le faire fonctionner</string>
+    <string name="landing_support_reonboard_description">Assurez-vous d\'installer AnDrop également sur votre Mac. Nous vous recommandons de suivre à nouveau l\'intégration.</string>
+    <string name="landing_support_reonboard_action">Commencer l\'intégration</string>
 
     <!-- Onboarding -->
     <string name="onboarding_skip">Ignorer la configuration</string>
@@ -34,9 +34,9 @@
     <!-- Onboarding Welcome -->
     <string name="onboarding_welcome_action">Démarrer la configuration</string>
     <string name="onboarding_welcome_greeting">Bienvenue sur \n**AnDrop**</string>
-    <string name="onboarding_welcome_subtitle">La **façon la plus simple** d'envoyer des fichiers</string>
+    <string name="onboarding_welcome_subtitle">La **façon la plus simple** d\'envoyer des fichiers</string>
     <!-- Onboarding Install -->
-    <string name="onboarding_install_action">AnDrop est en cours d'exécution</string>
+    <string name="onboarding_install_action">AnDrop est en cours d\'exécution</string>
     <string name="onboarding_install_title">Sur votre **Mac**, visitez :</string>
     <string name="onboarding_install_subtitle">**Installez** et **ouvrez** le là-bas</string>
 

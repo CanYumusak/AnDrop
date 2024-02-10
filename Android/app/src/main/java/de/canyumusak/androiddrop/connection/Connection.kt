@@ -47,9 +47,10 @@ class Connection(val ipaddress: String?, val port: Int, val name: String?) {
     }
 
     fun proposeFileSendRequest(context: Context, uris: List<Uri>) {
-        val files = SendableFile.fromUris(uris, context).map { File(it.fileName, it.size) }
+        val files = SendableFile.fromUris(uris, context).map { File(it.fileName, it.size, it.creationDate?.toEpochMilli()) }
         try {
-            sendEvent(FileProposition(deviceName(context), files))
+            val event = FileProposition(deviceName(context), files)
+            sendEvent(event)
         } catch (exception: Exception) {
             Log.w("Socket", "Socket closed with exception", exception)
             disconnectedDelegate?.invoke()
