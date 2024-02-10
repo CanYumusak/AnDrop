@@ -3,6 +3,7 @@ package de.canyumusak.androiddrop.connection
 import org.json.JSONObject
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
+import java.time.Instant
 
 
 interface SentRequest {
@@ -33,9 +34,9 @@ data class FileProposition(val deviceName: String, val files: List<File>, val ty
     override fun serialize(): String {
         return Json {
             encodeDefaults = true
-        }.encodeToString(FileProposition.serializer(), this)
+        }.encodeToString(serializer(), this)
     }
 }
 
 @Serializable
-data class File(val fileName: String, val fileLength: Long)
+data class File(val fileName: String, val fileLength: Long, val creationDate: Long?)

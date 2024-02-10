@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnDrop</string>
+    <string name="welcome_to_androp">欢迎使用 AnDrop</string>
+
+    <!-- Transfer Dialog -->
+    <string name="discovery_dialog_title">分享文件至</string>
+    <string name="searching_clients">正在搜索客户端…</string>
+    <string name="not_connected_to_wifi">未连接到 Wi-Fi</string>
+    <string name="unsupoorted_file_type">很遗憾，AnDrop 目前无法发送此类文件</string>
+    <string name="storage_access_permission">要分享此文件，您需要授予 AnDrop 存储访问权限</string>
+    <string name="grant_storage_permission_button_title">授予权限</string>
+
+    <!-- Landing -->
+    <string name="landing_made_in_munich">用爱在慕尼黑制造</string>
+
+    <string name="landing_support_androp_title">支持 AnDrop</string>
+    <string name="landing_support_androp_description">AnDrop 是免费的。然而，开发者需要您的帮助来维持这种状态。如果您觉得它有用，请考虑留个小费。</string>
+    <string name="landing_support_androp_action">去小费罐</string>
+
+    <string name="landing_support_support_title">故障排除</string>
+
+    <string name="landing_support_first_file_title">分享您的第一个文件</string>
+    <string name="landing_support_first_file_description">AnDrop 是一个分享菜单应用，因此可以在分享菜单中工作。</string>
+    <string name="landing_support_first_file_action">发送示例</string>
+
+    <string name="landing_support_reonboard_title">我无法使它工作</string>
+    <string name="landing_support_reonboard_description">请确保您的 Mac 上也安装了 AnDrop。我们建议您重新进行新手指导。</string>
+    <string name="landing_support_reonboard_action">开始新手指导</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">跳过设置</string>
+
+    <!-- Onboarding Welcome -->
+    <string name="onboarding_welcome_action">开始设置</string>
+    <string name="onboarding_welcome_greeting">欢迎来到 \n**AnDrop**</string>
+    <string name="onboarding_welcome_subtitle">发送文件的**最简单**方法</string>
+    <!-- Onboarding Install -->
+    <string name="onboarding_install_action">AnDrop 正在运行</string>
+    <string name="onboarding_install_title">在您的 **Mac** 上访问：</string>
+    <string name="onboarding_install_subtitle">**安装** 并在那里**打开**它</string>
+
+    <!-- Onboarding CheckSetup -->
+    <string name="onboarding_check_confirm_computer">是的！</string>
+    <string name="onboarding_check_continue_anyway">继续进行</string>
+    <string name="onboarding_check_title">让我们看看能否找到它</string>
+    <string name="onboarding_scan_screen_title">正在搜索客户端…</string>
+    <string name="onboarding_check_hint">**AnDrop** 是否正在运行，您是否在相同的 **WiFi** 下？</string>
+    <string name="onboarding_check_single_result_question">这是您的 **Mac** 吗？</string>
+    <string name="onboarding_check_multiple_result_question">您的 **Mac** 是否在此列表中？</string>
+    <string name="transfer_notification_success_title">成功</string>
+    <string name="transfer_notification_success_description">成功发送 %1$s</string>
+
+    <!-- Onboarding Push Permission -->
+    <string name="onboarding_push_permission_title">需要**通知**吗？</string>
+    <string name="onboarding_push_permission_description">为了向您显示传输状态，**AnDrop** 需要权限。</string>
+    <string name="onboarding_push_permission_hint">**AnDrop** 不会以其他方式打扰您。\n**承诺**。</string>
+    <string name="onboarding_push_permission_action">授权</string>
+    <string name="onboarding_push_permission_skip">不需要</string>
+
+    <!-- Onboarding Analytics-->
+    <string name="onboarding_analytics_title">帮助我们让 **AnDrop** 变得更好？</string>
+    <string name="onboarding_analytics_description">我们正在努力使这个应用更好，请帮助我们了解下一步最好的做法。</string>
+    <string name="onboarding_analytics_action">允许</string>
+    <string name="onboarding_analytics_skip">拒绝</string>
+
+</resources>

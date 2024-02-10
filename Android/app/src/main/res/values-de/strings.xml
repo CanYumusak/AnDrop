@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnDrop</string>
+    <string name="welcome_to_androp">Willkommen bei AnDrop</string>
+    <!-- Transfer Dialog -->
+    <string name="discovery_dialog_title">Datei teilen mit</string>
+    <string name="searching_clients">Suche nach Clients…</string>
+    <string name="not_connected_to_wifi">Nicht mit WLAN verbunden</string>
+    <string name="unsupoorted_file_type">Leider kann AnDrop diese Art von Datei derzeit nicht senden</string>
+    <string name="storage_access_permission">Um diese Datei zu teilen, müssen Sie AnDrop den Speicherzugriff erlauben</string>
+    <string name="grant_storage_permission_button_title">Speicherzugriff erlauben</string>
+
+    <!-- Landing -->
+    <string name="landing_made_in_munich">Mit Liebe in München entwickelt</string>
+
+    <string name="landing_support_androp_title">Unterstütze AnDrop</string>
+    <string name="landing_support_androp_description">AnDrop ist kostenlos. Die Entwickler sind jedoch auf Ihre Hilfe angewiesen, um es so zu halten. Bitte erwägen Sie, ein Trinkgeld zu geben, wenn Sie es nützlich finden.</string>
+    <string name="landing_support_androp_action">Zum Trinkgeld-Glas</string>
+
+    <string name="landing_support_support_title">Fehlerbehebung</string>
+
+    <string name="landing_support_first_file_title">Teile deine erste Datei</string>
+    <string name="landing_support_first_file_description">AnDrop ist eine Share-Menu-App und funktioniert daher über das Teilen-Menü.</string>
+    <string name="landing_support_first_file_action">Beispiel senden</string>
+
+    <string name="landing_support_reonboard_title">Ich kann es nicht zum Laufen bringen</string>
+    <string name="landing_support_reonboard_description">Stellen Sie sicher, dass AnDrop auch auf Ihrem Mac installiert ist. Wir empfehlen, das Onboarding erneut durchzuführen.</string>
+    <string name="landing_support_reonboard_action">Onboarding starten</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Einrichtung überspringen</string>
+
+    <!-- Onboarding Welcome -->
+    <string name="onboarding_welcome_action">Einrichtung starten</string>
+    <string name="onboarding_welcome_greeting">Willkommen bei \n**AnDrop**</string>
+    <string name="onboarding_welcome_subtitle">Der **einfachste** Weg, Dateien zu senden</string>
+
+    <!-- Onboarding Install -->
+    <string name="onboarding_install_action">AnDrop läuft</string>
+    <string name="onboarding_install_title">Besuche auf deinem **Mac**:</string>
+    <string name="onboarding_install_subtitle">**Installiere** und **öffne** es dort</string>
+
+    <!-- Onboarding CheckSetup -->
+    <string name="onboarding_check_confirm_computer">Ja!</string>
+    <string name="onboarding_check_continue_anyway">Trotzdem fortfahren</string>
+    <string name="onboarding_check_title">Schauen wir mal, ob wir es finden können</string>
+    <string name="onboarding_scan_screen_title">Suche Clients…</string>
+    <string name="onboarding_check_hint">Läuft **AnDrop** und befinden Sie sich im selben **WLAN**</string>
+    <string name="onboarding_check_single_result_question">Ist das dein **Mac**?</string>
+    <string name="onboarding_check_multiple_result_question">Ist dein **Mac** in dieser Liste?</string>
+    <string name="transfer_notification_success_title">Erfolgreich</string>
+    <string name="transfer_notification_success_description">%1$s erfolgreich gesendet</string>
+
+    <!-- Onboarding Push Permission -->
+    <string name="onboarding_push_permission_title">Möchtest du **Benachrichtigungen** erhalten?</string>
+    <string name="onboarding_push_permission_description">Um dir den Übertragungsstatus anzuzeigen, benötigt **AnDrop** Berechtigungen.</string>
+    <string name="onboarding_push_permission_hint">**AnDrop** wird dich sonst nicht stören.\n**Versprochen**.</string>
+    <string name="onboarding_push_permission_action">Berechtigung erteilen</string>
+    <string name="onboarding_push_permission_skip">Nicht nötig</string>
+
+    <!-- Onboarding Analytics-->
+    <string name="onboarding_analytics_title">Hilf uns, **AnDrop** zu verbessern?</string>
+    <string name="onboarding_analytics_description">Wir bemühen uns, diese App besser zu machen. Bitte hilf uns, den nächsten besten Schritt zu verstehen.</string>
+    <string name="onboarding_analytics_action">Erlauben</string>
+    <string name="onboarding_analytics_skip">Ablehnen</string>
+
+</resources>
