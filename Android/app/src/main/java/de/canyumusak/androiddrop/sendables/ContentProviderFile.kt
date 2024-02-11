@@ -15,17 +15,14 @@ class ContentProviderFile(val context: Context, val uri: Uri) : SendableFile {
     override val creationDate: Instant?
         get() {
             val cursor = context.contentResolver.query(uri, null, null, null, null)
-            return cursor.use {
+            val result =  cursor.use {
                 if (cursor != null && cursor.moveToFirst()) {
-                    cursor.columnNames.forEachIndexed { index, row ->
-                        Log.e("FILE", "Row: $row")
-                        Log.e("FILE", "Value: ${cursor.getString(index)}}")
-                    }
-                    Instant.now()
+                    cursor.getLong(cursor.getColumnIndex("datetaken"))
                 } else {
-                    null
+                    0
                 }
             }
+            return Instant.ofEpochMilli(result)
         }
 
     override val size: Long
