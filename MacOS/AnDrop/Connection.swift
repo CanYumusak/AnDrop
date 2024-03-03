@@ -151,9 +151,6 @@ class Connection: NSObject, NetServiceDelegate, StreamDelegate {
                             do {
                                 try FileManager.default.setAttributes(attributes, ofItemAtPath: fileURL.path)
                                 print("set creation date to \(nsCreationDate) for file \(fileURL.path)")
-                                
-                                let readCreationDate = try FileManager.default.attributesOfItem(atPath: fileURL.path)[FileAttributeKey.creationDate]
-                                print("Read Creation Date: \(readCreationDate)")
                             
                             }
                             catch {
