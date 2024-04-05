@@ -23,19 +23,42 @@ class DiscoveryViewModel(
 
     private val _uris = MutableStateFlow<Array<Uri>?>(null)
     private val _clients = MutableStateFlow<List<AnDropClient>>(listOf())
+    private val _error = MutableStateFlow<Int?>(null)
+    private val _fileTypeUnsupported =
+        _uris.map { it == null }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     private val storagePermission = storagePermissionFlow(getApplication<Application>())
 
-    val needsStoragePermission: StateFlow<Boolean> = combine(_uris, storagePermission) { uris, hasStoragePermssion ->
-        needsStoragePermission(uris, hasStoragePermssion)
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    val needsStoragePermission: StateFlow<Boolean> =
+        combine(_uris, storagePermission) { uris, hasStoragePermssion ->
+            needsStoragePermission(uris, hasStoragePermssion)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
+    val error: StateFlow<ScanError?> =
+        combine(_fileTypeUnsupported, _error) { fileTypeUnsupported, error ->
+            when {
+                fileTypeUnsupported -> {
+                    ScanError.FileTypeUnsupported
+                }
+
+                error != null -> {
+                    ScanError.ErrorOccured(error)
+                }
+
+                else -> {
+                    null
+                }
+            }
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val clients: StateFlow<List<AnDropClient>> = _clients.asStateFlow()
-    val fileTypeUnsupported = _uris.map { it == null }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
     val wifiState = viewModelScope.wifiStateFlow(getApplication<Application>())
 
     val nsdManager: NsdManager get() = getApplication<Application>().getSystemService(Context.NSD_SERVICE) as NsdManager
-    private val wifiManager: WifiManager get() = getApplication<Application>().getSystemService(Context.WIFI_SERVICE) as WifiManager
+    private val wifiManager: WifiManager
+        get() = getApplication<Application>().getSystemService(
+            Context.WIFI_SERVICE
+        ) as WifiManager
     private val discoveryListener = DiscoveryListener()
 
     private val multicastLock = wifiManager.createMulticastLock("DiscoveryViewModel")
@@ -74,8 +97,9 @@ class DiscoveryViewModel(
     }
 
     fun endDiscovery(): List<AnDropClient> {
-        discovering = false
-        return performEndDiscovery()
+        return performEndDiscovery().also {
+            discovering = false
+        }
     }
 
     private fun performEndDiscovery(): List<AnDropClient> {
@@ -100,16 +124,24 @@ class DiscoveryViewModel(
     }
 
     private fun performDiscoverClients() {
+        _error.value = null
         Log.d("Bonjour", "starting discovery")
         try {
             multicastLock.acquire()
-            nsdManager.discoverServices("_androp._tcp", NsdManager.PROTOCOL_DNS_SD, discoveryListener)
+            nsdManager.discoverServices(
+                "_androp._tcp",
+                NsdManager.PROTOCOL_DNS_SD,
+                discoveryListener
+            )
         } catch (exception: RuntimeException) {
             // fail silently if we can't acquire a multicast lock
         }
     }
 
-    private fun needsStoragePermission(dataUris: Array<Uri>?, hasStoragePermssion: Boolean): Boolean {
+    private fun needsStoragePermission(
+        dataUris: Array<Uri>?,
+        hasStoragePermssion: Boolean
+    ): Boolean {
         return dataUris?.any { dataUri ->
             val sendableFile = SendableFile.fromUri(dataUri, getApplication())
             val isClassic = sendableFile is ClassicFile
@@ -132,7 +164,10 @@ class DiscoveryViewModel(
                     val resolveListener = this
 
                     viewModelScope.launch {
-                        Log.w("DiscoveryViewModel", "onResolveFailed(): Resolve failed (serviceInfo = '$serviceInfo'; errorCode = '$errorCode'; retries = '$retries')")
+                        Log.w(
+                            "DiscoveryViewModel",
+                            "onResolveFailed(): Resolve failed (serviceInfo = '$serviceInfo'; errorCode = '$errorCode'; retries = '$retries')"
+                        )
                         delay((Math.random() * 20).toLong())
                         retries -= 1
                         if (retries > 0) {
@@ -142,7 +177,10 @@ class DiscoveryViewModel(
                 }
 
                 override fun onServiceResolved(serviceInfo: NsdServiceInfo) {
-                    Log.d("DiscoveryViewModel", "onServiceResolved(): Resolve successful (serviceInfo = '$serviceInfo')")
+                    Log.d(
+                        "DiscoveryViewModel",
+                        "onServiceResolved(): Resolve successful (serviceInfo = '$serviceInfo')"
+                    )
 
                     val oldClients = clients.value.toMutableList()
                     if (oldClients.any { it.host == serviceInfo.host.canonicalHostName }) {
@@ -167,24 +205,40 @@ class DiscoveryViewModel(
         override fun onServiceLost(serviceInformation: NsdServiceInfo?) {
             serviceInformation?.let {
                 Log.d("Bonjour", "onServiceLost(): $serviceInformation")
-                _clients.value = clients.value.filterNot { it.name == serviceInformation.serviceName }
+                _clients.value =
+                    clients.value.filterNot { it.name == serviceInformation.serviceName }
             }
         }
 
         override fun onStartDiscoveryFailed(serviceType: String?, errorCode: Int) {
-            Log.w("DiscoveryViewModel", "onStartDiscoveryFailed(): Discovery start failed (serviceType = '$serviceType'; errorCode = '$errorCode')")
+            Log.w(
+                "DiscoveryViewModel",
+                "onStartDiscoveryFailed(): Discovery start failed (serviceType = '$serviceType'; errorCode = '$errorCode')"
+            )
+            _error.value = errorCode
+            endDiscovery()
         }
 
         override fun onStopDiscoveryFailed(serviceType: String?, errorCode: Int) {
-            Log.w("DiscoveryViewModel", "onStopDiscoveryFailed(): Discovery stop failed (serviceType = '$serviceType'; errorCode = '$errorCode')")
+            Log.w(
+                "DiscoveryViewModel",
+                "onStopDiscoveryFailed(): Discovery stop failed (serviceType = '$serviceType'; errorCode = '$errorCode')"
+            )
         }
 
         override fun onDiscoveryStarted(serviceType: String?) {
-            Log.w("DiscoveryViewModel", "onDiscoveryStarted(): Discovery started (serviceType = '$serviceType')")
+            _error.value = null
+            Log.w(
+                "DiscoveryViewModel",
+                "onDiscoveryStarted(): Discovery started (serviceType = '$serviceType')"
+            )
         }
 
         override fun onDiscoveryStopped(serviceType: String?) {
-            Log.w("DiscoveryViewModel", "onDiscoveryStopped(): Discovery stopped (serviceType = '$serviceType')")
+            Log.w(
+                "DiscoveryViewModel",
+                "onDiscoveryStopped(): Discovery stopped (serviceType = '$serviceType')"
+            )
         }
     }
 }
@@ -192,6 +246,11 @@ class DiscoveryViewModel(
 sealed class WifiState {
     object Disabled : WifiState()
     object Enabled : WifiState()
+}
+
+sealed class ScanError {
+    data object FileTypeUnsupported: ScanError()
+    data class ErrorOccured(val code: Int): ScanError()
 }
 
 data class AnDropClient(

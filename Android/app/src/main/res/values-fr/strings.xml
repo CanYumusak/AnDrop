@@ -10,6 +10,7 @@
     <string name="unsupoorted_file_type">Malheureusement, AnDrop ne peut pas envoyer ce type de fichier actuellement</string>
     <string name="storage_access_permission">Pour partager ce fichier, vous devez accorder à AnDrop la permission d\'accéder au stockage</string>
     <string name="grant_storage_permission_button_title">Accorder la permission de stockage</string>
+    <string name="scan_failed">Échec de la recherche de clients (%s)</string>
 
     <!-- Landing -->
     <string name="landing_made_in_munich">Fabriqué à Munich avec amour</string>

@@ -9,6 +9,7 @@
     <string name="unsupoorted_file_type">Leider kann AnDrop diese Art von Datei derzeit nicht senden</string>
     <string name="storage_access_permission">Um diese Datei zu teilen, müssen Sie AnDrop den Speicherzugriff erlauben</string>
     <string name="grant_storage_permission_button_title">Speicherzugriff erlauben</string>
+    <string name="scan_failed">Das Suchen nach Clients ist fehlgeschlagen (%s)</string>
 
     <!-- Landing -->
     <string name="landing_made_in_munich">Mit Liebe in München entwickelt</string>

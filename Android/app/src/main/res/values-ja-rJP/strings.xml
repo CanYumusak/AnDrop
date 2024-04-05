@@ -9,6 +9,7 @@
     <string name="unsupoorted_file_type">残念ながら、AnDropは現在この種類のファイルを送信できません</string>
     <string name="storage_access_permission">このファイルを共有するには、AnDropにストレージへのアクセス許可を付与する必要があります</string>
     <string name="grant_storage_permission_button_title">ストレージの許可を与える</string>
+    <string name="scan_failed">クライアントのスキャンに失敗しました (%s)</string>
 
     <!-- Landing -->
     <string name="landing_made_in_munich">愛を込めてミュンヘンで作られました</string>

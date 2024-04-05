@@ -10,6 +10,7 @@
     <string name="unsupoorted_file_type">很遗憾，AnDrop 目前无法发送此类文件</string>
     <string name="storage_access_permission">要分享此文件，您需要授予 AnDrop 存储访问权限</string>
     <string name="grant_storage_permission_button_title">授予权限</string>
+    <string name="scan_failed">扫描客户端失败 (%s)</string>
 
     <!-- Landing -->
     <string name="landing_made_in_munich">用爱在慕尼黑制造</string>

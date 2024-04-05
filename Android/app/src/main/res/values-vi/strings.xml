@@ -10,6 +10,7 @@
     <string name="unsupoorted_file_type">Rất tiếc, AnDrop hiện không thể gửi loại tệp này</string>
     <string name="storage_access_permission">Để chia sẻ tệp này, bạn cần cấp quyền truy cập bộ nhớ cho AnDrop</string>
     <string name="grant_storage_permission_button_title">Cấp quyền truy cập bộ nhớ</string>
+    <string name="scan_failed">Quét tìm khách hàng thất bại (%s)</string>
 
     <!-- Landing -->
     <string name="landing_made_in_munich">Được tạo ra ở Munich với tình yêu</string>
