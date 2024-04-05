@@ -85,7 +85,6 @@ fun CheckSetupPage(
                 wifiDisabled = wifiState == WifiState.Disabled,
                 permissionMissing = false,
                 scanForDemoPurposes = true,
-                unsupportedFileType = false,
                 clientSelected = {},
                 modifier = Modifier,
             )

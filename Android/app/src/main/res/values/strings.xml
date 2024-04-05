@@ -7,6 +7,7 @@
     <string name="searching_clients">Searching for clients…</string>
     <string name="not_connected_to_wifi">Not connected to Wi-Fi</string>
     <string name="unsupoorted_file_type">Unfortunately AnDrop can\'t send this type of file currently</string>
+    <string name="scan_failed">Scanning for clients failed (%s)</string>
     <string name="storage_access_permission">To share this file you need to grant AnDrop storage access permission</string>
     <string name="grant_storage_permission_button_title">Grant storage permission</string>
 

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import de.canyumusak.androiddrop.AnDropClient
 import de.canyumusak.androiddrop.DiscoveryViewModel
 import de.canyumusak.androiddrop.R
+import de.canyumusak.androiddrop.ScanError
 import de.canyumusak.androiddrop.WifiState
 import de.canyumusak.androiddrop.theme.Alphas
 import de.canyumusak.androiddrop.theme.AnDropTheme
@@ -44,7 +45,7 @@ fun ScanScreen(
     val list by discoveryViewModel.clients.collectAsState()
     val permissionMissing by discoveryViewModel.needsStoragePermission.collectAsState()
     val wifiState by discoveryViewModel.wifiState.collectAsState()
-    val unsupportedFileType by discoveryViewModel.fileTypeUnsupported.collectAsState()
+    val error by discoveryViewModel.error.collectAsState()
     ScanScreen(
         list = list,
         permissionRequested = permissionRequested,
@@ -53,7 +54,7 @@ fun ScanScreen(
         permissionMissing = permissionMissing,
         wifiDisabled = wifiState == WifiState.Disabled,
         scanForDemoPurposes = scanForDemoPurposes,
-        unsupportedFileType = unsupportedFileType,
+        error = error,
     )
 }
 
@@ -66,7 +67,7 @@ fun ScanScreen(
     permissionMissing: Boolean,
     wifiDisabled: Boolean,
     scanForDemoPurposes: Boolean,
-    unsupportedFileType: Boolean,
+    error: ScanError? = null,
 ) {
     val shape = RoundedCornerShape(16.dp)
     Surface(
@@ -86,8 +87,12 @@ fun ScanScreen(
                     WifiDisabled()
                 }
 
-                unsupportedFileType -> {
+                error is ScanError.FileTypeUnsupported -> {
                     UnsupportedFileType()
+                }
+
+                error is ScanError.ErrorOccured -> {
+                    ScanErrorUI(error.code)
                 }
 
                 list.isEmpty() -> {
@@ -225,6 +230,23 @@ private fun UnsupportedFileType() {
 }
 
 @Composable
+private fun ScanErrorUI(
+    errorCode: Int
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.padding(horizontal = Spacings.m, vertical = Spacings.s)
+    ) {
+        Text(
+            text = stringResource(id = R.string.scan_failed, errorCode.toString()),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.secondary,
+
+            )
+    }
+}
+
+@Composable
 private fun ClientInformation(name: String) {
     Column(modifier = Modifier.padding(vertical = Spacings.xs)) {
         Text(
@@ -270,7 +292,6 @@ fun ScanScreenPreview() {
             modifier = Modifier,
             permissionMissing = false,
             wifiDisabled = false,
-            unsupportedFileType = false,
             scanForDemoPurposes = false,
         )
     }
@@ -287,7 +308,6 @@ fun ScanScreenPreviewWifi() {
             modifier = Modifier,
             permissionMissing = false,
             wifiDisabled = true,
-            unsupportedFileType = false,
             scanForDemoPurposes = false,
         )
     }
@@ -304,7 +324,6 @@ fun ScanScreenPreviewWifiPermission() {
             modifier = Modifier,
             permissionMissing = true,
             wifiDisabled = true,
-            unsupportedFileType = false,
             scanForDemoPurposes = false,
         )
     }
@@ -321,7 +340,24 @@ fun ScanScreenPreviewUnuspported() {
             modifier = Modifier,
             permissionMissing = false,
             wifiDisabled = false,
-            unsupportedFileType = true,
+            error = ScanError.FileTypeUnsupported,
+            scanForDemoPurposes = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ScanScreenPreviewErrorOccured() {
+    AnDropTheme {
+        ScanScreen(
+            listOf(),
+            permissionRequested = {},
+            clientSelected = {},
+            modifier = Modifier,
+            permissionMissing = false,
+            wifiDisabled = false,
+            error = ScanError.ErrorOccured(4),
             scanForDemoPurposes = false,
         )
     }
@@ -341,7 +377,6 @@ fun ScanScreenPreviewPermission() {
             modifier = Modifier,
             permissionMissing = true,
             wifiDisabled = false,
-            unsupportedFileType = false,
             scanForDemoPurposes = false,
         )
     }
@@ -358,7 +393,6 @@ fun ScanScreenEmptyPreview() {
             modifier = Modifier,
             permissionMissing = true,
             wifiDisabled = false,
-            unsupportedFileType = false,
             scanForDemoPurposes = false,
         )
     }
