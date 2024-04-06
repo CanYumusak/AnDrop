@@ -8,8 +8,12 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.google.android.play.core.review.ReviewException
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.model.ReviewErrorCode
 import de.canyumusak.androiddrop.connection.FileConnection
 import de.canyumusak.androiddrop.connection.State
+import de.canyumusak.androiddrop.inappreview.InAppReviewManager
 import de.canyumusak.androiddrop.sendables.SendableFile
 import de.canyumusak.androiddrop.transfer.TransferEvents
 
@@ -51,17 +55,24 @@ class TransferService : Service() {
                 }
 
                 is State.Finished -> {
+                    InAppReviewManager.fileTransferSucceeded(this)
                     stopForeground(true)
                     stopSelf()
                     notificationManager.cancel(RESPONSE_NOTIFICATION_ID)
-                    notificationManager.notify(RESPONSE_NOTIFICATION_ID, createSuccessNotification(this, transferCommand))
+                    notificationManager.notify(
+                        RESPONSE_NOTIFICATION_ID,
+                        createSuccessNotification(this, transferCommand)
+                    )
                 }
 
                 is State.Disconnected -> {
                     stopForeground(true)
                     stopSelf()
                     notificationManager.cancel(RESPONSE_NOTIFICATION_ID)
-                    notificationManager.notify(RESPONSE_NOTIFICATION_ID, createErrorNotification(this, transferCommand))
+                    notificationManager.notify(
+                        RESPONSE_NOTIFICATION_ID,
+                        createErrorNotification(this, transferCommand)
+                    )
                 }
 
                 else -> Log.i("TransferService", "Change state to $it")
@@ -95,14 +106,22 @@ class TransferService : Service() {
 
         private fun createHighPriorityChannel(context: Context) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                val rhmiNotificationChannel = NotificationChannel(HIGH_PRIO_CHANNEL_ID, "Success/Fail Notification", NotificationManager.IMPORTANCE_HIGH)
+                val rhmiNotificationChannel = NotificationChannel(
+                    HIGH_PRIO_CHANNEL_ID,
+                    "Success/Fail Notification",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
                 context.notificationManager.createNotificationChannel(rhmiNotificationChannel)
             }
         }
 
         private fun createLowPriorityChannel(context: Context) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                val rhmiNotificationChannel = NotificationChannel(LOW_PRIO_CHANNEL_ID, "Transfer Notification", NotificationManager.IMPORTANCE_LOW)
+                val rhmiNotificationChannel = NotificationChannel(
+                    LOW_PRIO_CHANNEL_ID,
+                    "Transfer Notification",
+                    NotificationManager.IMPORTANCE_LOW
+                )
                 context.notificationManager.createNotificationChannel(rhmiNotificationChannel)
             }
         }
@@ -110,7 +129,12 @@ class TransferService : Service() {
         fun createStartupNotification(context: TransferService): Notification {
             createLowPriorityChannel(context)
 
-            val intent = PendingIntent.getBroadcast(context, 0, Intent(CANCEL_REQUEST_ACTION), PendingIntent.FLAG_IMMUTABLE)
+            val intent = PendingIntent.getBroadcast(
+                context,
+                0,
+                Intent(CANCEL_REQUEST_ACTION),
+                PendingIntent.FLAG_IMMUTABLE
+            )
             val action = NotificationCompat.Action(0, "Cancel", intent)
 
             return NotificationCompat.Builder(context, LOW_PRIO_CHANNEL_ID)
@@ -129,7 +153,12 @@ class TransferService : Service() {
         fun createTransferNotification(context: TransferService, progress: Int): Notification {
             createLowPriorityChannel(context)
 
-            val intent = PendingIntent.getBroadcast(context, 0, Intent(CANCEL_REQUEST_ACTION), PendingIntent.FLAG_IMMUTABLE)
+            val intent = PendingIntent.getBroadcast(
+                context,
+                0,
+                Intent(CANCEL_REQUEST_ACTION),
+                PendingIntent.FLAG_IMMUTABLE
+            )
             val action = NotificationCompat.Action(0, "Cancel", intent)
 
             return NotificationCompat.Builder(context, LOW_PRIO_CHANNEL_ID)
@@ -147,7 +176,10 @@ class TransferService : Service() {
 
         }
 
-        fun createErrorNotification(context: Context, fileTransferCommand: FileTransferCommand): Notification {
+        fun createErrorNotification(
+            context: Context,
+            fileTransferCommand: FileTransferCommand
+        ): Notification {
             createHighPriorityChannel(context)
 
             val sendableFiles = SendableFile.fromUris(fileTransferCommand.dataUris, context)
@@ -163,7 +195,10 @@ class TransferService : Service() {
                 .build()
         }
 
-        fun createSuccessNotification(context: Context, fileTransferCommand: FileTransferCommand): Notification {
+        fun createSuccessNotification(
+            context: Context,
+            fileTransferCommand: FileTransferCommand
+        ): Notification {
             createHighPriorityChannel(context)
 
             val sendableFiles = SendableFile.fromUris(fileTransferCommand.dataUris, context)
@@ -174,7 +209,11 @@ class TransferService : Service() {
                 .setSmallIcon(R.drawable.ic_stat_share)
                 .setColor(context.getColor(R.color.colorPrimaryDark))
                 .setContentTitle(context.getString(R.string.transfer_notification_success_title))
-                .setContentText(context.getString(R.string.transfer_notification_success_description, sendableFiles.joinToString { it.fileName }))
+                .setContentText(
+                    context.getString(
+                        R.string.transfer_notification_success_description,
+                        sendableFiles.joinToString { it.fileName })
+                )
                 .setContentIntent(null)
                 .build()
 
@@ -191,7 +230,12 @@ class TransferServiceBroadcastReceiver(val service: TransferService) : Broadcast
 
 }
 
-data class FileTransferCommand(val clientName: String, val ipAddress: String, val port: Int, val dataUris: List<Uri>) {
+data class FileTransferCommand(
+    val clientName: String,
+    val ipAddress: String,
+    val port: Int,
+    val dataUris: List<Uri>
+) {
 
     constructor(intent: Intent) : this(
         intent.getStringExtra(TransferService.CLIENT_NAME)!!,

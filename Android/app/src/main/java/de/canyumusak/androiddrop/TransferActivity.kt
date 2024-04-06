@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.canyumusak.androiddrop.inappreview.InAppReviewManager
 import de.canyumusak.androiddrop.sendables.ExampleFile
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.transfer.TransferEvents
@@ -47,7 +48,6 @@ class TransferActivity : AppCompatActivity() {
 
     private fun clientSelected(viewModel: DiscoveryViewModel, client: AnDropClient) {
         val dataUris = dataUris()
-        viewModel.endDiscovery()
 
         lifecycleScope.launch {
 
@@ -70,6 +70,8 @@ class TransferActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             delay(200)
+            InAppReviewManager.requestReview(this@TransferActivity)
+            viewModel.endDiscovery()
             supportFinishAfterTransition()
         }
     }
