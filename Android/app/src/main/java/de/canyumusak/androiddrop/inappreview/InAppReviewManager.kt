@@ -8,12 +8,12 @@ import de.canyumusak.androiddrop.BuildConfig
 
 object InAppReviewManager {
     private const val REVIEW_PREFERENCE_KEY = "inappreview"
-    private const val TEST_INAPP_REVIEW = true
+    private const val REVIEW_COUNT_PREFERENCE_KEY = "last_review_request"
 
     fun fileTransferSucceeded(context: Context) {
         val sharedPref = context.getSharedPreferences(REVIEW_PREFERENCE_KEY, Context.MODE_PRIVATE)
-        val lastCount = sharedPref.getLong("transferCount", 0)
-        sharedPref.edit().putLong("last_review_request", lastCount + 1).apply()
+        val lastCount = sharedPref.getLong(REVIEW_COUNT_PREFERENCE_KEY, 0)
+        sharedPref.edit().putLong(REVIEW_COUNT_PREFERENCE_KEY, lastCount + 1).apply()
     }
 
     suspend fun requestReview(activity: Activity) {
@@ -41,12 +41,12 @@ object InAppReviewManager {
 
     private fun shouldRequestReview(context: Context): Boolean {
         val sharedPref = context.getSharedPreferences(REVIEW_PREFERENCE_KEY, Context.MODE_PRIVATE)
-        val lastCount = sharedPref.getLong("last_review_request", 0)
-        return lastCount >= 5 || (BuildConfig.DEBUG && TEST_INAPP_REVIEW)
+        val lastCount = sharedPref.getLong(REVIEW_COUNT_PREFERENCE_KEY, 0)
+        return lastCount >= 3
     }
 
     private fun resetReviewRequest(context: Context) {
         val sharedPref = context.getSharedPreferences(REVIEW_PREFERENCE_KEY, Context.MODE_PRIVATE)
-        sharedPref.edit().putLong("last_review_request", 0).apply()
+        sharedPref.edit().putLong(REVIEW_COUNT_PREFERENCE_KEY, 0).apply()
     }
 }
