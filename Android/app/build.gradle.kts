@@ -17,7 +17,7 @@ android {
         compose = true
     }
 
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 26
