@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.android.play.core.review.ReviewException
@@ -27,7 +28,18 @@ class TransferService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        registerReceiver(transferServiceBroadcastReceiver, IntentFilter(CANCEL_REQUEST_ACTION))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                transferServiceBroadcastReceiver,
+                IntentFilter(CANCEL_REQUEST_ACTION),
+                RECEIVER_NOT_EXPORTED,
+            )
+        } else {
+            registerReceiver(
+                transferServiceBroadcastReceiver,
+                IntentFilter(CANCEL_REQUEST_ACTION),
+            )
+        }
     }
 
     override fun onDestroy() {
