@@ -6,11 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.google.android.play.core.review.ReviewException
-import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.review.model.ReviewErrorCode
 import de.canyumusak.androiddrop.connection.FileConnection
 import de.canyumusak.androiddrop.connection.State
 import de.canyumusak.androiddrop.inappreview.InAppReviewManager
@@ -27,7 +25,18 @@ class TransferService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        registerReceiver(transferServiceBroadcastReceiver, IntentFilter(CANCEL_REQUEST_ACTION))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                transferServiceBroadcastReceiver,
+                IntentFilter(CANCEL_REQUEST_ACTION),
+                RECEIVER_NOT_EXPORTED,
+            )
+        } else {
+            registerReceiver(
+                transferServiceBroadcastReceiver,
+                IntentFilter(CANCEL_REQUEST_ACTION),
+            )
+        }
     }
 
     override fun onDestroy() {
@@ -105,25 +114,21 @@ class TransferService : Service() {
         const val DATA = "android.intent.extra.STREAM"
 
         private fun createHighPriorityChannel(context: Context) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                val rhmiNotificationChannel = NotificationChannel(
-                    HIGH_PRIO_CHANNEL_ID,
-                    "Success/Fail Notification",
-                    NotificationManager.IMPORTANCE_HIGH
-                )
-                context.notificationManager.createNotificationChannel(rhmiNotificationChannel)
-            }
+            val rhmiNotificationChannel = NotificationChannel(
+                HIGH_PRIO_CHANNEL_ID,
+                "Success/Fail Notification",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            context.notificationManager.createNotificationChannel(rhmiNotificationChannel)
         }
 
         private fun createLowPriorityChannel(context: Context) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                val rhmiNotificationChannel = NotificationChannel(
-                    LOW_PRIO_CHANNEL_ID,
-                    "Transfer Notification",
-                    NotificationManager.IMPORTANCE_LOW
-                )
-                context.notificationManager.createNotificationChannel(rhmiNotificationChannel)
-            }
+            val notificationChannel = NotificationChannel(
+                LOW_PRIO_CHANNEL_ID,
+                "Transfer Notification",
+                NotificationManager.IMPORTANCE_LOW
+            )
+            context.notificationManager.createNotificationChannel(notificationChannel)
         }
 
         fun createStartupNotification(context: TransferService): Notification {

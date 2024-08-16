@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.google.android.play.core.review.ReviewManagerFactory
-import de.canyumusak.androiddrop.BuildConfig
 
 object InAppReviewManager {
     private const val REVIEW_PREFERENCE_KEY = "inappreview"

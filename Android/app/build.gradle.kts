@@ -17,13 +17,13 @@ android {
         compose = true
     }
 
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 26
-        targetSdk = 33
-        versionCode = 212
-        versionName = "2.1.2"
+        targetSdk = 35
+        versionCode = 213
+        versionName = "2.1.3"
     }
 
     signingConfigs {
@@ -72,42 +72,38 @@ android {
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:2024.04.00"))
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(platform(libs.firebase.bom))
 
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.compose.ui.util)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.compose.ui:ui-util")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.datastore.preferences)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.activity.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.play.review.ktx)
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
-    implementation("androidx.activity:activity-compose")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("com.google.android.play:review-ktx:2.0.1")
+    implementation(libs.rive.android)
+    implementation(libs.startup.runtime)
 
-    implementation("app.rive:rive-android:4.0.0")
-    implementation("androidx.startup:startup-runtime:1.1.1")
+    implementation(libs.appcompat)
+    implementation(libs.recyclerview)
+    implementation(libs.constraintlayout)
+    implementation(libs.lifecycle.extensions)
+    implementation(libs.fragment.ktx)
 
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+    implementation(libs.serialization.json)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation(libs.billing)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
-
-    implementation("com.android.billingclient:billing:6.2.0")
-
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation(libs.firebase.analytics.ktx)
 }

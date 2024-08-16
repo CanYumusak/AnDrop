@@ -36,11 +36,7 @@ class TransferServiceWrapperActivity : Activity() {
         }
 
         if (dataUris != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(serviceIntent)
-            } else {
-                startService(serviceIntent)
-            }
+            startForegroundService(serviceIntent)
         }
     }
 }

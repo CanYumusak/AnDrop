@@ -206,23 +206,23 @@ enum class Tip(val id: String) {
 }
 
 sealed class BillingConnectionState {
-    object Connected : BillingConnectionState()
-    object GettingDetails : BillingConnectionState()
-    object Failed : BillingConnectionState()
-    object Connecting : BillingConnectionState()
+    data object Connected : BillingConnectionState()
+    data object GettingDetails : BillingConnectionState()
+    data object Failed : BillingConnectionState()
+    data object Connecting : BillingConnectionState()
 }
 
 class PurchaseEvent(val result: PurchaseResult, val tip: Tip?)
 
 sealed class PurchaseResult {
-    object Success : PurchaseResult()
-    object Fail : PurchaseResult()
-    object Cancelled : PurchaseResult()
+    data object Success : PurchaseResult()
+    data object Fail : PurchaseResult()
+    data object Cancelled : PurchaseResult()
 }
 
 sealed class TippingSum {
-    object NotYetLoaded : TippingSum()
-    object FailedToLoad : TippingSum()
+    data object NotYetLoaded : TippingSum()
+    data object FailedToLoad : TippingSum()
     class Succeeded(val sum: String) : TippingSum()
-    object NoTips : TippingSum()
+    data object NoTips : TippingSum()
 }

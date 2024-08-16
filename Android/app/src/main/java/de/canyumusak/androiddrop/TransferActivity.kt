@@ -61,11 +61,7 @@ class TransferActivity : AppCompatActivity() {
                 grantUriPermission(packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent)
-            } else {
-                startService(intent)
-            }
+            startForegroundService(intent)
         }
 
         lifecycleScope.launch(Dispatchers.Main) {

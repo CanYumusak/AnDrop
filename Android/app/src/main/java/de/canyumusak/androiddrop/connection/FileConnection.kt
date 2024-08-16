@@ -8,7 +8,11 @@ import android.os.Build
 import android.provider.Settings
 import de.canyumusak.androiddrop.FileTransferCommand
 
-class FileConnection(val context: Context, fileTransferCommand: FileTransferCommand, val callback: (State) -> Unit) {
+class FileConnection(
+    val context: Context,
+    fileTransferCommand: FileTransferCommand,
+    val callback: (State) -> Unit
+) {
 
     val connection = object : MutableLiveData<Connection>() {
         override fun onInactive() {
@@ -32,6 +36,7 @@ class FileConnection(val context: Context, fileTransferCommand: FileTransferComm
                 Log.i("ConnectionVM", "Received Handshake event. Proposing file")
                 connection.value?.proposeFileSendRequest(context, fileUris)
             }
+
             is Unknown -> Log.w("ConnectionVM", "Received unknown event")
         }
     }
@@ -64,18 +69,17 @@ class FileConnection(val context: Context, fileTransferCommand: FileTransferComm
 }
 
 fun deviceName(context: Context): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-        Settings.Global.getString(context.contentResolver, Settings.Global.DEVICE_NAME) ?: Build.MODEL
-    } else {
-        Build.MODEL
-    }
+    return Settings.Global.getString(
+        context.contentResolver,
+        Settings.Global.DEVICE_NAME
+    ) ?: Build.MODEL
 }
 
 sealed class State {
-    object Idle : State()
-    object Connected : State()
-    object WaitingForAccept : State()
+    data object Idle : State()
+    data object Connected : State()
+    data object WaitingForAccept : State()
     class Transferring(val progress: Int) : State()
-    object Finished : State()
-    object Disconnected : State()
+    data object Finished : State()
+    data object Disconnected : State()
 }
