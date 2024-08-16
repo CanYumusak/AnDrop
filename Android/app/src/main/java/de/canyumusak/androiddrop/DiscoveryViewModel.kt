@@ -244,8 +244,8 @@ class DiscoveryViewModel(
 }
 
 sealed class WifiState {
-    object Disabled : WifiState()
-    object Enabled : WifiState()
+    data object Disabled : WifiState()
+    data object Enabled : WifiState()
 }
 
 sealed class ScanError {
