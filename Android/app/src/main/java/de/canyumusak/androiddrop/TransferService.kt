@@ -29,7 +29,7 @@ class TransferService : Service() {
             registerReceiver(
                 transferServiceBroadcastReceiver,
                 IntentFilter(CANCEL_REQUEST_ACTION),
-                RECEIVER_NOT_EXPORTED,
+                RECEIVER_EXPORTED,
             )
         } else {
             registerReceiver(
