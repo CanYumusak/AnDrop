@@ -29,7 +29,7 @@ class TransferService : Service() {
             registerReceiver(
                 transferServiceBroadcastReceiver,
                 IntentFilter(CANCEL_REQUEST_ACTION),
-                RECEIVER_EXPORTED,
+                RECEIVER_NOT_EXPORTED,
             )
         } else {
             registerReceiver(
@@ -137,7 +137,9 @@ class TransferService : Service() {
             val intent = PendingIntent.getBroadcast(
                 context,
                 0,
-                Intent(CANCEL_REQUEST_ACTION),
+                Intent(CANCEL_REQUEST_ACTION).apply {
+                    setPackage(context.packageName)
+                },
                 PendingIntent.FLAG_IMMUTABLE
             )
             val action = NotificationCompat.Action(0, "Cancel", intent)
@@ -161,7 +163,9 @@ class TransferService : Service() {
             val intent = PendingIntent.getBroadcast(
                 context,
                 0,
-                Intent(CANCEL_REQUEST_ACTION),
+                Intent(CANCEL_REQUEST_ACTION).apply {
+                    setPackage(context.packageName)
+                },
                 PendingIntent.FLAG_IMMUTABLE
             )
             val action = NotificationCompat.Action(0, "Cancel", intent)
@@ -228,11 +232,11 @@ class TransferService : Service() {
 
 class TransferServiceBroadcastReceiver(val service: TransferService) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
+        // Validate that this is a legitimate cancel request
         if (intent?.action == TransferService.CANCEL_REQUEST_ACTION) {
             service.cancelCurrentTransfer()
         }
     }
-
 }
 
 data class FileTransferCommand(
