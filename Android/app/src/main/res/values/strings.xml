@@ -65,4 +65,7 @@
     <string name="onboarding_analytics_action">Allow</string>
     <string name="onboarding_analytics_skip">Decline</string>
 
+    <string name="local_network_permission_description">Allow nearby device access so AnDrop can find your Mac and send files over Wi-Fi.</string>
+    <string name="local_network_permission_allow">Allow nearby device access</string>
+    <string name="local_network_permission_settings">Open app settings</string>
 </resources>

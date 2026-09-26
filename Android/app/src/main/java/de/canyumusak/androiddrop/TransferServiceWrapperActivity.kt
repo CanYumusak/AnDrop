@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import de.canyumusak.androiddrop.permissions.hasLocalNetworkPermission
 
 class TransferServiceWrapperActivity : Activity() {
 
@@ -25,6 +26,12 @@ class TransferServiceWrapperActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (!hasLocalNetworkPermission()) {
+            startActivity(Intent(intent).setClass(this, TransferActivity::class.java))
+            finish()
+            return
+        }
 
         val serviceIntent = Intent(this, TransferService::class.java)
         serviceIntent.putExtra(TransferService.CLIENT_NAME, intent.extras!![TransferService.CLIENT_NAME] as String)

@@ -65,4 +65,7 @@
     <string name="onboarding_analytics_action">Erlauben</string>
     <string name="onboarding_analytics_skip">Ablehnen</string>
 
+    <string name="local_network_permission_description">Erlaube den Zugriff auf Geräte in der Nähe, damit AnDrop deinen Mac finden und Dateien über WLAN senden kann.</string>
+    <string name="local_network_permission_allow">Zugriff auf Geräte in der Nähe erlauben</string>
+    <string name="local_network_permission_settings">App-Einstellungen öffnen</string>
 </resources>

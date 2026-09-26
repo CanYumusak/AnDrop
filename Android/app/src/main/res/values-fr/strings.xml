@@ -65,4 +65,7 @@
     <string name="onboarding_analytics_action">Autoriser</string>
     <string name="onboarding_analytics_skip">Refuser</string>
 
+    <string name="local_network_permission_description">Autorisez l’accès aux appareils à proximité pour permettre à AnDrop de trouver votre Mac et d’envoyer des fichiers par Wi-Fi.</string>
+    <string name="local_network_permission_allow">Autoriser les appareils à proximité</string>
+    <string name="local_network_permission_settings">Ouvrir les paramètres de l’application</string>
 </resources>

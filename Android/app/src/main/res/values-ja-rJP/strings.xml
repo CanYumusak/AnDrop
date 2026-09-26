@@ -65,4 +65,7 @@
     <string name="onboarding_analytics_action">許可する</string>
     <string name="onboarding_analytics_skip">拒否</string>
 
+    <string name="local_network_permission_description">AnDrop が Mac を見つけて Wi-Fi でファイルを送信できるように、付近のデバイスへのアクセスを許可してください。</string>
+    <string name="local_network_permission_allow">付近のデバイスへのアクセスを許可</string>
+    <string name="local_network_permission_settings">アプリの設定を開く</string>
 </resources>
