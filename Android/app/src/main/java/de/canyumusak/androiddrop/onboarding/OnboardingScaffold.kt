@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -50,8 +49,7 @@ fun OnboardingScaffold(
 ) {
     Column(
         modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding()
+            .safeDrawingPadding()
             .padding(Spacings.l)
             .verticalScroll(rememberScrollState())
             .animateAppearanceAlpha(500, animateEntry),

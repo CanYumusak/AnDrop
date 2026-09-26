@@ -6,7 +6,7 @@ lifecycle-viewmodel-ktx = "2.8.4"
 datastore-preferences = "1.1.1"
 navigation-compose = "2.7.7"
 play-review-ktx = "2.0.1"
-rive-android = "4.0.0"
+rive-android = "10.0.4"
 startup-runtime = "1.1.1"
 appcompat = "1.7.0"
 recyclerview = "1.3.2"
@@ -16,7 +16,6 @@ fragment-ktx = "1.8.2"
 coroutines = "1.8.1"
 serialization-json = "1.6.2"
 billing = "7.0.0"
-firebase-analytics-ktx = "latest.release"
 
 [libraries]
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose" }
@@ -51,4 +50,4 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-json" }
 
 billing = { module = "com.android.billingclient:billing", version.ref = "billing" }
-firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebase-analytics-ktx" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx" }
