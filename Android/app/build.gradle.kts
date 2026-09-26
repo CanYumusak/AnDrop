@@ -17,11 +17,11 @@ android {
         compose = true
     }
 
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 213
         versionName = "2.1.3"
     }
