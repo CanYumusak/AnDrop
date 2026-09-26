@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AnDrop</string>
+    <string name="app_name">AnDrop - File Transfer</string>
     <string name="welcome_to_androp">AnDropへようこそ</string>
 
     <!-- Transfer Dialog -->

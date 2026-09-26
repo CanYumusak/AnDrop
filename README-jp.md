@@ -1,4 +1,4 @@
-# AnDrop
+# AnDrop - File Transfer
 
 (WIP) 注意: このREADMEは未完成です。
 

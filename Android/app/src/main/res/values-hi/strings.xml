@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnDrop</string>
+    <string name="app_name">AnDrop - File Transfer</string>
     <string name="welcome_to_androp">AnDrop में आपका स्वागत है</string>
 
     <!-- Transfer Dialog -->

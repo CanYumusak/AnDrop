@@ -61,7 +61,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, FilePropositionPromptDelegat
         
         menu.addItem(changeAutoAcceptMenuItem)
         
-        menu.addItem(NSMenuItem(title: "Quit Androp", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: "Quit AnDrop - File Transfer", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         statusItem.menu = menu
         
         DispatchQueue.main.async {

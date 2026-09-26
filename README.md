@@ -1,4 +1,4 @@
-# AnDrop
+# AnDrop - File Transfer
 [Change to Japanese](README-jp.md)
 
 Readme currently is a work in progress
