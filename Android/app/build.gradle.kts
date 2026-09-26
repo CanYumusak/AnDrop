@@ -2,12 +2,11 @@
 
 import java.io.FileInputStream
 import java.util.*
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
-    kotlin("android")
     kotlin("plugin.serialization")
+    kotlin("plugin.compose")
     id("com.google.gms.google-services")
 }
 
@@ -17,11 +16,11 @@ android {
         compose = true
     }
 
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         applicationId = "de.canyumusak.androiddrop"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 213
         versionName = "2.1.3"
     }
@@ -49,7 +48,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
@@ -62,12 +61,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     namespace = "de.canyumusak.androiddrop"
 }
 

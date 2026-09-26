@@ -65,4 +65,7 @@
     <string name="onboarding_analytics_action">允许</string>
     <string name="onboarding_analytics_skip">拒绝</string>
 
+    <string name="local_network_permission_description">允许访问附近的设备，以便 AnDrop 查找你的 Mac 并通过 Wi-Fi 发送文件。</string>
+    <string name="local_network_permission_allow">允许访问附近的设备</string>
+    <string name="local_network_permission_settings">打开应用设置</string>
 </resources>

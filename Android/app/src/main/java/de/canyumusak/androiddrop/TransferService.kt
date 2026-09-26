@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import de.canyumusak.androiddrop.permissions.hasLocalNetworkPermission
 import de.canyumusak.androiddrop.connection.FileConnection
 import de.canyumusak.androiddrop.connection.State
 import de.canyumusak.androiddrop.inappreview.InAppReviewManager
@@ -49,6 +50,12 @@ class TransferService : Service() {
 
         val createNotification = createStartupNotification(this)
         startForeground(SERVICE_ID, createNotification)
+
+        if (!hasLocalNetworkPermission()) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            stopSelf()
+            return START_NOT_STICKY
+        }
 
         intent?.let {
             startConnectionHandling(FileTransferCommand(it))

@@ -66,4 +66,7 @@
     <string name="onboarding_analytics_action">अनुमति दें</string>
     <string name="onboarding_analytics_skip">अस्वीकार करें</string>
 
+    <string name="local_network_permission_description">आस-पास के डिवाइस का ऐक्सेस दें ताकि AnDrop आपका Mac खोज सके और Wi-Fi से फ़ाइलें भेज सके।</string>
+    <string name="local_network_permission_allow">आस-पास के डिवाइस का ऐक्सेस दें</string>
+    <string name="local_network_permission_settings">ऐप की सेटिंग खोलें</string>
 </resources>

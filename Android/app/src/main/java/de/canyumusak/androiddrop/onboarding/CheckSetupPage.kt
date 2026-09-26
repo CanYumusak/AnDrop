@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.canyumusak.androiddrop.permissions.LocalNetworkAccess
 import de.canyumusak.androiddrop.AnDropClient
 import de.canyumusak.androiddrop.DiscoveryViewModel
 import de.canyumusak.androiddrop.R
@@ -37,21 +38,23 @@ fun CheckSetupPage(
     skipRequested: () -> Unit,
     viewModel: DiscoveryViewModel = viewModel(),
 ) {
-    val list by viewModel.clients.collectAsState()
-    val wifiState by viewModel.wifiState.collectAsState()
-    DisposableEffect(viewModel) {
-        viewModel.discoverClients()
-        onDispose { viewModel.endDiscovery() }
+    LocalNetworkAccess(onSkip = skipRequested) {
+        val list by viewModel.clients.collectAsState()
+        val wifiState by viewModel.wifiState.collectAsState()
+        DisposableEffect(viewModel) {
+            viewModel.discoverClients()
+            onDispose { viewModel.endDiscovery() }
+        }
+        CheckSetupPage(
+            list = list,
+            wifiState = wifiState,
+            nextRequested = {
+                OnboardingEvents.checkSetupComplete(list.size)
+                nextRequested()
+            },
+            skipRequested = skipRequested
+        )
     }
-    CheckSetupPage(
-        list = list,
-        wifiState = wifiState,
-        nextRequested = {
-            OnboardingEvents.checkSetupComplete(list.size)
-            nextRequested()
-        },
-        skipRequested = skipRequested
-    )
 }
 
 @Composable

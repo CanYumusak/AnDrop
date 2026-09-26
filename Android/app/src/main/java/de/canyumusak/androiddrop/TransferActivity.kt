@@ -7,11 +7,14 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.canyumusak.androiddrop.inappreview.InAppReviewManager
+import de.canyumusak.androiddrop.permissions.LocalNetworkAccess
+import de.canyumusak.androiddrop.permissions.hasLocalNetworkPermission
 import de.canyumusak.androiddrop.sendables.ExampleFile
 import de.canyumusak.androiddrop.theme.AnDropTheme
 import de.canyumusak.androiddrop.transfer.TransferEvents
@@ -27,26 +30,32 @@ class TransferActivity : AppCompatActivity() {
 
         setContent {
             AnDropTheme {
-                val context = LocalContext.current
-                val discoveryViewModel: DiscoveryViewModel = viewModel()
-                LaunchedEffect(true) {
-                    discoveryViewModel.dataUrisRequested(dataUris())
-                    TransferEvents.trackTransferRequest(dataUris(), context)
-                }
-                ScanScreen(
-                    discoveryViewModel = discoveryViewModel,
-                    clientSelected = {
-                        clientSelected(discoveryViewModel, it)
-                    },
-                    permissionRequested = {
-                        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+                LocalNetworkAccess {
+                    val context = LocalContext.current
+                    val discoveryViewModel: DiscoveryViewModel = viewModel()
+                    DisposableEffect(discoveryViewModel) {
+                        onDispose { discoveryViewModel.endDiscovery() }
                     }
-                )
+                    LaunchedEffect(true) {
+                        discoveryViewModel.dataUrisRequested(dataUris())
+                        TransferEvents.trackTransferRequest(dataUris(), context)
+                    }
+                    ScanScreen(
+                        discoveryViewModel = discoveryViewModel,
+                        clientSelected = {
+                            clientSelected(discoveryViewModel, it)
+                        },
+                        permissionRequested = {
+                            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 0)
+                        }
+                    )
+                }
             }
         }
     }
 
     private fun clientSelected(viewModel: DiscoveryViewModel, client: AnDropClient) {
+        if (!hasLocalNetworkPermission()) return
         val dataUris = dataUris()
 
         lifecycleScope.launch {

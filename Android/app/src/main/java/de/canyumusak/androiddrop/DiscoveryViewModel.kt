@@ -9,6 +9,7 @@ import android.net.wifi.WifiManager
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import de.canyumusak.androiddrop.permissions.hasLocalNetworkPermission
 import de.canyumusak.androiddrop.permissions.storagePermissionFlow
 import de.canyumusak.androiddrop.permissions.wifiStateFlow
 import de.canyumusak.androiddrop.sendables.ClassicFile
@@ -90,6 +91,7 @@ class DiscoveryViewModel(
     }
 
     fun discoverClients() {
+        if (!getApplication<Application>().hasLocalNetworkPermission()) return
         if (!discovering) {
             discovering = true
             performDiscoverClients()
@@ -124,6 +126,7 @@ class DiscoveryViewModel(
     }
 
     private fun performDiscoverClients() {
+        if (!getApplication<Application>().hasLocalNetworkPermission()) return
         _error.value = null
         Log.d("Bonjour", "starting discovery")
         try {
@@ -157,6 +160,7 @@ class DiscoveryViewModel(
     private inner class DiscoveryListener : NsdManager.DiscoveryListener {
 
         override fun onServiceFound(serviceInformation: NsdServiceInfo?) {
+            if (!discovering || !getApplication<Application>().hasLocalNetworkPermission()) return
             Log.w("DiscoveryViewModel", "Found $serviceInformation")
             var retries = 20
             val listener = object : NsdManager.ResolveListener {
@@ -170,7 +174,7 @@ class DiscoveryViewModel(
                         )
                         delay((Math.random() * 20).toLong())
                         retries -= 1
-                        if (retries > 0) {
+                        if (retries > 0 && discovering && getApplication<Application>().hasLocalNetworkPermission()) {
                             nsdManager.resolveService(serviceInformation, resolveListener)
                         }
                     }

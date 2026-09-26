@@ -65,4 +65,7 @@
     <string name="onboarding_analytics_action">Cho phép</string>
     <string name="onboarding_analytics_skip">Từ chối</string>
 
+    <string name="local_network_permission_description">Cho phép truy cập thiết bị ở gần để AnDrop tìm máy Mac và gửi tệp qua Wi-Fi.</string>
+    <string name="local_network_permission_allow">Cho phép truy cập thiết bị ở gần</string>
+    <string name="local_network_permission_settings">Mở cài đặt ứng dụng</string>
 </resources>
